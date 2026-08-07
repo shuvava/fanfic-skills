@@ -38,6 +38,17 @@ Follow `${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md`. Report in the user's language.
 - **Stale claims** — statements a later-ingested source supersedes. Check `log.md` ordering.
 - **Broken anchors** — citations pointing at files or headings that no longer exist.
 
+### Style fidelity
+- **Unmeasured style fingerprint** — `canon/overview.md` describing style habits in adjectives
+  ("uses ellipsis heavily", "short paragraphs") with no counts. Severity `high`: an uncountable note
+  cannot be checked, and drafted prose satisfies it at any density. Propose measuring from `raw/`.
+- **Missing non-standard orthography section** — after ingesting a source that departs from standard
+  spelling or punctuation anywhere, `overview.md` recording no such rule. A model drafting against
+  the wiki will restore the standard silently.
+- **Fingerprint drift in drafts** — drafted chapters whose measured word count or punctuation
+  frequencies fall outside the recorded fingerprint. Report the measured value against the target;
+  this is the cheapest objective signal the wiki has about drift.
+
 ### Coverage
 - **Thin voice cards** — fewer than five verbatim lines. Report the count.
 - **Missing would-never-do** — character pages with that section empty or absent. Most-skipped,

@@ -67,6 +67,14 @@ contradictions the scene list was too coarse to show. A `blocking` conflict stop
 
 - **Match the container exactly** — POV person, tense, narrative distance, chapter length, opening and
   closing habits from `canon/overview.md`.
+- **Hit the numbers in `## Style fingerprint`.** Chapter length in words and each recorded punctuation
+  frequency are targets, not flavor. Prose written against a qualitative note ("uses ellipsis
+  heavily") lands at a fraction of the source's density every time, because nothing forces a count.
+  After drafting, check the fingerprint features against the table and fix the gaps.
+- **Obey `## Non-standard orthography` literally, and do not improve it.** Where the source departs
+  from standard spelling or punctuation, reproduce the departure. Your instinct will be to correct it
+  — that instinct is the failure mode. If the page records that the author writes `какой то` without
+  the hyphen, every such form in your draft is written without the hyphen.
 - **Write dialogue against the voice cards, not from memory.** Before each character's first line,
   re-read their verbatim canon lines. Check each drafted line against the `would never say` table.
 - **Honor the language-specific markers** the voice cards record — address forms, diminutives,
@@ -95,6 +103,8 @@ Run explicitly and report:
 | Check | Verify |
 |---|---|
 | Language | Is the prose in `output_language`? Are quoted canon lines untouched? |
+| Style fingerprint | Does the draft hit the recorded word count and punctuation frequencies? Report the measured value next to the target. |
+| Orthography | Is every rule in `## Non-standard orthography` reproduced, not corrected? |
 | Voice | Does each character's dialogue survive comparison to their verbatim lines? |
 | Register | Are address forms and honorifics consistent with the relationship table? |
 | Forbidden | Does anything violate `forbidden.md`? |

@@ -37,6 +37,10 @@ source is characterization data that voice cards will need.
 project-root/
 ├── CANON.md                    # schema, conventions, language, divergences
 ├── raw/                        # immutable sources — never edited, never translated
+├── plan/                       # STORY_INTENT.md, outline.md, conflicts.md, HARNESS.md
+│   └── beats/                  # ch<NN>.md — one beat sheet per chapter
+├── drafts/                     # tier: generated — chapters + continuity.md
+│   └── snapshots/              # untouched first drafts, for edit-diff feedback
 └── wiki/
     ├── index.md                # catalog of every page
     ├── log.md                  # append-only operation history
@@ -47,14 +51,16 @@ project-root/
     │   ├── voices/             # verbatim dialogue — always source language
     │   ├── world/
     │   └── plot/               # per-source summaries, timeline.md, threads.md
-    ├── fanon/                  # tier: fanon-established — invented, user-ratified
-    │   ├── proposed/           # tier: fanon-proposed — awaiting ratification
-    │   ├── characters/         # OCs and canon characters' fic-only developments
-    │   └── world/
-    ├── plan/                   # STORY_INTENT.md, outline.md, beats/, HARNESS.md
-    └── drafts/                 # tier: generated — chapters + continuity.md
-        └── snapshots/          # untouched first drafts, for edit-diff feedback
+    └── fanon/                  # tier: fanon-established — invented, user-ratified
+        ├── proposed/           # tier: fanon-proposed — awaiting ratification
+        ├── characters/         # OCs and canon characters' fic-only developments
+        └── world/
 ```
+
+**`plan/` and `drafts/` sit at the project root, not under `wiki/`.** Every other skill writes
+`plan/outline.md`, `plan/beats/ch<NN>.md`, and `drafts/ch<NN>-<slug>.md` — root-relative. An earlier
+version of this tree nested them under `wiki/`, and a real run created both: `plan/` at the root,
+`drafts/` under `wiki/`, and two empty directories nobody wrote to. Create exactly the paths above.
 
 ## 3. Place source material
 

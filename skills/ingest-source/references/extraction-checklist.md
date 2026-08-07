@@ -82,7 +82,12 @@ lines_captured: <n>
 ## Verbatim canon lines
 Minimum five. **Exact. Untranslated. Cited.** The spine of the card.
 
-1. «<line exactly as in raw/>» [src: ...]
+Quote as a blockquote rather than wrapping the line in quotation marks. Wrapping imports punctuation
+the source may not use, and the drafter reads these lines as the model for dialogue — it will copy
+whatever marks it sees around them.
+
+1. > <line exactly as in raw/, including the source's own dialogue marker>
+   [src: ...]
 2. ...
 
 ## Vocabulary
@@ -200,6 +205,49 @@ relationship state changes.
 - **Style and orthographic conventions** — invented name spellings, capitalization, dialogue
   punctuation as the source language uses it (guillemets, em-dashes, quotation marks), how thoughts,
   letters, and dreams are formatted
+
+### The style fingerprint — counted, not described
+
+A drafter cannot act on an adjective. "Uses ellipsis heavily" is satisfied by one ellipsis per
+paragraph and by five; a chapter written against that note came out at a quarter of the source's
+density and still matched the note. Record a table of **counts and literal examples**, so the
+convention is checkable rather than agreeable:
+
+```markdown
+## Style fingerprint
+| Feature | Source value | Literal example |
+|---|---|---|
+| Chapter length | ~1200 слов | — |
+| Ellipsis | ~21 на 1000 слов | `Похоже... Похоже... Это был не совсем сон...` |
+| Dialogue marker | `\- ` в начале строки, 99% реплик | `\- Привет, Феликс.` |
+| Guillemets «» | не используются (0) | — |
+| Paragraph length | 1–3 предложения | — |
+```
+
+Count from the actual text — including at least chapter length in words, the frequency of every
+punctuation habit that reads as a tic, and the exact literal form of the dialogue marker.
+`write-chapter` is instructed to reproduce these numbers, and `wiki-lint` checks them.
+
+### Non-standard orthography — the section a model will silently repair
+
+**Look specifically for places where the source departs from standard spelling or punctuation, and
+record the deviation as a rule with its count.** This is the highest-risk item on the page: a model
+drafting a continuation will "correct" the author back to the standard without ever noticing it did,
+and the result reads subtly like a different writer.
+
+Hunt for at least: hyphenation the standard requires and the author omits (or vice versa), spacing
+around dashes and ellipses, apostrophes and quotation marks, capitalization of invented terms,
+inconsistent transliterations, and any spelling the author repeats often enough to be deliberate.
+
+```markdown
+## Non-standard orthography
+- Постфиксы -то/-нибудь пишутся БЕЗ дефиса: `какой то`, `кто то`, `что то`
+  (1688 раз без дефиса против 5 с дефисом) [src: raw/ch01.md#p3, ch02.md#p17].
+  **Это авторская норма. Не «исправлять».**
+```
+
+Write the count. A rule recorded with its frequency survives the next stage; a rule recorded as a
+remark does not.
 
 ---
 

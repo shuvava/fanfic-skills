@@ -72,6 +72,19 @@ chapters open and close, tone words, themes, motifs, and **style and spelling co
 name spellings, capitalization, how thoughts and letters are formatted, and any orthographic
 conventions specific to the source language. Top continuity trap; record explicitly.
 
+Two subsections of this page are load-bearing and both must be **counted, not described**:
+
+- **`## Style fingerprint`** — a table of measured values: chapter length in words, the per-1000-word
+  frequency of each punctuation habit that reads as a tic, the literal form of the dialogue marker.
+  Adjectives do not transfer. A note reading "uses ellipsis heavily" was satisfied by prose carrying
+  a quarter of the source's ellipsis density, because nothing in the note could be checked.
+- **`## Non-standard orthography`** — every place the source departs from standard spelling or
+  punctuation, each with its count and the instruction not to "correct" it. **A drafting model will
+  silently repair the author back to the standard.** If the author writes `какой то` without the
+  hyphen 1688 times, that is the author's norm and the page must say so in those terms.
+
+See `references/extraction-checklist.md` §5 for both templates.
+
 ### 6. Forbidden → `wiki/canon/forbidden.md`
 Anything this source establishes that a continuation must not violate.
 
