@@ -1,0 +1,19 @@
+{
+  "name": "fanfic-wiki",
+  "version": "0.3.0",
+  "description": "Extract a canon wiki from source material, plan collaboratively, and write fanfiction chapters that preserve the source's language, voice, and canon.",
+  "author": {
+    "name": "fanfic-wiki"
+  },
+  "license": "MIT",
+  "keywords": [
+    "fanfiction",
+    "story-bible",
+    "llm-wiki",
+    "canon",
+    "creative-writing",
+    "worldbuilding",
+    "self-improving",
+    "feedback-loop"
+  ]
+}
