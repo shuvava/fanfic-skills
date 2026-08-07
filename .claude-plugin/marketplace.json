@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "fanfic-skills",
+  "description": "Turn a source book into a canon wiki, plan a fic against it, and write chapters that stay in-character and in-language.",
+  "owner": {
+    "name": "shuvava",
+    "url": "https://github.com/shuvava"
+  },
+  "plugins": [
+    {
+      "name": "fanfic-wiki",
+      "description": "Extract a canon wiki from source material, plan collaboratively, and write fanfiction chapters that preserve the source's language, voice, and canon.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
