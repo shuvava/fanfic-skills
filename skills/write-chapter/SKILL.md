@@ -84,6 +84,13 @@ contradictions the scene list was too coarse to show. A `blocking` conflict stop
   quotation marks), paragraph habits, how thoughts and letters are set.
 - **Respect world limits.** If a rule has a recorded cost, pay it in the prose.
 - **Deploy verbal tics sparingly** — three per character is the cap, and not all three every scene.
+- **Carry the comic register, delivery included.** Read `## Comic register` in `canon/overview.md`
+  before drafting and hit its counts. A first draft reliably keeps the *device* — the source's
+  signature ironic move — and loses the *delivery*: exclamations, stacked terminal marks, ellipsis,
+  the punctuation that makes a narrator sound like they are talking rather than composing. Measured on
+  a real run, a draft matched the author's scare-quoting to within 4% while dropping his exclamations
+  by 92%. The jokes were structurally right and the voice was gone. **Humour that is merely
+  well-formed is not this author's humour.**
 
 Write to `drafts/ch<NN>-<slug>.md` with frontmatter recording `tier: generated`, POV, timeline
 position, and threads touched.

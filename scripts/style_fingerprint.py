@@ -56,6 +56,16 @@ PUNCTUATION = {
     "guillemet": re.compile(r"«"),
     "double_quote": re.compile(r"[\"“”]"),
     "single_quote": re.compile(r"[‘’](?![\w])"),
+    # Comic register. Humour is not directly countable, but its delivery is, and
+    # these three carry most of it in practice: a short quoted span mid-sentence is
+    # almost always ironic distance rather than speech, and stacked terminal marks
+    # are the sound of a narrator sputtering. Measured on a real corpus, the author
+    # scare-quoted at 10 per 1000 words and a draft that reproduced the device
+    # scored 10.4 while a draft that missed it scored 1.2 — a gap no reader-facing
+    # note about "ironic tone" had managed to close.
+    "scare_quote": re.compile(r"[\"“«][^\"“”«»\n]{1,40}[\"”»]"),
+    "stacked_terminal": re.compile(r"[!?]\.\.|\.\.[!?]|[!?]{2,}"),
+    "interjection_dash": re.compile(r"(?<=[а-яёa-z])\s*[-—]\s*[а-яёa-z]", re.IGNORECASE),
 }
 
 # How a line of dialogue opens. Order matters: the escaped form is checked before

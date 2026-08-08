@@ -228,6 +228,33 @@ Count from the actual text — including at least chapter length in words, the f
 punctuation habit that reads as a tic, and the exact literal form of the dialogue marker.
 `write-chapter` is instructed to reproduce these numbers, and `wiki-lint` checks them.
 
+### Comic register — the device *and* the delivery
+
+If the source is funny, record **how**, concretely enough to reproduce. Humour is the first thing to
+go flat in a continuation, and it goes flat in a specific, diagnosable way: the joke structure
+survives and the delivery does not.
+
+Measured on a real corpus, a generated chapter reproduced the narrator's ironic scare-quoting at 10.4
+per 1000 words against the author's 10.9 — because `overview.md` had recorded that convention with
+examples. The same chapter dropped exclamations by 92% and stacked terminal marks (`!..`, `?..`) by
+87%, because nothing recorded those. The prose came out composed and dry where the source sputters.
+
+```markdown
+## Comic register
+- **Source of humour:** ирония рассказчика к самому себе и к обстановке, не остроты персонажей
+  [src: raw/ch01.md#p3, p21].
+- **Signature device:** кавычки для иронической дистанции — `"сценария"`, `"спасение"`,
+  `"ловушкой"`. 10 на 1000 слов [src: raw/ch01.md#p21].
+- **Delivery markers:** восклицания 11.8 на 1000 слов; составные знаки `!..` `?..` 7.7 на 1000 слов;
+  многоточие 20.9 на 1000 слов. **Это и есть звук голоса — без них шутка остаётся, а голос уходит.**
+- **Never:** отточенные реплики-панчлайны. Юмор рождается в ремарках повествователя, а не в
+  диалоге [src: ...].
+```
+
+The last line matters as much as the counts. Record where the humour *lives* — narrator's asides,
+character wit, situational absurdity, understatement — because a drafter that relocates it writes
+jokes the source would never make.
+
 ### Non-standard orthography — the section a model will silently repair
 
 **Look specifically for places where the source departs from standard spelling or punctuation, and
