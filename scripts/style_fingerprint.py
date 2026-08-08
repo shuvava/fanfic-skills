@@ -379,8 +379,14 @@ def render_check(draft_fp: dict, source_fp: dict) -> tuple[str, int]:
     for name, data in source_fp["punctuation"].items():
         if data["per_1k"] < 1.0:
             continue
+        # A habit the source leans on hard needs a tighter band than an incidental one.
+        # A flat ±35% let the worst real drift through: the source ran 21 ellipses per
+        # 1000 words, the draft ran 14.8, and the check passed at -30% while that single
+        # feature was the largest deviation in the chapter. Anything at 10+ per 1000
+        # words is a signature of the voice, and losing a fifth of it is audible.
+        tolerance = 0.15 if data["per_1k"] >= 10.0 else 0.35
         compare(f"{name} per 1k", data["per_1k"],
-                draft_fp["punctuation"].get(name, {}).get("per_1k", 0.0), 0.35)
+                draft_fp["punctuation"].get(name, {}).get("per_1k", 0.0), tolerance)
 
     source_total = source_fp["dialogue_lines"] or 1
     draft_total = draft_fp["dialogue_lines"] or 1

@@ -70,7 +70,9 @@ contradictions the scene list was too coarse to show. A `blocking` conflict stop
 - **Hit the numbers in `## Style fingerprint`.** Chapter length in words and each recorded punctuation
   frequency are targets, not flavor. Prose written against a qualitative note ("uses ellipsis
   heavily") lands at a fraction of the source's density every time, because nothing forces a count.
-  After drafting, check the fingerprint features against the table and fix the gaps.
+  Any punctuation habit the table records at 10+ per 1000 words must land within ±15% of its source
+  value — the checker fails the draft outside that band. After drafting, count those features in your
+  own text, report the counts, and revise until they are inside the band.
 - **Obey `## Non-standard orthography` literally, and do not improve it.** Where the source departs
   from standard spelling or punctuation, reproduce the departure. Your instinct will be to correct it
   — that instinct is the failure mode. If the page records that the author writes `какой то` without
