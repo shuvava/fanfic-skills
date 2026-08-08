@@ -103,7 +103,7 @@ Run explicitly and report:
 | Check | Verify |
 |---|---|
 | Language | Is the prose in `output_language`? Are quoted canon lines untouched? |
-| Style fingerprint | Does the draft hit the recorded word count and punctuation frequencies? Report the measured value next to the target. |
+| Style fingerprint | Run the script below. Report its table and fix anything outside tolerance. |
 | Orthography | Is every rule in `## Non-standard orthography` reproduced, not corrected? |
 | Voice | Does each character's dialogue survive comparison to their verbatim lines? |
 | Register | Are address forms and honorifics consistent with the relationship table? |
@@ -114,8 +114,22 @@ Run explicitly and report:
 | Beats | Does each scene deliver its card's goal, conflict, and outcome? |
 | New assertions | What does this chapter establish that no tier records? |
 
+Measure the style row rather than judging it:
+
+```bash
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/style_fingerprint.py check drafts/ch<NN>-<slug>.md --against raw/*.md
+```
+
+It prints every feature that drifted, with the source value, the draft value and the delta, and exits
+non-zero when anything is outside tolerance. **Revise the draft and re-run until it passes, or state
+plainly which deltas you are leaving and why.** A first draft typically comes back with the source's
+strongest punctuation habits at a fraction of their density — that is the normal failure and it is
+worth one revision pass, because it is the difference between prose that reads like the author and
+prose that reads like a competent imitation.
+
 **Report violations rather than silently fixing them.** A deliberate divergence is legitimate; the
-user decides which it is.
+user decides which it is. This applies to canon, not to the fingerprint: a style delta is a defect to
+fix, not a choice to surface.
 
 ## 5. Hand off
 

@@ -39,6 +39,16 @@ Follow `${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md`. Report in the user's language.
 - **Broken anchors** — citations pointing at files or headings that no longer exist.
 
 ### Style fidelity
+
+Run the measurement rather than eyeballing the page:
+
+```bash
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/style_fingerprint.py measure raw/*.md
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/style_fingerprint.py check drafts/ch<NN>-*.md --against raw/*.md
+```
+
+Compare the first against what `overview.md` records, and run the second for every drafted chapter.
+
 - **Unmeasured style fingerprint** — `canon/overview.md` describing style habits in adjectives
   ("uses ellipsis heavily", "short paragraphs") with no counts. Severity `high`: an uncountable note
   cannot be checked, and drafted prose satisfies it at any density. Propose measuring from `raw/`.

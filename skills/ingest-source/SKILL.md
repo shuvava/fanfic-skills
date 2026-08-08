@@ -72,6 +72,15 @@ chapters open and close, tone words, themes, motifs, and **style and spelling co
 name spellings, capitalization, how thoughts and letters are formatted, and any orthographic
 conventions specific to the source language. Top continuity trap; record explicitly.
 
+**Measure these; do not estimate them.** Run:
+
+```bash
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/style_fingerprint.py measure raw/*.md
+```
+
+It prints the `## Style fingerprint` table ready to paste, plus candidate spellings to adjudicate.
+Standard library only, works in any language. Re-run it as `raw/` grows — the numbers sharpen.
+
 Two subsections of this page are load-bearing and both must be **counted, not described**:
 
 - **`## Style fingerprint`** — a table of measured values: chapter length in words, the per-1000-word
@@ -80,8 +89,14 @@ Two subsections of this page are load-bearing and both must be **counted, not de
   a quarter of the source's ellipsis density, because nothing in the note could be checked.
 - **`## Non-standard orthography`** — every place the source departs from standard spelling or
   punctuation, each with its count and the instruction not to "correct" it. **A drafting model will
-  silently repair the author back to the standard.** If the author writes `какой то` without the
-  hyphen 1688 times, that is the author's norm and the page must say so in those terms.
+  silently repair the author back to the standard.** If the author writes a postfix particle
+  unhyphenated hundreds of times, that is the author's norm and the page must say so in those terms.
+
+  The script's *Candidates to adjudicate* section is the input to this, not the answer. It counts;
+  **you decide**, because whether a form is non-standard is a fact about the language rather than
+  about the text, and you know the language. Read the candidate lists — especially the grouped
+  "short tokens that follow many different words", which is what a postfix particle looks like from
+  the outside — and record the ones that genuinely depart from the standard.
 
 See `references/extraction-checklist.md` §5 for both templates.
 

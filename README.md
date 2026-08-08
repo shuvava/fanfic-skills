@@ -127,25 +127,71 @@ A blocking conflict asks one question: intentional AU divergence, or error? Inte
 get recorded in `CANON.md` and stop being conflicts. Catching this at the beat stage costs a line;
 catching it after drafting costs a scene.
 
-## Style is recorded as numbers
+## Style is measured, not described
 
-`overview.md` carries a **style fingerprint** — measured values, not adjectives:
+A style note written as an adjective cannot be checked. "Uses em-dashes heavily" is satisfied at any
+density — and in testing, exactly that happened: the wiki recorded the source's ellipsis habit as
+"heavy", the source ran 21 ellipses per 1,000 words, the generated chapter ran 4.6, and nothing in
+the pipeline could tell the difference. So the plugin ships a counter.
+
+```bash
+# during ingest — produces the tables that go into canon/overview.md
+python3 scripts/style_fingerprint.py measure raw/*.md
+
+# during drafting and linting — how far has this draft drifted?
+python3 scripts/style_fingerprint.py check drafts/ch07-*.md --against raw/*.md
+```
+
+Standard library only, no dependencies, no language-specific rules. `ingest-source` runs `measure`
+and pastes the result; `write-chapter` runs `check` on its own draft and revises until it passes;
+`wiki-lint` runs both.
+
+`measure` produces the **style fingerprint** — measured values with literal examples:
 
 | Feature | Source value | Literal example |
 |---|---|---|
-| Chapter length | ~2,400 words | — |
-| Em-dash asides | ~9 per 1,000 words | `— and he knew it —` |
-| Dialogue marker | `"` … `"`, 98% of lines | `"Not tonight."` |
-| Section break | `* * *`, centered | — |
+| Chapter length | ~2,400 words (range 2,050–2,780) | — |
+| Sentence length | 17.2 words (sd 9.4) | — |
+| Em dash | 9.1 per 1000 words | `— and he knew it —` |
+| Dialogue marker `double_quote` | 98% of 412 lines | `"Not tonight."` |
 
-Plus a **non-standard orthography** section for every place the source departs from the standard,
-recorded with its count and an instruction not to "correct" it — compound adjectives the author leaves
-unhyphenated, a name spelled against convention, spacing around dashes.
+`check` reports the delta on every one of them and exits non-zero if anything is out of tolerance:
 
-Both exist because a qualitative note cannot be checked. "Uses em-dashes heavily" is satisfied at any
-density, and a drafting model will restore standard spelling silently unless the rule is explicit.
-`write-chapter` treats these numbers as targets and reports measured against target; `wiki-lint`
-flags a fingerprint written in adjectives.
+```
+| Feature              | Source | Draft | Delta   |
+| Chapter length       |   2400 |  1810 | -25%  ⚠ |
+| Em dash per 1k       |    9.1 |   2.4 | -74%  ⚠ |
+| Dialogue double_quote|    98% |   96% |  -2pp   |
+
+**2 feature(s) outside tolerance.**
+```
+
+### Orthography: what the script does, and what it refuses to do
+
+Every source has spellings that depart from the standard, and **a drafting model will silently repair
+them** — it has been trained to. So `measure` also hunts for them, two ways:
+
+- Where the source uses *both* spellings, it reports which one dominates and by how much. Precise, and
+  blind when the standard form never appears at all.
+- For that blind case, it emits **candidates to adjudicate**: every hyphenated form, the frequent
+  two-word sequences, and — most usefully — short tokens grouped by how many different words precede
+  them, which is what a postfix particle looks like from the outside.
+
+**The script does not decide which candidates are non-standard, and deliberately cannot.** Whether a
+form needs a hyphen is a fact about the language, not about the text; shipping a dictionary would
+make this work for one language and fail silently for the rest. Claude reads the candidate list, and
+Claude knows the language. The script counts; the model judges. That split is what makes this work on
+a Russian LitRPG and a Regency romance with the same forty lines of code.
+
+Real output from the test corpus, where the standard form never once appears:
+
+```
+- `то` — follows 14 different words, 56 times total: `какой то`, `что то`, `какое то`, `как то`
+```
+
+Standard Russian hyphenates all four. Claude recognizes that instantly, writes the rule into
+`overview.md` with its count and a do-not-correct instruction, and every later chapter keeps the
+author's spelling.
 
 ## Structure
 
