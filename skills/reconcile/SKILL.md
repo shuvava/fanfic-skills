@@ -11,7 +11,7 @@ description: >
 
 Fold a finished chapter's assertions into the fanon tier — through review, never automatically.
 
-Follow `${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md`. Output in `wiki_language`; the review conversation in
+Follow `../../CONVENTIONS.md`. Output in `wiki_language`; the review conversation in
 the user's language.
 
 ## Why this gate exists

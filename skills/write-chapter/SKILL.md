@@ -11,7 +11,7 @@ description: >
 
 Beat out one chapter, draft it, check it. One chapter at a time.
 
-Follow `${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md`. **Prose is written in `output_language` from
+Follow `../../CONVENTIONS.md`. **Prose is written in `output_language` from
 `CANON.md` — by default, the source's language.** If `output_language` differs from `source_language`,
 say so before drafting and confirm.
 
@@ -126,7 +126,7 @@ Run explicitly and report:
 Measure the style row rather than judging it:
 
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/style_fingerprint.py check drafts/ch<NN>-<slug>.md --against raw/*.md
+python3 ../../scripts/style_fingerprint.py check drafts/ch<NN>-<slug>.md --against raw/*.md
 ```
 
 It prints every feature that drifted, with the source value, the draft value and the delta, and exits

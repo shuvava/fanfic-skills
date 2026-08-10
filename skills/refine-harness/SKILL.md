@@ -13,7 +13,7 @@ description: >
 Close the loop. Read the trajectory the project has already generated, find repeated patterns, and
 propose changes to how the pipeline works.
 
-Follow `${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md`. Analysis in the user's language; artifacts in
+Follow `../../CONVENTIONS.md`. Analysis in the user's language; artifacts in
 `wiki_language`.
 
 ## What this is and is not

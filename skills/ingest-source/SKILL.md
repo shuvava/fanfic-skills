@@ -11,7 +11,7 @@ description: >
 
 Compile one source chunk into the canon tier. A single ingest typically touches 8–15 pages.
 
-Follow `${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md`. **All output is written in `wiki_language` from
+Follow `../../CONVENTIONS.md`. **All output is written in `wiki_language` from
 `CANON.md`; verbatim quotations are copied exactly from `raw/` and never translated.**
 
 ## Before starting
@@ -75,7 +75,7 @@ conventions specific to the source language. Top continuity trap; record explici
 **Measure these; do not estimate them.** Run:
 
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/style_fingerprint.py measure raw/*.md
+python3 ../../scripts/style_fingerprint.py measure raw/*.md
 ```
 
 It prints the `## Style fingerprint` table ready to paste, plus candidate spellings to adjudicate.

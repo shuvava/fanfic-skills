@@ -13,7 +13,7 @@ Establish authorial intent through a relentless one-question-at-a-time interview
 human gate in the pipeline and the highest-leverage one — misalignment here costs a rewrite of
 everything downstream.
 
-Follow `${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md`. The interview happens in the user's language; the
+Follow `../../CONVENTIONS.md`. The interview happens in the user's language; the
 artifact is written in `wiki_language`.
 
 ## The interview protocol

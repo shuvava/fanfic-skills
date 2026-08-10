@@ -11,7 +11,7 @@ description: >
 
 Audit and report. **Read-only by default** — propose fixes, apply only on confirmation.
 
-Follow `${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md`. Report in the user's language.
+Follow `../../CONVENTIONS.md`. Report in the user's language.
 
 ## Checks
 
@@ -43,8 +43,8 @@ Follow `${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md`. Report in the user's language.
 Run the measurement rather than eyeballing the page:
 
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/style_fingerprint.py measure raw/*.md
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/style_fingerprint.py check drafts/ch<NN>-*.md --against raw/*.md
+python3 ../../scripts/style_fingerprint.py measure raw/*.md
+python3 ../../scripts/style_fingerprint.py check drafts/ch<NN>-*.md --against raw/*.md
 ```
 
 Compare the first against what `overview.md` records, and run the second for every drafted chapter.

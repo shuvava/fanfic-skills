@@ -9,7 +9,7 @@ description: >
 
 # Wiki Init
 
-Scaffold the project. Read `${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md` first — it defines language
+Scaffold the project. Read `../../CONVENTIONS.md` first — it defines language
 preservation, provenance tiers, and citation format used by every other skill.
 
 ## 1. Detect the source language

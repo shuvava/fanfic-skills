@@ -5,6 +5,12 @@ in-character, in-canon, and **in the source's language**.
 
 ## Install
 
+The skills reference `CONVENTIONS.md` and `scripts/style_fingerprint.py` via repo-relative paths
+(`../../CONVENTIONS.md`, `../../scripts/...` from each `skills/<name>/SKILL.md`). Either install
+method keeps those paths intact; do not move `SKILL.md` files out of their `skills/<name>/` folders.
+
+### Claude Code
+
 ```bash
 git clone https://github.com/shuvava/fanfic-skills.git
 ```
@@ -22,9 +28,29 @@ To load it for a single non-interactive run instead:
 claude --plugin-dir /path/to/fanfic-skills
 ```
 
-**Do not install by copying `skills/` into `.claude/skills/`.** Every skill references
-`${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md`, which only resolves under plugin loading — a copied install
-silently loses the shared rules on language, tiers, and citations.
+### opencode
+
+opencode discovers skills from `.agents/skills/<name>/SKILL.md` (project) or
+`~/.agents/skills/<name>/SKILL.md` (global). Vendor the plugin so the `../../` paths resolve:
+
+```bash
+cd /path/to/your-fic-project
+mkdir -p .agents
+cp -R /path/to/fanfic-skills/{CONVENTIONS.md,scripts,skills} .agents/
+```
+
+opencode walks up from the cwd to the git worktree root looking for `.agents/`, so the project must
+be a git repo (`git init` if not). Verify the skills loaded:
+
+```bash
+opencode debug skill | grep -E 'wiki-init|ingest-source|plan-story|plan-chapters|write-chapter|reconcile|refine-harness|wiki-lint'
+```
+
+For a global install visible from every project, copy the same three into `~/.agents/` instead.
+
+**Do not move `SKILL.md` files out of their `skills/<name>/` folders.** The `../../` references
+resolve to the plugin root from that exact depth — flattening the layout silently breaks the shared
+conventions and the style fingerprint script.
 
 ## Use it
 

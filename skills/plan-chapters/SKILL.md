@@ -12,7 +12,7 @@ description: >
 Expand intent into a structured outline, ratifying each level with the user, then lint the plan
 against canon before anyone writes a word.
 
-Follow `${CLAUDE_PLUGIN_ROOT}/CONVENTIONS.md`. The outline is written in `wiki_language`.
+Follow `../../CONVENTIONS.md`. The outline is written in `wiki_language`.
 
 ## Prerequisites
 
