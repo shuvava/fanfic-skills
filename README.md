@@ -5,9 +5,14 @@ in-character, in-canon, and **in the source's language**.
 
 ## Install
 
-The skills reference `CONVENTIONS.md` and `scripts/style_fingerprint.py` via repo-relative paths
-(`../../CONVENTIONS.md`, `../../scripts/...` from each `skills/<name>/SKILL.md`). Either install
-method keeps those paths intact; do not move `SKILL.md` files out of their `skills/<name>/` folders.
+Each `skills/<name>/SKILL.md` reads the shared `CONVENTIONS.md` as `../../CONVENTIONS.md` — a
+markdown path, resolved from that SKILL.md's own folder. Either install method keeps it intact; do
+not move `SKILL.md` files out of their `skills/<name>/` folders.
+
+`scripts/style_fingerprint.py` is different: it runs in a shell whose working directory is **your
+project root**, not the plugin, so the skills resolve it at run time against your install layout
+(`.agents/scripts`, `~/.agents/scripts`, `$CLAUDE_PLUGIN_ROOT/scripts`, `scripts` — first hit wins).
+See `CONVENTIONS.md` §7. Copy `scripts/` wherever you copy `skills/` and it resolves itself.
 
 ### Claude Code
 
@@ -48,20 +53,32 @@ opencode debug skill | grep -E 'wiki-init|ingest-source|plan-story|plan-chapters
 
 For a global install visible from every project, copy the same three into `~/.agents/` instead.
 
-**Do not move `SKILL.md` files out of their `skills/<name>/` folders.** The `../../` references
-resolve to the plugin root from that exact depth — flattening the layout silently breaks the shared
-conventions and the style fingerprint script.
+**Do not move `SKILL.md` files out of their `skills/<name>/` folders.** The `../../CONVENTIONS.md`
+reference resolves to the plugin root from that exact depth — flattening the layout silently breaks
+the shared conventions.
 
 ## Use it
 
-Make a project directory and put your source material in it. Plain markdown or text, one file per
-chapter if you can — smaller ingests produce sharper pages.
+Make a project directory and **put your source material in `raw/`**. That directory name is not a
+suggestion: every skill reads the source from `raw/`, cites to it as `[src: <file>#<location>]`, and
+measures the style fingerprint against `raw/*.md`. A book sitting in `source/`, `books/`, or the
+project root will not be found, and `wiki-init` will copy it into `raw/` rather than read it in
+place — leaving you two copies of the same book.
+
+Plain markdown or text, **one file per chapter** if you can. That matters more than it looks: ingest
+is per-chapter, citations point into whatever file you give it, and `measure` globs `raw/*.md` — so
+a single file holding the whole novel produces citations into a megabyte of text and a style
+fingerprint computed over chapters you have not ingested yet.
 
 ```
 mkdir my-fic && cd my-fic
-mkdir raw && cp ~/books/the-source/*.md raw/
+mkdir raw && cp ~/books/the-source/chapter-*.md raw/    # one file per chapter
+git init                                                 # so a bad ingest can be reverted
 claude
 ```
+
+`raw/` is never edited and never translated, by any skill, ever. Everything else in the project is
+generated from it.
 
 Then talk to Claude. Skills trigger from what you say; you never type a skill name.
 
@@ -162,11 +179,15 @@ the pipeline could tell the difference. So the plugin ships a counter.
 
 ```bash
 # during ingest — produces the tables that go into canon/overview.md
-python3 scripts/style_fingerprint.py measure raw/*.md
+python3 <scripts>/style_fingerprint.py measure raw/*.md
 
 # during drafting and linting — how far has this draft drifted?
-python3 scripts/style_fingerprint.py check drafts/ch07-*.md --against raw/*.md
+python3 <scripts>/style_fingerprint.py check drafts/ch07-*.md --against raw/*.md
 ```
+
+Run these from your project root. `<scripts>` is wherever you installed the plugin's `scripts/`
+folder — `.agents/scripts` for a vendored opencode install, `$CLAUDE_PLUGIN_ROOT/scripts` under
+Claude Code; the skills resolve it themselves.
 
 Standard library only, no dependencies, no language-specific rules. `ingest-source` runs `measure`
 and pastes the result; `write-chapter` runs `check` on its own draft and revises until it passes;

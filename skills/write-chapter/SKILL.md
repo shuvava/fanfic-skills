@@ -126,8 +126,12 @@ Run explicitly and report:
 Measure the style row rather than judging it:
 
 ```bash
-python3 ../../scripts/style_fingerprint.py check drafts/ch<NN>-<slug>.md --against raw/*.md
+python3 <scripts>/style_fingerprint.py check drafts/ch<NN>-<slug>.md --against <ingested chapters>
 ```
+
+`<ingested chapters>` is the same span `canon/overview.md` records under `## Style fingerprint`
+(e.g. `raw/ch01.md raw/ch02.md ...`), **not** `raw/*.md`. Checking a draft against uningested
+chapters grades it on a target no page in the wiki describes.
 
 It prints every feature that drifted, with the source value, the draft value and the delta, and exits
 non-zero when anything is outside tolerance. **Revise the draft and re-run until it passes, or state

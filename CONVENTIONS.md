@@ -154,7 +154,37 @@ files — one book's habits must not leak into the next.
 
 ---
 
-## 7. Metrics
+## 7. Locating the plugin's own files
+
+Two different anchors are in play, and confusing them is the most common way these skills break:
+
+| Reference | Resolved relative to |
+|---|---|
+| Markdown links inside a SKILL.md (`../../CONVENTIONS.md`) | that SKILL.md's own directory |
+| **Paths in bash commands** (`python3 .../style_fingerprint.py`) | **the cwd — the project root** |
+
+A bash command must therefore **never** use `../../scripts/...`; from the project root that escapes
+the project entirely. Skills write the script as `<scripts>/style_fingerprint.py` and resolve
+`<scripts>` at run time, first hit wins:
+
+| Install | `<scripts>` |
+|---|---|
+| opencode, project-vendored | `.agents/scripts` |
+| opencode, global | `~/.agents/scripts` |
+| Claude Code plugin | `"$CLAUDE_PLUGIN_ROOT/scripts"` |
+| Running inside a clone of the plugin repo | `scripts` |
+
+```bash
+for d in .agents/scripts ~/.agents/scripts "$CLAUDE_PLUGIN_ROOT/scripts" scripts; do
+  [ -f "$d/style_fingerprint.py" ] && SCRIPTS="$d" && break
+done
+```
+
+`raw/`, `wiki/`, `plan/`, and `drafts/` are always project-root-relative, in both markdown and bash.
+
+---
+
+## 8. Metrics
 
 Every operation appends a metrics line to `wiki/log.md` so refinement has something to measure. Cost
 signals, not quality judgments.

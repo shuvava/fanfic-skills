@@ -19,9 +19,22 @@ Follow `../../CONVENTIONS.md`. The outline is written in `wiki_language`.
 Read `plan/STORY_INTENT.md`. If it does not exist, run `plan-story` first — outlining without
 established intent produces a plan the user did not ask for.
 
-Also load: `canon/overview.md` (structure conventions), `canon/plot/threads.md` (what is open),
-`canon/plot/timeline.md`, `canon/forbidden.md`, and `plan/HARNESS.md` if it exists — it may add
-project-specific checks to the conflict lint.
+Also load, in this order:
+
+1. **`canon/world/constraints.md`** — the flat ledger of what the world does not permit, one row per
+   rule with its cost. Read it *first*. It is the cheapest way to catch a plan that needs a rule the
+   world does not have, and its second section ("what canon does not establish") tells you which
+   silences a scene would be quietly filling in.
+2. **`canon/world/география.md`** — places and how they relate. Any scene that moves a character
+   between two places is checked here: if canon states no distance or travel time, the plan is
+   inventing one, and that is a `notice` needing ratification, not a detail.
+3. `canon/overview.md` (structure conventions), `canon/plot/threads.md` (what is open),
+   `canon/plot/timeline.md`, `canon/forbidden.md`.
+4. `plan/HARNESS.md` if it exists — it may add project-specific checks to the conflict lint.
+
+If the two derived pages do not exist, say so and offer to build them from the world pages. Linting a
+plan without them means holding every world page in mind at once, which is how a world-logic gap
+reaches the draft.
 
 ## Expand in layers, ratifying each
 
