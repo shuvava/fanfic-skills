@@ -109,6 +109,10 @@ Compare the first against what `overview.md` records, and run the second for eve
 - **Outgrown composite page** — a character with three or more canon facts living as a row in a
   composite page (a family, a squad) instead of their own page. Severity `medium`: a table cell has
   no `## Mannerisms` or `## Would never do`, so those facts were never capturable. Propose the split.
+- **Malformed heading** — a page heading that is truncated, misspelled, or otherwise not one of
+  the template's. Severity `low` on its own, but it silently defeats every other structural check:
+  a page whose `## Правило` was written `## Прави` reads fine to a human and is invisible to any
+  lint matching on heading names. Two world pages in a real wiki carried this for six ingests.
 - **Social rule with no mechanism** — a `world/` page recording a custom, hierarchy, or friction as
   outcome only ("brawls break out at markets") where canon explained the cause. Severity `low`, and
   the fix is a re-read: the cause is usually one clause away from the outcome in the source.
