@@ -6,6 +6,26 @@ Field-by-field capture list. All page bodies in `wiki_language`; all quotations 
 
 ## 1. Character page — `wiki/canon/characters/<name>.md`
 
+**Required headings — the exact set, in this order, on every character page.** `wiki-lint` checks
+for them by name. A heading you have nothing for gets `не установлено` beneath it, not deletion:
+
+`## Identity` · `## Physical` · `## Personality` · `## Wants vs. Needs` · `## Backstory` ·
+`## Relationships` · `## Arc state` · `## Mannerisms` · `## Would never do` · `## Contradictions` ·
+`## Sources`
+
+Extra headings beyond this set are allowed — a composite page needs its roster table, a character
+may earn a page-specific section. What is not allowed is dropping one of the required headings or
+renaming it away. Do not rename, merge, or substitute. A page that reorganizes these into bespoke
+sections
+(`## Личность/способности`, `## Dialogue`) loses whichever detail had no home in the improvised
+shape — and `## Mannerisms` is the one that disappears, every time, because gestures and tells feel
+like flavor next to plot facts.
+
+**Granularity:** one page per character once canon gives them three or more facts. Below that they
+may live as a row in a composite page (a family, a squad). See `../SKILL.md` §1 — the composite page
+has no per-character `## Mannerisms`, so a character who outgrows a row and stays in one silently
+loses everything the row has no column for.
+
 ```markdown
 ---
 tier: canon
@@ -52,8 +72,10 @@ Where they stand at the end of ingested canon.
 - Behavioral: rituals, habits, tells under stress
 
 ## Would never do
-The internal moral code — the lines they hold. Each with citation.
-**Highest-value section. Populate it aggressively.**
+The internal moral code — the lines they hold **under pressure**. Each with citation.
+**Highest-value section. Populate it aggressively — but only with refusals.**
+An unvoiced discomfort is Personality, not a held line; `plan-chapters` reads every row here as a
+hard behavioral constraint, so a soft inference here is worse than a thin section.
 
 ## Contradictions
 Claims from different sources that do not reconcile. Keep both.
@@ -161,6 +183,11 @@ What canon establishes.
 What it cannot do. What it costs. What it breaks.
 **A rule with no recorded limit is a rule the writer can cheat with.**
 
+## Mechanism
+For social, political, and economic rules: **why** the rule produces the effect canon shows. Record
+the cause, not only the outcome — an outcome can be staged anywhere, a mechanism says where it can
+and cannot happen. Omit this heading only for rules canon states without explanation.
+
 ## How canon has used it
 Instances, cited.
 
@@ -174,6 +201,77 @@ Also capture across world pages: geography and travel distances · culture, cust
 politics, hierarchies · history and key events · daily-life texture (food, clothing, currency, jobs,
 technology level) · sensory detail · **naming conventions in the source language** (patronymics,
 surnames, place-name morphology) so invented names fit.
+
+### 3a. Geography — `wiki/canon/world/<geography>.md` (derived)
+
+```markdown
+---
+tier: canon
+type: world
+topic: <Geography and space>
+derived: true
+sources_ingested: [...]
+---
+
+# <Geography and space>
+
+**Derived page.** Assembled from the topic pages; adds nothing to them. Every row carries a
+citation or says `not established`. **An empty cell is a fact about the wiki, not about the
+world** — never fill one with a plausible distance.
+
+## Relation sketch
+<a rough ASCII or mermaid diagram of what borders, contains, or lies beyond what>
+
+## Places
+| Place | Type | Relation to others | Distance / travel time | Source |
+
+## Placement rules
+The world's own spatial law — what may be built where, who may live how far from what.
+
+## Units of measure
+Which units of distance and time canon has actually named. If none: say so, and forbid
+inventing leagues, miles, hours, or weekday names in prose.
+
+## Gaps that would break world logic
+Numbered. Each one a question planning must settle before a scene depends on it.
+
+## Sources
+```
+
+### 3b. Constraint ledger — `wiki/canon/world/constraints.md` (derived)
+
+```markdown
+---
+tier: canon
+type: world
+topic: <Constraint ledger>
+derived: true
+sources_ingested: [...]
+---
+
+# <Constraint ledger>
+
+**Derived page.** One row per rule, aggregated from every world page. `plan-chapters` reads
+this first: an outline can be checked against one table, and will not be checked against eight
+prose pages.
+
+## Hard constraints
+| # | Rule | Limit / cost | Source |
+
+## What canon does NOT establish
+The silences, listed. Absence of a rule reads as permission to a drafting model — no magic
+shown, no other creatures in frame, no economy. Anything here needs `reconcile` before a plot
+leans on it.
+
+## How to use this
+Which severity a violation of each section earns, and the instruction to rebuild after each
+ingest.
+
+## Sources
+```
+
+Both derived pages are **regenerated, never hand-edited**. Rebuild them at the end of every ingest so
+they cannot drift from the pages they summarize.
 
 ---
 

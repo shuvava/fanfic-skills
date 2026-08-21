@@ -13,6 +13,8 @@ source_language: <ISO 639-1>
 wiki_language: <ISO 639-1>
 output_language: <ISO 639-1>
 ingest_granularity: <per-chapter | per-arc | whole-book>
+layout: flat                     # flat | series — see CONVENTIONS.md §8
+current_book:                    # series only; the book being planned or drafted
 ---
 
 # CANON.md — Project Schema
@@ -51,8 +53,8 @@ Contradictions are logged under a page's `## Contradictions` heading, never sile
 ```
 ingest-source   → canon wiki pages
 plan-story      → plan/STORY_INTENT.md          [grilling gate]
-plan-chapters   → plan/outline.md + conflicts   [conflict gate]
-write-chapter   → plan/beats/ + drafts/         [beat gate]
+plan-chapters   → outline.md + conflicts.md     [conflict gate]
+write-chapter   → beats/ + drafts/              [beat gate]
 reconcile       → fanon promotion               [review gate]
 wiki-lint       → health report
 ```

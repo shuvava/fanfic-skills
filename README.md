@@ -5,9 +5,14 @@ in-character, in-canon, and **in the source's language**.
 
 ## Install
 
-The skills reference `CONVENTIONS.md` and `scripts/style_fingerprint.py` via repo-relative paths
-(`../../CONVENTIONS.md`, `../../scripts/...` from each `skills/<name>/SKILL.md`). Either install
-method keeps those paths intact; do not move `SKILL.md` files out of their `skills/<name>/` folders.
+Each `skills/<name>/SKILL.md` reads the shared `CONVENTIONS.md` as `../../CONVENTIONS.md` — a
+markdown path, resolved from that SKILL.md's own folder. Either install method keeps it intact; do
+not move `SKILL.md` files out of their `skills/<name>/` folders.
+
+`scripts/style_fingerprint.py` is different: it runs in a shell whose working directory is **your
+project root**, not the plugin, so the skills resolve it at run time against your install layout
+(`.agents/scripts`, `~/.agents/scripts`, `$CLAUDE_PLUGIN_ROOT/scripts`, `scripts` — first hit wins).
+See `CONVENTIONS.md` §7. Copy `scripts/` wherever you copy `skills/` and it resolves itself.
 
 ### Claude Code
 
@@ -43,25 +48,37 @@ opencode walks up from the cwd to the git worktree root looking for `.agents/`, 
 be a git repo (`git init` if not). Verify the skills loaded:
 
 ```bash
-opencode debug skill | grep -E 'wiki-init|ingest-source|plan-story|plan-chapters|write-chapter|reconcile|refine-harness|wiki-lint'
+opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|write-chapter|reconcile|refine-harness|wiki-lint'
 ```
 
 For a global install visible from every project, copy the same three into `~/.agents/` instead.
 
-**Do not move `SKILL.md` files out of their `skills/<name>/` folders.** The `../../` references
-resolve to the plugin root from that exact depth — flattening the layout silently breaks the shared
-conventions and the style fingerprint script.
+**Do not move `SKILL.md` files out of their `skills/<name>/` folders.** The `../../CONVENTIONS.md`
+reference resolves to the plugin root from that exact depth — flattening the layout silently breaks
+the shared conventions.
 
 ## Use it
 
-Make a project directory and put your source material in it. Plain markdown or text, one file per
-chapter if you can — smaller ingests produce sharper pages.
+Make a project directory and **put your source material in `raw/`**. That directory name is not a
+suggestion: every skill reads the source from `raw/`, cites to it as `[src: <file>#<location>]`, and
+measures the style fingerprint against `raw/*.md`. A book sitting in `source/`, `books/`, or the
+project root will not be found, and `wiki-init` will copy it into `raw/` rather than read it in
+place — leaving you two copies of the same book.
+
+Plain markdown or text, **one file per chapter** if you can. That matters more than it looks: ingest
+is per-chapter, citations point into whatever file you give it, and `measure` globs `raw/*.md` — so
+a single file holding the whole novel produces citations into a megabyte of text and a style
+fingerprint computed over chapters you have not ingested yet.
 
 ```
 mkdir my-fic && cd my-fic
-mkdir raw && cp ~/books/the-source/*.md raw/
+mkdir raw && cp ~/books/the-source/chapter-*.md raw/    # one file per chapter
+git init                                                 # so a bad ingest can be reverted
 claude
 ```
+
+`raw/` is never edited and never translated, by any skill, ever. Everything else in the project is
+generated from it.
 
 Then talk to Claude. Skills trigger from what you say; you never type a skill name.
 
@@ -78,27 +95,36 @@ chapters is usually enough to plan against.
 
 Ask *"lint the wiki"* whenever you want a health report.
 
-**3. Decide what you're writing.** → *"Let's plan the story."*
+**3. Figure out what to write** (optional, and skip it if you already know) → *"Let's brainstorm the
+next book"* or *"What if he ends up on the throne — how many books is that?"*
+
+The divergent stage. You and Claude throw ideas at each other, each one gets a quick canon check as
+it lands, and most of them get killed out loud with the reason recorded so they don't come back next
+session. Planning several books sets a destination and a ladder of rungs to reach it — which turns
+"any idea is fine" into "does this move him along it?" Lands in `plan/IDEAS.md` and
+`plan/SERIES_ARC.md`. Nothing is committed here; the next step reads them as candidates.
+
+**4. Decide what you're writing.** → *"Let's plan the story."*
 
 A one-question-at-a-time interview, each question carrying a recommended answer so you can say "yes"
 and move on. Anything the wiki can answer is looked up, never asked. Ends with `plan/STORY_INTENT.md`
 once you confirm.
 
-**4. Outline.** → *"Outline it — five chapters."*
+**5. Outline.** → *"Outline it — five chapters."*
 
 Expands to paragraph → arc → chapter list → scene list, ratifying each layer. Then it lints the plan
 against canon **before any prose exists** and reports conflicts.
 
-**5. Write.** → *"Write chapter 1."*
+**6. Write.** → *"Write chapter 1."*
 
 Beats first — you review them, which is the cheapest place to catch a problem. Then prose, then a
 canon check reporting anything it violated rather than quietly fixing it.
 
-**6. Edit the draft yourself.** Then → *"Reconcile chapter 1."*
+**7. Edit the draft yourself.** Then → *"Reconcile chapter 1."*
 
 Routes what the chapter invented through your review, promoting what you accept into `fanon`.
 
-**7. After a few chapters** → *"Refine the harness."*
+**8. After a few chapters** → *"Refine the harness."*
 
 Reads the diff between what Claude drafted and what you kept, and proposes project-local rules. You
 ratify each one.
@@ -108,6 +134,7 @@ ratify each one.
 ```
 wiki-init      → structure + language detection
 ingest-source  → canon wiki pages                        [tier: canon, immutable]
+brainstorm     → plan/IDEAS.md + plan/SERIES_ARC.md      [no gate — candidates only]
 plan-story     → plan/STORY_INTENT.md                    [grilling gate]
 plan-chapters  → outline + conflict report               [conflict gate]
 write-chapter  → beats → prose → canon check             [beat gate]
@@ -116,7 +143,8 @@ refine-harness → learn from your edits
 wiki-lint      → health report
 ```
 
-Four human gates. Each catches errors one stage before they become expensive.
+Four human gates. Each catches errors one stage before they become expensive. `brainstorm` is
+deliberately not one of them — nothing it produces is committed, so there is nothing to gate.
 
 ## Three invariants
 
@@ -139,6 +167,29 @@ action, never reaching canon:
 
 Without this wall, chapter 7 treats chapter 3's inventions as source material and canon fidelity rots.
 
+## Ideas are candidates, not facts
+
+`brainstorm` writes to `plan/`, never to `wiki/` — not even to `fanon/proposed/`. An idea is not a
+fact about the world; it is something you might decide later, and most of them you won't. Putting
+candidates in a provenance tier dilutes the entries that actually matter when a chapter is being
+drafted.
+
+Two things make the stage worth running rather than just chatting:
+
+**A destination makes ideas judgeable.** If the series ends with him on the throne ten books out,
+"what if he falls in love" stops being unanswerable. The relationship is good if it's *how* he learns
+what the throne demands, or *what* he trades to reach it — and it's a detour if he ends it unchanged.
+Without a destination every idea looks equally fine, which is the same as having no opinion. So
+`SERIES_ARC.md` holds the destination and a ladder of rungs, where each book's end state is the next
+book's start state. The destination is firm; the next two rungs are detailed; rungs 4–10 are one line
+each. Ten planned books get thrown away when book 2 changes, exactly as forty planned scenes get
+thrown away when chapter 3 does.
+
+**Killed ideas stay killed.** Every kill is recorded with its reason, so the same idea doesn't come
+back next session to be re-argued from scratch. The skill is told to take a position on every idea
+and kill out loud, because thirty ideas met with equal enthusiasm contain no signal — the culling is
+the work. A session's `kill_rate` goes in the log; a session that killed nothing didn't discriminate.
+
 ## Conflicts surface at planning time
 
 `plan-chapters` lints the outline against canon before any prose exists:
@@ -153,6 +204,27 @@ A blocking conflict asks one question: intentional AU divergence, or error? Inte
 get recorded in `CANON.md` and stop being conflicts. Catching this at the beat stage costs a line;
 catching it after drafting costs a scene.
 
+## A series is planned one book at a time
+
+The wiki is shared across every book; the plan and the drafts are per book. So book 2 lives in
+`plan/book-02-<slug>/` and `drafts/book-02/`, chapter numbers restart at 1 in each book, and a
+chapter is referred to across the project as `b02/ch03`. A project starts flat — a single book's
+`plan/outline.md` — and `plan-chapters` migrates it the first time you plan a second book.
+
+Outlining book 2 then runs three checks book 1 never needed:
+
+- **The start state is gated against what book 1 actually ended with**, not against what the ladder
+  said it would end with. Where the drafted text and `SERIES_ARC.md` disagree, the text wins.
+- **Seeds are checked both directions.** A seed the ladder says to plant in this book that no scene
+  plants is `blocking` — by the time book 4 needs it, book 2 is published and the fix is either a
+  rewrite or a coincidence the reader will notice.
+- **The ending has to deliver this rung's end state**, because the next book's start state is already
+  written against it.
+
+Facts earlier books invented and you ratified live in `wiki/fanon/`, which is series-wide: in book 3
+they are as binding as canon in practice. `drafts/continuity.md` is one file for the whole series for
+the same reason — a per-book ledger is how book 3 forgets book 1.
+
 ## Style is measured, not described
 
 A style note written as an adjective cannot be checked. "Uses em-dashes heavily" is satisfied at any
@@ -162,11 +234,15 @@ the pipeline could tell the difference. So the plugin ships a counter.
 
 ```bash
 # during ingest — produces the tables that go into canon/overview.md
-python3 scripts/style_fingerprint.py measure raw/*.md
+python3 <scripts>/style_fingerprint.py measure raw/*.md
 
 # during drafting and linting — how far has this draft drifted?
-python3 scripts/style_fingerprint.py check drafts/ch07-*.md --against raw/*.md
+python3 <scripts>/style_fingerprint.py check drafts/ch07-*.md --against raw/*.md
 ```
+
+Run these from your project root. `<scripts>` is wherever you installed the plugin's `scripts/`
+folder — `.agents/scripts` for a vendored opencode install, `$CLAUDE_PLUGIN_ROOT/scripts` under
+Claude Code; the skills resolve it themselves.
 
 Standard library only, no dependencies, no language-specific rules. `ingest-source` runs `measure`
 and pastes the result; `write-chapter` runs `check` on its own draft and revises until it passes;
@@ -225,8 +301,11 @@ author's spelling.
 project/
 ├── CANON.md              # schema, language, divergences, preferences
 ├── raw/                  # immutable, untranslated
-├── plan/                 # STORY_INTENT.md, outline.md, conflicts.md, beats/, HARNESS.md
-├── drafts/               # chapters + continuity.md + snapshots/
+├── plan/                 # IDEAS.md, SERIES_ARC.md, HARNESS.md — series-wide
+│                         #   STORY_INTENT.md, outline.md, conflicts.md, beats/ — per book,
+│                         #   nested under book-<NN>-<slug>/ once there is a second book
+├── drafts/               # chapters + snapshots/, nested per book in a series
+│                         #   continuity.md — series-wide, never per book
 └── wiki/
     ├── canon/            # overview, forbidden, characters, voices, world, plot
     └── fanon/            # ratified inventions + proposed/

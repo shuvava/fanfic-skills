@@ -96,13 +96,18 @@ resolution is to record it in `CANON.md` under `divergences` with a reason, tag 
 ## 4. Citation format
 
 ```
-[src: chapter-04.md#Глава 4, сцена в саду]     # canon, cited to raw/
+[src: ch04.md#Глава 4, сцена в саду]             # canon, cited raw/-relative, single-volume source
+[src: book-02/ch04.md#Глава 4]                   # multi-volume source — the volume is required
 [fanon: intent#pairing-decision]                 # ratified fanon
-[fanon: ch03-scene02]                            # asserted by a generated scene
+[fanon: b02/ch03-scene02]                        # asserted by a generated scene (b<NN>/ in a series)
 (inferred)                                       # reasoned, not read
 ```
 
 Citation text stays in the source language when it quotes source headings.
+
+**A `[src:]` path is resolvable or it is not a citation.** It resolves against `raw/` exactly as
+written, so once a source has more than one volume every citation carries the volume directory —
+`ch04.md` alone is then ambiguous between volumes and points at nothing on disk.
 
 ---
 
@@ -154,7 +159,122 @@ files — one book's habits must not leak into the next.
 
 ---
 
-## 7. Metrics
+## 7. Locating the plugin's own files
+
+Two different anchors are in play, and confusing them is the most common way these skills break:
+
+| Reference | Resolved relative to |
+|---|---|
+| Markdown links inside a SKILL.md (`../../CONVENTIONS.md`) | that SKILL.md's own directory |
+| **Paths in bash commands** (`python3 .../style_fingerprint.py`) | **the cwd — the project root** |
+
+A bash command must therefore **never** use `../../scripts/...`; from the project root that escapes
+the project entirely. Skills write the script as `<scripts>/style_fingerprint.py` and resolve
+`<scripts>` at run time, first hit wins:
+
+| Install | `<scripts>` |
+|---|---|
+| opencode, project-vendored | `.agents/scripts` |
+| opencode, global | `~/.agents/scripts` |
+| Claude Code plugin | `"$CLAUDE_PLUGIN_ROOT/scripts"` |
+| Running inside a clone of the plugin repo | `scripts` |
+
+```bash
+for d in .agents/scripts ~/.agents/scripts "$CLAUDE_PLUGIN_ROOT/scripts" scripts; do
+  [ -f "$d/style_fingerprint.py" ] && SCRIPTS="$d" && break
+done
+```
+
+`raw/`, `wiki/`, `plan/`, and `drafts/` are always project-root-relative, in both markdown and bash.
+
+---
+
+## 8. Book scope
+
+A project holds either one work or a series. **The wiki is shared across the whole series; the plan
+and the drafts are per book.** Canon extracted from the source does not change because the fic moved
+to its second book, but an outline, a conflict report, a beat sheet and a chapter file all belong to
+exactly one book.
+
+**Two independent book axes. Do not conflate them.**
+
+| Axis | What it counts | Where | Numbered by |
+|---|---|---|---|
+| **source book** | volumes of the material being ingested | `raw/` | the source series' own numbering |
+| **fic book** | volumes of the fic being written | `plan/`, `drafts/` | the `SERIES_ARC.md` ladder |
+
+A five-volume source can be the input to a one-book fic, and a three-book fic can be built out of
+volume 2 alone. `raw/book-03/` and `plan/book-03-<slug>/` have nothing to do with each other.
+
+### Source books in `raw/`
+
+One directory per volume as soon as there is more than one: `raw/book-<NN>/ch<NN>.md`, plus that
+volume's `_meta.md`, which is where the volume's title and author live. A single-volume source stays
+flat at `raw/ch<NN>.md`.
+
+**No slug in the directory name.** It is carried by every `[src:]` in the wiki — thousands of them in
+a real project — and a title that reads fine once reads as noise at that count. The plan and drafts
+directories do carry a slug, because a working title is the only way to tell two unwritten books
+apart at a glance; a source volume already has `_meta.md` to consult.
+
+Chapter numbers follow the volume, so a second volume restarts at `ch01.md` and **collides with the
+first volume's in a flat `raw/`** — which is the whole reason for the directory. Migrate before
+ingesting volume 2, never after: citations written flat all have to be rewritten anyway, and doing it
+while only one volume exists is a mechanical rename instead of a disambiguation.
+
+Citations are `raw/`-relative and carry the volume when there is one — see §4.
+
+### Fic books in `plan/` and `drafts/`
+
+| Layout | When | Paths |
+|---|---|---|
+| **flat** | one book, one-shot, or no `plan/SERIES_ARC.md` | `plan/STORY_INTENT.md`, `plan/outline.md`, `plan/conflicts.md`, `plan/beats/ch<NN>.md`, `drafts/ch<NN>-<slug>.md`, `drafts/snapshots/ch<NN>-v0.md` |
+| **series** | `plan/SERIES_ARC.md` has more than one rung, or the user says it is a series | `plan/book-<NN>-<slug>/{STORY_INTENT.md,outline.md,conflicts.md,beats/ch<NN>.md}`, `drafts/book-<NN>/ch<NN>-<slug>.md`, `drafts/book-<NN>/snapshots/ch<NN>-v0.md` |
+
+Shared in both layouts, never per book: `CANON.md`, `wiki/`, `plan/HARNESS.md`, `plan/IDEAS.md`,
+`plan/SERIES_ARC.md`, `drafts/continuity.md`.
+
+`<NN>` is zero-padded and matches the `Book` column of the `SERIES_ARC.md` ladder. `<slug>` is the
+book's working title, kebab-case, in `wiki_language`'s script transliterated to ASCII if needed.
+
+**Which book am I in.** `CANON.md` records it:
+
+```yaml
+layout: series          # or: flat
+current_book: 2         # series only
+```
+
+Resolve in this order: `CANON.md` `current_book` → the highest-numbered `plan/book-*/` whose outline
+has undrafted chapters → ask. **Never guess from the highest-numbered directory alone** — a finished
+book 2 and an unstarted book 3 look the same on disk.
+
+**Chapter numbers restart at 1 in each book.** A chapter is identified across the project as
+`b<NN>/ch<NN>` — `b02/ch03`. Cite it that way in `continuity.md`, `log.md`, and any cross-book
+reference; a bare `ch03` in a series project is ambiguous and will eventually be read as the wrong
+chapter.
+
+**Migrating flat → series** happens the first time a second book is planned, or — for `raw/` — before
+a second source volume is ingested. Move, do not copy:
+
+```bash
+mkdir -p raw/book-01
+git mv raw/ch*.md raw/_meta.md raw/book-01/
+
+mkdir -p plan/book-01-<slug> drafts/book-01
+git mv plan/STORY_INTENT.md plan/outline.md plan/conflicts.md plan/beats plan/book-01-<slug>/
+git mv drafts/ch*.md drafts/snapshots drafts/book-01/
+```
+
+Moving `raw/` files is not editing them — the bytes are untouched, which is what the invariant
+protects. Rewrite every `[src:]` citation in the same commit; a citation pointing at a path that no
+longer exists is worse than a coarse one, because `wiki-lint` cannot tell it from a typo.
+
+Then set `layout: series` in `CANON.md` and say what moved. Leaving book 1 flat while book 2 is
+nested means every later skill has to handle both shapes for the rest of the project's life.
+
+---
+
+## 9. Metrics
 
 Every operation appends a metrics line to `wiki/log.md` so refinement has something to measure. Cost
 signals, not quality judgments.

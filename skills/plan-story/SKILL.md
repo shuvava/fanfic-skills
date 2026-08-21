@@ -24,6 +24,16 @@ Adapted from the "grilling" collaboration pattern. Follow it exactly — the dis
 learned from earlier rounds. Its questions are asked alongside the standard ones, in the same
 one-at-a-time discipline.
 
+**Read `plan/SERIES_ARC.md` and `plan/IDEAS.md` if they exist.** They hold decided-nothing candidate
+material from `brainstorm`: a series destination with its ladder, and shortlisted ideas. Use them as
+recommendation sources, not as answers — nothing there passed a gate. If `SERIES_ARC.md` names which
+rung this book is, its start and end states answer the placement questions and constrain what the fic
+may resolve; state that rather than asking. **If an earlier book is already drafted, read its ending
+and `drafts/continuity.md` before asking anything about placement** — the drafted text is this book's
+actual start state, and where it disagrees with the ladder, the text wins and the ladder is stale. If the user is planning a series and neither file exists,
+offer `brainstorm` first — grilling someone toward a premise they have not yet found is the wrong
+tool.
+
 **Look up facts. Ask only decisions.**
 Anything discoverable in `wiki/canon/` must be read, never asked. Do not ask "who is the protagonist's
 sister?" — read it. Ask only what is genuinely the user's call: what they want this fic to *be*.
@@ -51,7 +61,8 @@ Walk roughly in this order, skipping anything the user already specified and pru
 answers make irrelevant.
 
 **Root — what kind of fic**
-1. Premise in one sentence. (Recommend one drawn from an unpaid thread in `plot/threads.md`.)
+1. Premise in one sentence. (Recommend a shortlisted `arc` idea from `plan/IDEAS.md` if there is one,
+   otherwise one drawn from an unpaid thread in `plot/threads.md`.)
 2. Relationship to canon: continuation · interquel · AU · canon-divergence · fix-it · crossover.
 3. Scope: one-shot · short multichapter · long fic. This sets how much planning follows.
 
@@ -90,7 +101,10 @@ While interviewing, watch for two things:
 
 ## The artifact
 
-On confirmation, write `plan/STORY_INTENT.md` in `wiki_language`:
+On confirmation, write `STORY_INTENT.md` in `wiki_language` — at `plan/` in a flat project, in the
+book's directory in a series (`../../CONVENTIONS.md` §8). **One intent per book.** Book 2 gets its
+own premise, its own load-bearing list and its own divergences; overwriting book 1's intent destroys
+the record of what its outline was linted against.
 
 ```markdown
 ---
@@ -137,7 +151,11 @@ Rating, boundaries, length target, chapter count.
 Also append each divergence to `CANON.md`'s `divergences` table, and each sanctioned invention to
 `wiki/fanon/proposed/`.
 
-Append to `wiki/log.md`: `## [YYYY-MM-DD] plan-story | <working title>`.
+If an idea from `plan/IDEAS.md` fed this intent, mark it `promoted` there and note which section took
+it. An idea file where nothing is ever marked promoted is a busy one, not a productive one.
+
+Append to `wiki/log.md`: `## [YYYY-MM-DD] plan-story | b<NN> <working title>` (drop `b<NN>` when
+flat).
 
 ## Rules
 
