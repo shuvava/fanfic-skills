@@ -16,7 +16,9 @@ Follow `../../CONVENTIONS.md`. **All output is written in `wiki_language` from
 
 ## Before starting
 
-1. Read `CANON.md` — conventions and language settings.
+1. Read `CANON.md` — conventions and language settings, including which source volume this material
+   belongs to. Every `[src:]` you write carries the volume directory when `raw/` holds more than one
+   (`../../CONVENTIONS.md` §4, §8); a bare `ch<NN>.md` in a multi-volume project is unresolvable.
 2. Read `wiki/index.md` — what already exists.
 3. Read the last few `wiki/log.md` entries — what was recently ingested.
 4. **Check the log for this source.** Never ingest the same source twice; it duplicates claims and

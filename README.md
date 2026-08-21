@@ -48,7 +48,7 @@ opencode walks up from the cwd to the git worktree root looking for `.agents/`, 
 be a git repo (`git init` if not). Verify the skills loaded:
 
 ```bash
-opencode debug skill | grep -E 'wiki-init|ingest-source|plan-story|plan-chapters|write-chapter|reconcile|refine-harness|wiki-lint'
+opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|write-chapter|reconcile|refine-harness|wiki-lint'
 ```
 
 For a global install visible from every project, copy the same three into `~/.agents/` instead.
@@ -95,27 +95,36 @@ chapters is usually enough to plan against.
 
 Ask *"lint the wiki"* whenever you want a health report.
 
-**3. Decide what you're writing.** → *"Let's plan the story."*
+**3. Figure out what to write** (optional, and skip it if you already know) → *"Let's brainstorm the
+next book"* or *"What if he ends up on the throne — how many books is that?"*
+
+The divergent stage. You and Claude throw ideas at each other, each one gets a quick canon check as
+it lands, and most of them get killed out loud with the reason recorded so they don't come back next
+session. Planning several books sets a destination and a ladder of rungs to reach it — which turns
+"any idea is fine" into "does this move him along it?" Lands in `plan/IDEAS.md` and
+`plan/SERIES_ARC.md`. Nothing is committed here; the next step reads them as candidates.
+
+**4. Decide what you're writing.** → *"Let's plan the story."*
 
 A one-question-at-a-time interview, each question carrying a recommended answer so you can say "yes"
 and move on. Anything the wiki can answer is looked up, never asked. Ends with `plan/STORY_INTENT.md`
 once you confirm.
 
-**4. Outline.** → *"Outline it — five chapters."*
+**5. Outline.** → *"Outline it — five chapters."*
 
 Expands to paragraph → arc → chapter list → scene list, ratifying each layer. Then it lints the plan
 against canon **before any prose exists** and reports conflicts.
 
-**5. Write.** → *"Write chapter 1."*
+**6. Write.** → *"Write chapter 1."*
 
 Beats first — you review them, which is the cheapest place to catch a problem. Then prose, then a
 canon check reporting anything it violated rather than quietly fixing it.
 
-**6. Edit the draft yourself.** Then → *"Reconcile chapter 1."*
+**7. Edit the draft yourself.** Then → *"Reconcile chapter 1."*
 
 Routes what the chapter invented through your review, promoting what you accept into `fanon`.
 
-**7. After a few chapters** → *"Refine the harness."*
+**8. After a few chapters** → *"Refine the harness."*
 
 Reads the diff between what Claude drafted and what you kept, and proposes project-local rules. You
 ratify each one.
@@ -125,6 +134,7 @@ ratify each one.
 ```
 wiki-init      → structure + language detection
 ingest-source  → canon wiki pages                        [tier: canon, immutable]
+brainstorm     → plan/IDEAS.md + plan/SERIES_ARC.md      [no gate — candidates only]
 plan-story     → plan/STORY_INTENT.md                    [grilling gate]
 plan-chapters  → outline + conflict report               [conflict gate]
 write-chapter  → beats → prose → canon check             [beat gate]
@@ -133,7 +143,8 @@ refine-harness → learn from your edits
 wiki-lint      → health report
 ```
 
-Four human gates. Each catches errors one stage before they become expensive.
+Four human gates. Each catches errors one stage before they become expensive. `brainstorm` is
+deliberately not one of them — nothing it produces is committed, so there is nothing to gate.
 
 ## Three invariants
 
@@ -156,6 +167,29 @@ action, never reaching canon:
 
 Without this wall, chapter 7 treats chapter 3's inventions as source material and canon fidelity rots.
 
+## Ideas are candidates, not facts
+
+`brainstorm` writes to `plan/`, never to `wiki/` — not even to `fanon/proposed/`. An idea is not a
+fact about the world; it is something you might decide later, and most of them you won't. Putting
+candidates in a provenance tier dilutes the entries that actually matter when a chapter is being
+drafted.
+
+Two things make the stage worth running rather than just chatting:
+
+**A destination makes ideas judgeable.** If the series ends with him on the throne ten books out,
+"what if he falls in love" stops being unanswerable. The relationship is good if it's *how* he learns
+what the throne demands, or *what* he trades to reach it — and it's a detour if he ends it unchanged.
+Without a destination every idea looks equally fine, which is the same as having no opinion. So
+`SERIES_ARC.md` holds the destination and a ladder of rungs, where each book's end state is the next
+book's start state. The destination is firm; the next two rungs are detailed; rungs 4–10 are one line
+each. Ten planned books get thrown away when book 2 changes, exactly as forty planned scenes get
+thrown away when chapter 3 does.
+
+**Killed ideas stay killed.** Every kill is recorded with its reason, so the same idea doesn't come
+back next session to be re-argued from scratch. The skill is told to take a position on every idea
+and kill out loud, because thirty ideas met with equal enthusiasm contain no signal — the culling is
+the work. A session's `kill_rate` goes in the log; a session that killed nothing didn't discriminate.
+
 ## Conflicts surface at planning time
 
 `plan-chapters` lints the outline against canon before any prose exists:
@@ -169,6 +203,27 @@ Without this wall, chapter 7 treats chapter 3's inventions as source material an
 A blocking conflict asks one question: intentional AU divergence, or error? Intentional divergences
 get recorded in `CANON.md` and stop being conflicts. Catching this at the beat stage costs a line;
 catching it after drafting costs a scene.
+
+## A series is planned one book at a time
+
+The wiki is shared across every book; the plan and the drafts are per book. So book 2 lives in
+`plan/book-02-<slug>/` and `drafts/book-02/`, chapter numbers restart at 1 in each book, and a
+chapter is referred to across the project as `b02/ch03`. A project starts flat — a single book's
+`plan/outline.md` — and `plan-chapters` migrates it the first time you plan a second book.
+
+Outlining book 2 then runs three checks book 1 never needed:
+
+- **The start state is gated against what book 1 actually ended with**, not against what the ladder
+  said it would end with. Where the drafted text and `SERIES_ARC.md` disagree, the text wins.
+- **Seeds are checked both directions.** A seed the ladder says to plant in this book that no scene
+  plants is `blocking` — by the time book 4 needs it, book 2 is published and the fix is either a
+  rewrite or a coincidence the reader will notice.
+- **The ending has to deliver this rung's end state**, because the next book's start state is already
+  written against it.
+
+Facts earlier books invented and you ratified live in `wiki/fanon/`, which is series-wide: in book 3
+they are as binding as canon in practice. `drafts/continuity.md` is one file for the whole series for
+the same reason — a per-book ledger is how book 3 forgets book 1.
 
 ## Style is measured, not described
 
@@ -246,8 +301,11 @@ author's spelling.
 project/
 ├── CANON.md              # schema, language, divergences, preferences
 ├── raw/                  # immutable, untranslated
-├── plan/                 # STORY_INTENT.md, outline.md, conflicts.md, beats/, HARNESS.md
-├── drafts/               # chapters + continuity.md + snapshots/
+├── plan/                 # IDEAS.md, SERIES_ARC.md, HARNESS.md — series-wide
+│                         #   STORY_INTENT.md, outline.md, conflicts.md, beats/ — per book,
+│                         #   nested under book-<NN>-<slug>/ once there is a second book
+├── drafts/               # chapters + snapshots/, nested per book in a series
+│                         #   continuity.md — series-wide, never per book
 └── wiki/
     ├── canon/            # overview, forbidden, characters, voices, world, plot
     └── fanon/            # ratified inventions + proposed/

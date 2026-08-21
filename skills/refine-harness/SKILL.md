@@ -35,9 +35,13 @@ promote anything between tiers. Those are `reconcile`'s job and canon's wall.
 
 Read across the whole project history, not just the last chapter. Patterns need repetition to be real.
 
-**Edit diffs — the primary signal.** For each chapter, diff `drafts/snapshots/ch<NN>-v0.md` (Claude's
-untouched draft) against the current `drafts/ch<NN>-*.md`. If no snapshot exists, say so — the chapter
-predates snapshotting and cannot contribute edit signal.
+**Edit diffs — the primary signal.** For each chapter, diff its `snapshots/ch<NN>-v0.md` (Claude's
+untouched draft) against the current `ch<NN>-*.md` in the same drafts directory. If no snapshot
+exists, say so — the chapter predates snapshotting and cannot contribute edit signal.
+
+**In a series, gather across every book.** `plan/HARNESS.md` is series-wide, and the edit signal from
+book 1 is exactly what should stop book 2 repeating its mistakes. Do weight recency: a habit the user
+corrected in book 1 and stopped correcting in book 2 is a rule that already landed, not a live one.
 
 **Rejections.** Proposals `reconcile` raised and the user rejected. Repeated rejections of the same
 *kind* mean Claude is over-asserting in a category.

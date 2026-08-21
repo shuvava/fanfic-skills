@@ -37,6 +37,10 @@ Follow `../../CONVENTIONS.md`. Report in the user's language.
   not resolve unilaterally.
 - **Stale claims** — statements a later-ingested source supersedes. Check `log.md` ordering.
 - **Broken anchors** — citations pointing at files or headings that no longer exist.
+- **Volume-less citation** — a `[src:]` naming a bare `ch<NN>.md` while `raw/` holds more than one
+  volume directory. Severity `high`: it resolves against no file, and in a series it is ambiguous
+  between volumes that both have that chapter number. Usually means a `raw/` migration
+  (`CONVENTIONS.md` §8) rewrote the files but not the wiki.
 - **Claim/source mismatch** — a claim whose citation resolves but whose *content* the cited span does
   not support. Severity `high`. This is the one defect the wiki cannot show you: the page reads
   clean, the anchor resolves, and the claim is wrong.
@@ -58,7 +62,7 @@ Run the measurement rather than eyeballing the page:
 
 ```bash
 python3 <scripts>/style_fingerprint.py measure <ingested chapters>
-python3 <scripts>/style_fingerprint.py check drafts/ch<NN>-*.md --against <ingested chapters>
+python3 <scripts>/style_fingerprint.py check drafts/**/ch<NN>-*.md --against <ingested chapters>
 ```
 
 `<ingested chapters>` is the span recorded in `overview.md`'s `## Style fingerprint` header comment
@@ -122,8 +126,39 @@ Compare the first against what `overview.md` records, and run the second for eve
   maintained.
 - **Stale threads** — `threads.md` entries marked `open` with no activity across recent chapters.
 
+### Ideas and series arc
+
+Only if `plan/IDEAS.md` or `plan/SERIES_ARC.md` exist — they are optional.
+
+- **Ladder discontinuity** — a `SERIES_ARC.md` rung whose start state does not match the previous
+  rung's end state. Severity `high`: that mismatch is the whole reason the ladder exists, and a break
+  in it means one book is about to ignore what the last one cost.
+- **Unchecked destination** — `SERIES_ARC.md` with no canon status on its destination, or a
+  destination contradicting `forbidden.md` with no matching row in `CANON.md` `divergences`. Severity
+  `high`: the series premise is then an unrecorded divergence, and every book inherits it.
+- **Over-detailed ladder** — rungs beyond the next two carrying more than a line. Severity `low`;
+  it is planning that will be thrown away, and worse, it constrains wrongly in the meantime.
+- **Idea landfill** — `IDEAS.md` with many `raw` entries untouched across several sessions. Severity
+  `low`. Propose killing them; an idea list with no kills has no signal in it.
+- **Ideas leaked into a tier** — brainstorm candidates written into `wiki/fanon/` or `wiki/canon/`.
+  Severity `high` for fanon, `critical` for canon. Ideas are candidates, not facts.
+- **Mixed layout** — a project with `plan/book-*/` directories that also has `plan/outline.md` or
+  loose `drafts/ch*.md` at the root. Severity `high`: the migration in `CONVENTIONS.md` §8 was half
+  done, and every skill now reads whichever it finds first.
+- **Split continuity ledger** — a `continuity.md` inside a book directory. Severity `high`; the
+  ledger is series-wide, and a per-book copy is how book 3 forgets book 1.
+- **Seed past its payoff** — a `SERIES_ARC.md` seed whose `Payoff target` book is fully drafted and
+  whose status is not `paid`. Severity `high`: the payoff window has closed.
+- **Unplanted seed in a drafted book** — a seed whose `Plant in` book is drafted but which is still
+  `pending`. Severity `high` for the same reason, one book earlier.
+- **Book without a start state** — an `outline.md` with `book: <NN>` greater than 1 that records no
+  start state. Severity `medium`; nothing downstream can check the ladder held.
+- **Never-promoted ideas** — a shortlisted idea that plainly reached `outline.md` or
+  `STORY_INTENT.md` but is still `shortlisted`. Severity `low`; the loop is not being closed, so
+  the file cannot show which ideas actually paid off.
+
 ### Harness
-- **Missing snapshots** — chapters in `drafts/` with no `drafts/snapshots/ch<NN>-v0.md`. Without one,
+- **Missing snapshots** — chapters in `drafts/` with no sibling `snapshots/ch<NN>-v0.md`. Without one,
   that chapter contributes no edit signal to `refine-harness`.
 - **Stale harness rules** — rules in `plan/HARNESS.md` whose pattern has not recurred in several
   chapters. Propose pruning.
@@ -136,7 +171,7 @@ Compare the first against what `overview.md` records, and run the second for eve
 - **Orphans** — pages with no inbound links from anywhere including `index.md`.
 - **Index drift** — pages on disk missing from `index.md`, or index entries pointing at nothing.
 - **Log gaps** — operations visible in the wiki with no `log.md` entry.
-- **Plan drift** — `plan/outline.md` scenes that no longer match drafted chapters.
+- **Plan drift** — outline scenes that no longer match drafted chapters, in any book.
 
 ## Report
 

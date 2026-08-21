@@ -41,6 +41,7 @@ project-root/
 │   └── beats/                  # ch<NN>.md — one beat sheet per chapter
 ├── drafts/                     # tier: generated — chapters + continuity.md
 │   └── snapshots/              # untouched first drafts, for edit-diff feedback
+│                               # a series nests both per book — CONVENTIONS.md §8
 └── wiki/
     ├── index.md                # catalog of every page
     ├── log.md                  # append-only operation history
@@ -62,6 +63,11 @@ project-root/
 version of this tree nested them under `wiki/`, and a real run created both: `plan/` at the root,
 `drafts/` under `wiki/`, and two empty directories nobody wrote to. Create exactly the paths above.
 
+**Initialize flat, even when the user says "series".** `layout: flat` in `CANON.md`; `plan-chapters`
+migrates to the per-book layout when a second book is actually planned (`../../CONVENTIONS.md` §8).
+Creating `plan/book-01-untitled/` at init names a book before its premise exists, and the name is
+then wrong in every path for the rest of the project.
+
 ## 3. Place source material
 
 Copy (never move — preserve the user's original) source files into `raw/`. State plainly in `CANON.md`
@@ -75,6 +81,19 @@ If `raw/` holds one file containing many chapters, **offer to split it** before 
 python3 <scripts>/split_chapters.py raw/<file>.md --list   # inspect the split points
 python3 <scripts>/split_chapters.py raw/<file>.md          # write raw/ch01.md ...
 ```
+
+**If the source is one volume of a series, split into a volume directory instead** — see
+`../../CONVENTIONS.md` §8:
+
+```bash
+python3 <scripts>/split_chapters.py raw/<file>.md --out-dir raw/book-<NN>
+```
+
+The volume number comes from the source's own numbering (a `num:` field, the title, or the user),
+**not** from any fic ladder. Every volume restarts at chapter 1, so two volumes split flat into the
+same `raw/` overwrite each other file for file, and the survivor's chapters are silently a mix of
+both. Ask whether more volumes exist before splitting the first one; converting later costs a rewrite
+of every citation in the wiki.
 
 (`<scripts>` is resolved at run time — `../../CONVENTIONS.md` §7.)
 

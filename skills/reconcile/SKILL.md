@@ -74,12 +74,17 @@ For each, recommend accept / edit / reject with one line of reasoning. The user'
 ## 4. Update the continuity ledger
 
 Maintain `drafts/continuity.md` — what the fic itself has established, chapter by chapter, so chapter
-7 stays consistent with chapter 3. This is distinct from `wiki/fanon/`: the ledger is a running record
+7 stays consistent with chapter 3. **It is one file for the whole series, never per book**, and in a
+series each row is keyed `b<NN>/ch<NN>`: it is the only thing that keeps book 3 consistent with book
+1, and splitting it per book destroys exactly the consistency it exists to provide. This is distinct from `wiki/fanon/`: the ledger is a running record
 of the text, while fanon entries are ratified world-facts. Both are read at drafting time; neither is
 canon.
 
 Also update:
-- `plan/outline.md` — mark the chapter drafted; adjust downstream scenes the chapter changed
+- `<book>/outline.md` — the current book's outline (`../../CONVENTIONS.md` §8): mark the chapter
+  drafted; adjust downstream scenes the chapter changed
+- `plan/SERIES_ARC.md` if the chapter changed what this book ends with — the next rung's start state
+  moves with it. A drafted ending that no longer matches the ladder is caught here or not at all
 - `wiki/fanon/` thread status for fic-internal threads
 - `wiki/index.md`
 
@@ -90,7 +95,7 @@ chapter established anything that changes the plan for later chapters.
 
 Append to `wiki/log.md`:
 ```
-## [YYYY-MM-DD] reconcile | ch<NN> — <n> accepted, <n> rejected, <n> canon conflicts
+## [YYYY-MM-DD] reconcile | b<NN>/ch<NN> — <n> accepted, <n> rejected, <n> canon conflicts
    metrics: proposed=<n> accepted=<n> rejected=<n> reject_rate=<x>
 ```
 

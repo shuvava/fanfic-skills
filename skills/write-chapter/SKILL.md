@@ -3,8 +3,8 @@ name: write-chapter
 description: >
   Decompose one chapter into scene beats, then draft it in the source language against the canon wiki,
   then canon-check the draft. Use when the user says "write chapter 4", "draft the next chapter",
-  "write the scene where X", or "continue the story" in a project that has an outline. Requires
-  plan/outline.md — run plan-chapters first if it is missing.
+  "write the scene where X", "write chapter 2 of book 3", or "continue the story" in a project that
+  has an outline. Requires an outline — run plan-chapters first if it is missing.
 ---
 
 # Write Chapter
@@ -17,13 +17,19 @@ say so before drafting and confirm.
 
 ## 1. Load context
 
-In this order:
+**Resolve the book first** per `../../CONVENTIONS.md` §8. `<book>/` and `<drafts>/` below are
+`plan/` and `drafts/` in a flat project, and `plan/book-<NN>-<slug>/` and `drafts/book-<NN>/` in a
+series. Chapter numbers restart per book: "chapter 2" means chapter 2 *of the current book*. If the
+user names a chapter that exists in more than one book and the current book is ambiguous, ask which
+— drafting into the wrong book's directory is discovered late and by hand.
+
+Then, in this order:
 
 1. `CANON.md` — language, divergences, preferences
 2. `plan/HARNESS.md` if it exists — project-local drafting rules learned from your past edits.
    Precedence: `CANON.md` > `HARNESS.md` > plugin defaults.
-3. `plan/STORY_INTENT.md` — constraints and load-bearing canon
-4. `plan/outline.md` — this chapter's row and its scenes
+3. `<book>/STORY_INTENT.md` — constraints and load-bearing canon
+4. `<book>/outline.md` — this chapter's row and its scenes
 5. `canon/overview.md` — POV, tense, distance, structure, orthographic conventions
 6. `canon/forbidden.md` — read before beating, not after
 7. `canon/characters/<name>.md` for everyone in the chapter — especially `## Would never do`
@@ -31,7 +37,8 @@ In this order:
    `## Would never say`
 9. `canon/world/<topic>.md` for any system the chapter touches — especially `## Limits and costs`
 10. `wiki/fanon/` entries the chapter depends on
-11. `drafts/continuity.md` and summaries of the previous two chapters
+11. `drafts/continuity.md` (series-wide, not per book) and summaries of the previous two chapters —
+    for the first chapter of a book, those are the last two chapters of the book before it
 
 **Carry summaries, not full prose.** Loading the whole manuscript dilutes attention and degrades
 consistency faster than it helps. Summaries plus the wiki is the stronger context.
@@ -41,7 +48,7 @@ canon to fill the gap.**
 
 ## 2. Beat out the chapter
 
-Write `plan/beats/ch<NN>.md` — one card per scene, in `wiki_language`:
+Write `<book>/beats/ch<NN>.md` — one card per scene, in `wiki_language`:
 
 ```markdown
 ## Scene <n> — <slug>
@@ -61,7 +68,9 @@ Write `plan/beats/ch<NN>.md` — one card per scene, in `wiki_language`:
 beat costs a line, fixing drafted prose costs a scene.
 
 Run the same conflict check as `plan-chapters` over the beats, since beat-level detail surfaces
-contradictions the scene list was too coarse to show. A `blocking` conflict stops drafting.
+contradictions the scene list was too coarse to show — including its cross-book checks in a series,
+where a beat contradicting `drafts/continuity.md` or an earlier book's ratified fanon is `blocking`.
+A `blocking` conflict stops drafting.
 
 ## 3. Draft
 
@@ -94,10 +103,10 @@ contradictions the scene list was too coarse to show. A `blocking` conflict stop
   by 92%. The jokes were structurally right and the voice was gone. **Humour that is merely
   well-formed is not this author's humour.**
 
-Write to `drafts/ch<NN>-<slug>.md` with frontmatter recording `tier: generated`, POV, timeline
-position, and threads touched.
+Write to `<drafts>/ch<NN>-<slug>.md` with frontmatter recording `tier: generated`, POV, timeline
+position, threads touched, and `book: <NN>` in a series.
 
-**Then immediately write an untouched copy to `drafts/snapshots/ch<NN>-v0.md`.**
+**Then immediately write an untouched copy to `<drafts>/snapshots/ch<NN>-v0.md`.**
 
 This snapshot is the baseline `refine-harness` diffs the user's edits against — the only record of
 what Claude produced before anyone touched it. Write it once, at first draft, and never update it. If
@@ -126,7 +135,7 @@ Run explicitly and report:
 Measure the style row rather than judging it:
 
 ```bash
-python3 <scripts>/style_fingerprint.py check drafts/ch<NN>-<slug>.md --against <ingested chapters>
+python3 <scripts>/style_fingerprint.py check <drafts>/ch<NN>-<slug>.md --against <ingested chapters>
 ```
 
 `<ingested chapters>` is the same span `canon/overview.md` records under `## Style fingerprint`
@@ -151,9 +160,10 @@ assertions from the chapter are handed to `reconcile`, which routes them through
 
 Append to `wiki/log.md`:
 ```
-## [YYYY-MM-DD] write | ch<NN> <title>
-   metrics: words=<n> beats=<n> blocking=<n> warnings=<n>
+## [YYYY-MM-DD] write | b<NN>/ch<NN> <title>
+   metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n>
 ```
+Drop `b<NN>/` and `book=` in a flat project.
 Then suggest running `reconcile`.
 
 ## Rules
