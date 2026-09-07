@@ -197,6 +197,8 @@ the old, record both under `## Contradictions` with citations. The user adjudica
 
 ## Rules
 
+- **No completion claim without fresh evidence** — `../../CONVENTIONS.md` §10. "Cited" means the
+  `[src:]` path resolves against `raw/` as written; test it, do not assume the shape is right.
 - **Never edit or translate anything in `raw/`.**
 - **Never write outside `wiki/canon/`.** Ingest produces canon and nothing else.
 - **Never fill a section with plausible filler.** "Not established in ingested sources" is a correct

@@ -195,6 +195,8 @@ Append: `## [YYYY-MM-DD] lint | <n> issues (<n> critical)`.
 
 ## Rules
 
+- **No completion claim without fresh evidence** — `../../CONVENTIONS.md` §10. A check reported as
+  passing was run this session; a check you did not run is reported as `not checked`, not as clean.
 - **Never auto-fix contradictions.** The user decides which source wins.
 - **Never fabricate a citation** to clear an uncited-claim finding. Re-read `raw/` or delete the claim.
 - **Never repair a translated quotation from memory.** Go back to `raw/` and copy it.

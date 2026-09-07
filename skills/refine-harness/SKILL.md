@@ -134,6 +134,8 @@ An accumulating harness is the failure mode here. Removal is as valuable as addi
 
 ## Rules
 
+- **No completion claim without fresh evidence** — `../../CONVENTIONS.md` §10. A metric quoted in a
+  proposal is recomputed from `wiki/log.md` and the snapshots, never recalled.
 - **Never apply a refinement without explicit ratification.**
 - **Never write to `wiki/canon/`.** Canon reflects the source, never Claude's performance.
 - **Never write to the plugin's own SKILL.md files.** The harness is project-local; one book's habits

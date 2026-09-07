@@ -104,6 +104,8 @@ accumulated so far are the signal it learns from.
 
 ## Rules
 
+- **No completion claim without fresh evidence** — `../../CONVENTIONS.md` §10. An accept count is
+  read back out of `wiki/fanon/` after writing, never counted from the inbox you presented.
 - **`wiki/canon/` is read-only.** Reconcile never writes there, edits there, or promotes anything to
   that tier. If the chapter contradicts canon, canon wins and the chapter is the thing that was wrong.
 - **Never auto-accept.** Every promotion is an explicit user decision.

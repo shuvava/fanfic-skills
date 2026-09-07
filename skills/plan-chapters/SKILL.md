@@ -110,6 +110,28 @@ same waste an order of magnitude larger, and it gets discarded when book 2 chang
 **Match the source's structural conventions** from `canon/overview.md`: chapter length, scene count,
 how chapters open and close. A continuation that reads right structurally matters as much as voice.
 
+### Self-review before showing a layer
+
+Ratification is only as good as what you hand over, and a user cannot ratify vagueness — they read
+"and then they confront him" as shorthand for something you have already worked out, when it is
+usually shorthand for nothing. Audit your own layer before presenting it:
+
+- **No placeholders.** No `TBD`, no `(details later)`, no "something happens that forces the choice".
+  If you do not know what happens, that is a question to ask, not a row to write.
+- **No borrowed rows.** "Like chapter 4 but at the palace" is not a chapter. Write it out.
+- **Every scene has a conflict and a change.** A Layer 4 row whose `outcome` restates its `goal` is a
+  scene with nothing in it. Cut it, or give it opposition.
+- **Every row traces upward.** Each Layer 3 chapter implements a sentence of Layer 2; each Layer 4
+  scene sits inside a Layer 3 chapter. An orphan is either a missing beat upstream or scope creep.
+- **Every intent element lands.** Walk `STORY_INTENT.md`'s premise, themes, central conflict and cast
+  — each should be findable in the outline. Anything unlanded is a gap to name now, not at chapter 9.
+- **Names and numbers are consistent** across layers: one spelling per character, chapter numbers
+  contiguous from 1, POV characters drawn from the intent's cast.
+
+**Report what the self-review found rather than silently fixing it.** "Clean — three scenes had no
+conflict and were cut, the loyalty theme lands nowhere after chapter 5" is worth more than a
+clean-looking layer, because it tells the user where the outline is weakest while it is still cheap.
+
 ## The conflict lint
 
 **This is the stage the pipeline exists for.** Run it over the completed scene list, before drafting.
@@ -203,7 +225,9 @@ Drop `b<NN>` and `book=` in a flat project.
 
 ## Rules
 
-- **Ratify each layer before expanding it.**
+- **Ratify each layer before expanding it**, and self-review it before showing it.
+- **No completion claim without fresh evidence** — `../../CONVENTIONS.md` §10. "The lint is
+  clean" means it was run over the finished scene list this session.
 - **Never let a blocking conflict through to drafting.**
 - **The plan is `fanon-proposed`, not canon.** It cannot edit `wiki/canon/`.
 - **One book per run.** Resolve which book before Layer 1; never write into another book's directory.

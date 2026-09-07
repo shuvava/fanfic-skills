@@ -294,3 +294,47 @@ signals, not quality judgments.
 cost signal, analogous to button-press cost in an agent benchmark. It is a proxy for effort, **not a
 measure of quality**: a chapter the user loves and polishes heavily scores worse than a mediocre one
 they ignore. Use it to detect trends across many chapters, never to judge a single one.
+
+---
+
+## 10. Completion claims
+
+**No completion claim without fresh verification evidence.**
+
+Every skill here ends by reporting what it did. That report is an assertion about the state of the
+project on disk, made by the same model that just wrote that state — the worst available witness.
+Before claiming anything is done, checked, clean, updated, or consistent, run the gate:
+
+1. **Identify** the command or read that would prove the claim false if it were false.
+2. **Run** it, freshly and in full. Not a remembered result from earlier in the session.
+3. **Read** the whole output, exit code included.
+4. **Verify** that the output supports *this* claim and not an adjacent one.
+5. **Then** assert — and say what the evidence was.
+
+What proves what, in this pipeline:
+
+| Claim | Evidence that proves it |
+|---|---|
+| "the draft is canon-clean" | a re-read of every `[src:]` page the beats declared as deps — not recollection of them |
+| "style fingerprint passes" | a fresh `style_fingerprint.py check` run, its exit code observed, its table pasted |
+| "the wiki was updated" | a re-read of the written files, after writing them |
+| "N assertions accepted" | the accepted entries present in `wiki/fanon/`, counted there |
+| "no tier violations" | a fresh grep over `wiki/canon/` for `[fanon:` and for `drafts/`-derived provenance |
+| "the seed is planted" | the scene that plants it, quoted from the outline |
+| "citations resolve" | the paths tested against `raw/` as literal paths |
+
+**Mismatched evidence is the common failure, not missing evidence.** A passing fingerprint says
+nothing about voice. A clean conflict lint says nothing about whether the beats were delivered. Name
+which check you ran and which claim it carries; where a claim has no check behind it, report the
+claim as unverified rather than quietly dropping the qualifier.
+
+Red flags in your own output — each one means the gate was skipped:
+
+- a hedge standing in for evidence: "should be", "seems", "looks consistent", "probably fine"
+- satisfaction before output: "Done!", "All set", "Great — chapter complete"
+- a count with no source: "6 accepted" when nothing was re-read to arrive at six
+- trusting an earlier turn: the file may have changed since; re-read it
+
+**The spirit, not the letter.** Rewording a claim to avoid the word "verified" does not exempt it.
+Honest silence (§5) applies to your own work as much as to the wiki: *unchecked* is a legitimate and
+useful thing to report, and it is always better than a confident guess.

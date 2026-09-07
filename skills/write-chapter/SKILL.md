@@ -46,7 +46,32 @@ consistency faster than it helps. Summaries plus the wiki is the stronger contex
 If a needed page does not exist, say so and offer to ingest more source material. **Do not improvise
 canon to fill the gap.**
 
-## 2. Beat out the chapter
+## 2. Review the outline critically
+
+The outline was written in another session, possibly another week, against a wiki that has since been
+ingested into. **Read it as a critic before you use it as instructions**, and raise what you find
+before any prose exists — that is the same economics as the conflict lint, one question against one
+rewritten scene.
+
+Read this chapter's row and its scenes and ask:
+
+- **Is it still true?** Has an ingest since the plan landed changed a fact the chapter leans on? Does
+  `drafts/continuity.md` record something the earlier chapters actually said that the plan assumed
+  differently?
+- **Is it executable as written?** A scene whose `conflict` column is empty, or whose `outcome`
+  restates its `goal`, cannot be drafted into anything — it will come out as connective tissue.
+- **Does the previous chapter's draft leave the characters where this one starts?** Drafted text
+  outranks the plan. Where they disagree, the draft is right and the outline is stale.
+- **Is anything missing that you would have to invent?** Name it now. Inventing it mid-draft buries a
+  fanon assertion inside three thousand words where `reconcile` has to dig it out.
+
+**Raise concerns before drafting, not inside the draft.** If nothing is wrong, say so in one line and
+continue — a clean review is a real result and costs a sentence.
+
+A concern that changes the shape of the chapter goes back to `plan-chapters`. One that changes a
+detail can be resolved here with the user and noted in the beats.
+
+## 3. Beat out the chapter
 
 Write `<book>/beats/ch<NN>.md` — one card per scene, in `wiki_language`:
 
@@ -72,7 +97,7 @@ contradictions the scene list was too coarse to show — including its cross-boo
 where a beat contradicting `drafts/continuity.md` or an earlier book's ratified fanon is `blocking`.
 A `blocking` conflict stops drafting.
 
-## 3. Draft
+## 4. Draft
 
 - **Match the container exactly** — POV person, tense, narrative distance, chapter length, opening and
   closing habits from `canon/overview.md`.
@@ -114,7 +139,7 @@ the user asks for a revision before they've edited anything themselves, overwrit
 once they have edited, the snapshot is frozen. Without it there is no feedback signal and refinement
 has nothing to learn from.
 
-## 4. Canon-check the draft
+## 5. Canon-check the draft
 
 Run explicitly and report:
 
@@ -153,7 +178,32 @@ prose that reads like a competent imitation.
 user decides which it is. This applies to canon, not to the fingerprint: a style delta is a defect to
 fix, not a choice to surface.
 
-## 5. Hand off
+### When a check fails, find the cause before fixing the prose
+
+A failed check is a symptom. Patching the sentence that tripped it leaves the cause in place and the
+same defect returns next chapter — this is the single most common way a project accumulates the same
+edit forever, and it is what `refine-harness` later has to clean up in bulk.
+
+Locate the cause before revising:
+
+| Cause | How it looks | Where the fix belongs |
+|---|---|---|
+| **Prose** | The beat was right; the sentence executed it wrong | The draft. Revise and move on |
+| **Beat** | The scene card asked for something the wiki forbids | `<book>/beats/ch<NN>.md`, then redraft that scene |
+| **Outline** | The scene should not exist in this shape at all | `plan-chapters` — it is one row, not one chapter |
+| **Wiki** | The page you drafted against is thin, silent, or misread the source | `ingest-source` for the missing span, or fix the canon page against `raw/` |
+| **Harness** | You did the same wrong thing you did last chapter | `refine-harness` — the default needs changing, not this draft |
+
+State the cause you settled on before revising. "Voice drifted because `canon/voices/<x>.md` records
+four verbatim lines and none of them in an argument" is actionable; "fixed the dialogue" is not, and
+it will be fixed again next chapter.
+
+**Three strikes.** If three revision passes have not cleared the same check, stop revising. Three
+failures on one check is not a prose problem — it is a thin page, a wrong beat, or a harness default
+working against you. Say so, name the suspected cause, and hand it to the user instead of attempting
+a fourth pass.
+
+## 6. Hand off
 
 Drafts are `tier: generated`. **Never write chapter content into `wiki/canon/` — not ever.** New
 assertions from the chapter are handed to `reconcile`, which routes them through user review.
@@ -168,6 +218,11 @@ Then suggest running `reconcile`.
 
 ## Rules
 
+- **Review the outline before drafting against it.** Stale plans produce drafts that contradict
+  chapters already written.
+- **Fix the cause, not the symptom.** Three failed passes on one check means the cause is upstream.
+- **No completion claim without fresh evidence** — `../../CONVENTIONS.md` §10. "Canon-clean" means
+  the cited pages were re-read this session, not remembered.
 - **The wiki is the authority, not recollection of the fandom.** If the wiki is silent, say so.
 - **Never translate the source's dialogue into the prose.** Quote canon lines exactly if quoting.
 - Deliberate divergence is fine; accidental drift is not. Ask which is happening when unsure.
