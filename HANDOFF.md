@@ -169,6 +169,36 @@ tonally flat.
 pressure (voice cards repeatedly wrote *«Не установлено — недостаточно материала»* rather than
 inventing); extraction quality was high and correctly cited throughout.
 
+## What a real reader established (v0.5.0 → v0.6.0)
+
+The first three chapters of a continuation, drafted with v0.5.0 on the same Russian series, were read
+by **the source's own author**. Every chapter passed the style fingerprint. His verdict still landed on
+three defects the pipeline had no check for:
+
+1. **A re-staged scene.** «Экзамен и вступительный экзамен прямо один в один.» The beat card had told
+   the drafter to fill the exam's format from the canon entrance exam — the bored examiner, the sheets,
+   the "right answers", the narrator noticing the windows. Measured afterwards, the chapter shared
+   **0%** of its 4-word sequences with the canon exam. The copying was of the scene's *shape*.
+2. **Collage.** «Программа достала куски текста из разных частей прошлых книг и скомпоновала их.»
+   `Canon deps` were being used as ingredients, not constraints.
+3. **No plot.** «Сюжет без сюжета.» Three setup chapters in a row — cramming, exam, conversation —
+   with the inciting event planned for much later.
+
+**The lesson generalises the earlier one.** Recorded transfers, unrecorded is lost — and the same holds
+for *what a scene must not be*. Style had counts; scene novelty and plot motion had nothing, so they
+were lost. v0.6.0 records them: `Precedent` / `What is new` / `Event` on the beat card with a swap
+test, "canon is constraints, not ingredients" in drafting, and event / early-start / fold checks in
+`plan-chapters`. Lexical overlap is the wrong instrument — it read 0% on the scene the author called
+identical — so the checks are structural and read by the model, not a script.
+
+**What the author valued:** finding inconsistencies and digging forgotten details out of earlier
+books — the wiki and the conflict lint, not the prose.
+
+**Author statements are now a source class** (`CONVENTIONS.md` §2): recorded as `fanon-proposed` with
+`[author: ...]`, strongest recommendation in `brainstorm`/`plan-story`, never canon.
+
+None of the v0.6.0 checks has been validated yet — the chapters that prompted them are the test.
+
 ---
 
 ## Known gaps / possible next work
@@ -177,7 +207,8 @@ inventing); extraction quality was high and correctly cited throughout.
   chapters score at or below what a *random wrong chapter of the same novel* scores against the
   target, even when handed a synopsis of the real events. One candidate fix — requiring every
   scene-card character to be named in narration — moved entity overlap from 0.0 to 0.40 and was
-  discarded by a metric bug. It has not been re-tested.
+  discarded by a metric bug. It has not been re-tested. A real reader has since confirmed the gap from the other side: chapters inside
+  the style band read as «сюжет без сюжета» and as a re-staged canon scene (see above).
 - **Validated on one book.** One corpus, one author, one language, n=1 per condition. Nothing here
   should be trusted to generalise until it is run against a second source.
 - **Entity resolution is naive.** Character name matching across aliases, epithets, patronymics, and

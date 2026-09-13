@@ -87,7 +87,16 @@ Write `<book>/beats/ch<NN>.md` — one card per scene, in `wiki_language`:
 - **Fanon deps:** [fanon: ...]
 - **Voice notes:** which cards to re-read before each character's first line
 - **Constraints:** anything from forbidden.md or load-bearing canon that applies
+- **Precedent:** a canon scene of the same kind — an exam, a lecture, a sparring match — [src: ...], or `none`
+- **What is new:** what this scene has that the precedent does not — stakes, obstacle, outcome,
+  information. At least two; a different room does not count
+- **Event:** what happens on the page that changes the situation — not only what the POV thinks about it
 ```
+
+**Run the swap test on every card with a precedent.** Paste the canon scene in place of this one: if
+nothing downstream would notice, the scene is a re-staging, not a scene — rebeat it before drafting.
+The precedent is also where a card goes wrong quietly: "fill the format from the entrance exam" is an
+instruction to re-stage it, and a real author read the result as the same scene *один в один*.
 
 **Show the beats to the user before drafting.** This is the cheapest gate in the pipeline — fixing a
 beat costs a line, fixing drafted prose costs a scene.
@@ -119,6 +128,15 @@ A `blocking` conflict stops drafting.
 - **Use the source's orthographic conventions** — dialogue punctuation (guillemets, em-dashes,
   quotation marks), paragraph habits, how thoughts and letters are set.
 - **Respect world limits.** If a rule has a recorded cost, pay it in the prose.
+- **Canon dependencies are constraints, not ingredients.** What a card lists under `Canon deps` is
+  what the prose must not contradict — it is not a parts list to assemble the scene from. An
+  observation, joke or description the narrator already made in canon (noticing the windows are on
+  the "wrong" side, the bored examiner handing out sheets) may return only as an acknowledged
+  callback — "как и на вступительных" — never re-performed as a fresh discovery. A chapter built from
+  canon's details reads as a collage even when no sentence is copied: measured on a real run, a
+  drafted exam chapter shared **0%** of its 4-word sequences with the canon exam, and the author still
+  recognised it as the same scene. The defect is structural, so no n-gram check will catch it — only
+  reading the draft against the precedent will.
 - **Deploy verbal tics sparingly** — three per character is the cap, and not all three every scene.
 - **Carry the comic register, delivery included.** Read `## Comic register` in `canon/overview.md`
   before drafting and hit its counts. A first draft reliably keeps the *device* — the source's
@@ -155,6 +173,8 @@ Run explicitly and report:
 | World limits | Are costs honored? |
 | Timeline | Any conflict with `timeline.md`? |
 | Beats | Does each scene deliver its card's goal, conflict, and outcome? |
+| Precedent | Does any scene repeat a canon scene's shape — same staging, same moves, same observations? List every narrator observation re-performed from canon; each is cut or turned into an acknowledged callback |
+| Event | Does the chapter contain the external event its card named, on the page? |
 | New assertions | What does this chapter establish that no tier records? |
 
 Measure the style row rather than judging it:

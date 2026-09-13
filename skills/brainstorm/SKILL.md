@@ -121,8 +121,11 @@ a page is waste that will also constrain you wrongly.
 not theirs. Open each thread by asking what they have, and add yours after. When they are dry, then
 generate freely.
 
-Three generators, in order of yield:
+Generators, in order of yield:
 
+0. **The source author's stated intentions** — if the author has said what they meant to write next
+   (recorded per `../../CONVENTIONS.md` §2 as `[author: ...]`), start there. It is the nearest thing to
+   the book they would have written. Keep their hedges, and check each against canon like any idea.
 1. **Unpaid threads** — `canon/plot/threads.md` entries still `open`. The source already set these
    up; using one costs no invention and it will read as continuation rather than departure.
 2. **Canon's silences** — `canon/world/constraints.md` §"what canon does not establish". This is

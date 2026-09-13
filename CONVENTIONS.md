@@ -70,6 +70,13 @@ contaminating extracted canon.
   `[fanon: <decision-or-scene-that-created-it>]`. A claim with neither is an error, not a fact.
 - Facts derived by reasoning rather than read directly get `(inferred)` regardless of tier.
 
+**Statements by the source's author.** What the author says outside the published text — a letter, an
+interview, a reply to the user — is **not canon**: it is unpublished, it can change, and nothing in
+`raw/` supports it. Record it as `fanon-proposed` with `[author: <YYYY-MM-DD>, <channel>]`, and carry
+the author's own hedges with it — «скорее всего» stays in the entry. In `brainstorm` and `plan-story`
+it ranks as the strongest recommendation source, above unpaid threads, because it is the nearest thing
+to the book the author would have written; the user still decides. It never enters `wiki/canon/`.
+
 **Why the wall matters.** A compiled wiki answers confidently by design. If generated prose writes
 back into the tier the drafter reads as truth, chapter 7 treats chapter 3's inventions as source
 material, and canon fidelity degrades with each chapter — the same self-consuming loop that degrades

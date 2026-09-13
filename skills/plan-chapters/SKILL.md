@@ -127,6 +127,17 @@ usually shorthand for nothing. Audit your own layer before presenting it:
   — each should be findable in the outline. Anything unlanded is a gap to name now, not at chapter 9.
 - **Names and numbers are consistent** across layers: one spelling per character, chapter numbers
   contiguous from 1, POV characters drawn from the intent's cast.
+- **Every chapter has an event.** Something happens on the page that changes a situation — not only
+  what the POV character thinks about it. A Layer 3 row whose "what changes" is a realization is a
+  reaction chapter; reaction chapters never run two in a row.
+- **The book starts early.** The inciting event — whatever makes this book's central question urgent —
+  lands within the first ~10% of chapters. Setup that precedes it is compressed into it, not given its
+  own run of chapters. A real reader's verdict on three setup chapters was *«сюжет без сюжета»*.
+- **No re-staged canon scenes.** When a chapter's event has a canon precedent — an exam where canon
+  already showed an exam — name the precedent in the row and say what differs. "The canon scene again,
+  later" is a borrowed row.
+- **Fold test.** If the next chapter could open with one line summarising this one and lose nothing,
+  merge them.
 
 **Report what the self-review found rather than silently fixing it.** "Clean — three scenes had no
 conflict and were cut, the loyalty theme lands nowhere after chapter 5" is worth more than a

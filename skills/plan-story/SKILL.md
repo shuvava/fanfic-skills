@@ -34,6 +34,11 @@ actual start state, and where it disagrees with the ladder, the text wins and th
 offer `brainstorm` first — grilling someone toward a premise they have not yet found is the wrong
 tool.
 
+**Look for the source author's own statements** — entries cited `[author: ...]` in `plan/IDEAS.md` or
+`wiki/fanon/proposed/` (`../../CONVENTIONS.md` §2). Where the author has said what they intended, that
+is your recommended answer to the matching question, attributed as theirs. It is not canon and does
+not bind the user.
+
 **Look up facts. Ask only decisions.**
 Anything discoverable in `wiki/canon/` must be read, never asked. Do not ask "who is the protagonist's
 sister?" — read it. Ask only what is genuinely the user's call: what they want this fic to *be*.
