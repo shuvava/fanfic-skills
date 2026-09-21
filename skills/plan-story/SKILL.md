@@ -138,7 +138,10 @@ POV, mode, tense — and whether each matches canon or deliberately departs.
 What the fic asks; what changes.
 
 ## Cast
-| Character | Role | Voice card status | Notes |
+| Character | Role | Voice card status | Profile | Notes |
+
+`Profile` — status of the `develop-character` profile for anyone above the depth threshold
+(`CONVENTIONS.md` §11): `done`, `needed before ch<NN>`, or `below threshold`.
 
 ## Load-bearing canon
 Facts that must not be contradicted. Each cited. **This list feeds the conflict linter.**

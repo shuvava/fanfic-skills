@@ -138,6 +138,11 @@ usually shorthand for nothing. Audit your own layer before presenting it:
   later" is a borrowed row.
 - **Fold test.** If the next chapter could open with one line summarising this one and lose nothing,
   merge them.
+- **Every character above the depth threshold has a profile** (`../../CONVENTIONS.md` §11). A
+  character who has a line, appears in two scenes, or acts on a scene's goal without a profile in
+  `wiki/fanon/proposed/characters/` is a `warning` — offer `develop-character`. Then look at the scene
+  list the way its cardboard check does: a character whose every appearance serves the protagonist is
+  an outline problem to fix now, not a prose problem to discover at chapter 30.
 
 **Report what the self-review found rather than silently fixing it.** "Clean — three scenes had no
 conflict and were cut, the loyalty theme lands nowhere after chapter 5" is worth more than a

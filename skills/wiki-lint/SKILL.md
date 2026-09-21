@@ -157,6 +157,18 @@ Only if `plan/IDEAS.md` or `plan/SERIES_ARC.md` exist — they are optional.
   `STORY_INTENT.md` but is still `shortlisted`. Severity `low`; the loop is not being closed, so
   the file cannot show which ideas actually paid off.
 
+### Character depth
+
+Per `../../CONVENTIONS.md` §11. For the current book's `outline.md`:
+
+- List every character above the depth threshold (a line, two or more scenes, or agency in a scene).
+- Report each one without a profile in `wiki/fanon/proposed/characters/` — `warning`, fix: run
+  `develop-character`.
+- For characters with a profile, re-run its cardboard check against the **current** scene list; a
+  check that passed when the profile was written can fail after the outline changed — `notice`.
+- A profile that edits or contradicts its canon page instead of extending it — `blocking` (tier
+  integrity).
+
 ### Harness
 - **Missing snapshots** — chapters in `drafts/` with no sibling `snapshots/ch<NN>-v0.md`. Without one,
   that chapter contributes no edit signal to `refine-harness`.

@@ -345,3 +345,35 @@ Red flags in your own output — each one means the gate was skipped:
 **The spirit, not the letter.** Rewording a claim to avoid the word "verified" does not exempt it.
 Honest silence (§5) applies to your own work as much as to the wiki: *unchecked* is a legitimate and
 useful thing to report, and it is always better than a confident guess.
+
+---
+
+## 11. Character depth threshold
+
+**A character who is on the page more than fleetingly gets a profile.** Voice cards make a character
+sound right; a profile makes them want something of their own. Without it, secondary characters
+become scenery for the protagonist — present when he needs them, gone when he does not.
+
+A character is **above the threshold** if any one holds:
+
+| Signal | Why it counts |
+|---|---|
+| Has a line of dialogue | They have a point of view the prose must honour |
+| Appears in two or more scenes | They persist, so the reader expects continuity of motive |
+| Acts on a scene's goal or conflict — helps, blocks, decides | They change outcomes, so their reasons matter |
+| Is named and returns | The reader is being asked to remember them |
+
+**Below the threshold** — background: the guard, the server, a single appearance with no act.
+
+The profile lives in `wiki/fanon/proposed/characters/<name>.md` and is built by `develop-character`.
+For a canon character it **extends** the canon page and never edits it (§2).
+
+| Stage | Missing profile for an above-threshold character |
+|---|---|
+| `plan-story` | Noted in the cast table's `Profile` column |
+| `plan-chapters` | `warning` |
+| `write-chapter` | `blocking` — run `develop-character` before beating their scenes |
+| `wiki-lint` | Reported under Character depth |
+
+**Depth is not exposition.** A profile is the planner's knowledge. What reaches the page is decided by
+its reveal schedule and by the book's constraints on how fast the world is revealed.
