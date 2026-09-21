@@ -48,7 +48,7 @@ opencode walks up from the cwd to the git worktree root looking for `.agents/`, 
 be a git repo (`git init` if not). Verify the skills loaded:
 
 ```bash
-opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|write-chapter|reconcile|refine-harness|wiki-lint'
+opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|develop-character|write-chapter|reconcile|refine-harness|wiki-lint'
 ```
 
 For a global install visible from every project, copy the same three into `~/.agents/` instead.
@@ -137,6 +137,7 @@ ingest-source  → canon wiki pages                        [tier: canon, immutab
 brainstorm     → plan/IDEAS.md + plan/SERIES_ARC.md      [no gate — candidates only]
 plan-story     → plan/STORY_INTENT.md                    [grilling gate]
 plan-chapters  → outline + conflict report               [conflict gate]
+develop-character → character profiles + cardboard check [depth threshold, CONVENTIONS §11]
 write-chapter  → beats → prose → canon check             [beat gate]
 reconcile      → review inbox → fanon promotion          [review gate]
 refine-harness → learn from your edits

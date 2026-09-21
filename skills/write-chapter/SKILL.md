@@ -101,6 +101,12 @@ instruction to re-stage it, and a real author read the result as the same scene 
 **Show the beats to the user before drafting.** This is the cheapest gate in the pipeline — fixing a
 beat costs a line, fixing drafted prose costs a scene.
 
+**Profile gate.** Every character in the chapter above the depth threshold
+(`../../CONVENTIONS.md` §11) needs a profile in `wiki/fanon/proposed/characters/` — read it before
+beating their scenes, especially `Want`, `Stakes` and `Off-page life`, so the character pursues
+something of their own on the page. **A missing profile is `blocking`:** run `develop-character`
+first, exactly as a missing voice card blocks a first line.
+
 Run the same conflict check as `plan-chapters` over the beats, since beat-level detail surfaces
 contradictions the scene list was too coarse to show — including its cross-book checks in a series,
 where a beat contradicting `drafts/continuity.md` or an earlier book's ratified fanon is `blocking`.

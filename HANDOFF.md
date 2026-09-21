@@ -199,6 +199,19 @@ books — the wiki and the conflict lint, not the prose.
 
 None of the v0.6.0 checks has been validated yet — the chapters that prompted them are the test.
 
+## Characters as people, not scenery (v0.7.0)
+
+The same user, rebuilding the book 1 plan, named the next failure before any chapter showed it:
+secondary characters risk becoming **scenery for the protagonist**. The pipeline recorded how a
+character *sounds* (voice cards) and what they *would never do*, but nothing required a character to
+*want* anything of their own — so nothing did.
+
+v0.7.0 adds `develop-character` and a depth threshold (`CONVENTIONS.md` §11): a character with a line,
+two or more scenes, or agency in a scene gets a profile — own story, want / need / wound, stakes not
+routed through the protagonist, off-page life, shift, reveal schedule — and a **cardboard check** run
+against the scene list, not the profile. Missing profile: `warning` in `plan-chapters`, `blocking` in
+`write-chapter`. Untested at the time of writing; the book 1 cast is its first run.
+
 ---
 
 ## Known gaps / possible next work
