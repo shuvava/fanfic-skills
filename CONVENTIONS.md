@@ -19,6 +19,7 @@ Detect the language of the material in `raw/` during `wiki-init` and record it i
 | Story intent, outlines, beat sheets, scene cards | **source language** |
 | Generated chapter prose | **source language** |
 | Conversation with the user, questions, reports, conflict warnings | user's language |
+| Image-generation prompt blocks (`illustrate`) | `image_prompt_language`, default `en` — text meant to appear *inside* the image stays in the source language |
 
 So if the book is in Russian, character pages and chapters are written in Russian while Claude talks
 to the user in whatever language the user is using.
@@ -108,6 +109,7 @@ resolution is to record it in `CANON.md` under `divergences` with a reason, tag 
 [fanon: intent#pairing-decision]                 # ratified fanon
 [fanon: b02/ch03-scene02]                        # asserted by a generated scene (b<NN>/ in a series)
 (inferred)                                       # reasoned, not read
+[visual: 2026-09-21]                             # illustration-only look decision (plan/illustration/); never a story fact
 ```
 
 Citation text stays in the source language when it quotes source headings.

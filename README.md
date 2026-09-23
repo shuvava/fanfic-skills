@@ -48,7 +48,7 @@ opencode walks up from the cwd to the git worktree root looking for `.agents/`, 
 be a git repo (`git init` if not). Verify the skills loaded:
 
 ```bash
-opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|develop-character|write-chapter|reconcile|refine-harness|wiki-lint'
+opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|develop-character|write-chapter|reconcile|refine-harness|wiki-lint|illustrate'
 ```
 
 For a global install visible from every project, copy the same three into `~/.agents/` instead.
@@ -142,6 +142,7 @@ write-chapter  → beats → prose → canon check             [beat gate]
 reconcile      → review inbox → fanon promotion          [review gate]
 refine-harness → learn from your edits
 wiki-lint      → health report
+illustrate     → image prompts per chapter               [style + character lock gates]
 ```
 
 Four human gates. Each catches errors one stage before they become expensive. `brainstorm` is
@@ -305,12 +306,48 @@ project/
 ├── plan/                 # IDEAS.md, SERIES_ARC.md, HARNESS.md — series-wide
 │                         #   STORY_INTENT.md, outline.md, conflicts.md, beats/ — per book,
 │                         #   nested under book-<NN>-<slug>/ once there is a second book
+│                         #   illustration/ — image style, locked character looks, chapter prompts
 ├── drafts/               # chapters + snapshots/, nested per book in a series
 │                         #   continuity.md — series-wide, never per book
 └── wiki/
     ├── canon/            # overview, forbidden, characters, voices, world, plot
     └── fanon/            # ratified inventions + proposed/
 ```
+
+## Illustrations with the same faces
+
+`illustrate` writes image-generation prompts for chapters — you run them on OpenRouter or anywhere
+else. An image model has no memory, so a character looks the same only if the words describing them
+are the same every time and, better, the same approved picture is attached as a reference. The
+skill splits every prompt into what never changes and what changes per chapter:
+
+| Layer | Locked | Where |
+|---|---|---|
+| Style | once per series | `plan/illustration/STYLE.md` |
+| Character look | per identity version, after generate-and-revise rounds you approve | `plan/illustration/characters/<name>-v<N>.md` + reference sheet image |
+| Recurring elements | per version — uniforms, props, rooms, creatures, the era guard against anachronisms | `plan/illustration/world/<name>-v<N>.md` |
+| Scene | never — chosen from the chapter each time | `plan/illustration/book-<NN>/ch<NN>.md` |
+
+Once you like a composition, the skill stops regenerating and fixes the rest with single-change
+image edits, then checks the chain for drifted faces and colour. What went wrong along the way —
+three hands, a standing girl in an exam where nobody stands, an examiner the size of an ant — is
+kept as a checklist in `skills/illustrate/references/pitfalls.md` that every prompt is run against.
+
+Prompt sizes differ by two orders of magnitude between models (Qwen-Image: 800 characters; Nano
+Banana Pro: 65K tokens), and several truncate silently. `scripts/prompt_budget.py` checks a prompt
+against the target model and confirms every locked block is present verbatim:
+
+```bash
+python3 scripts/prompt_budget.py list
+python3 scripts/prompt_budget.py check plan/illustration/book-01/ch05.md \
+  --model google/gemini-3.1-flash-image \
+  --locked plan/illustration/STYLE.md plan/illustration/characters/лилия-v1.md
+```
+
+`scripts/openrouter_image.py` runs a prompt block on one or more OpenRouter models with your key,
+attaching reference images in order and printing API errors instead of saving empty files; `--block 2c` picks a labelled edit block.
+
+Limits and sources: `skills/illustrate/references/models.md`.
 
 ## Learning from your edits
 
