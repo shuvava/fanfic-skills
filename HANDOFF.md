@@ -15,17 +15,20 @@ A plugin that turns a source book into a canon wiki, plans a fanfic collaborativ
 generates chapters that stay in-character and in-language. **Now measured against a real book — see
 "What testing established" below before trusting any claim in this file.**
 
-Eight skills, four human gates:
+Eleven skills, four human gates:
 
 ```
 wiki-init      → structure + source-language detection
 ingest-source  → canon wiki pages                     [tier: canon, immutable]
+brainstorm     → plan/IDEAS.md + SERIES_ARC.md        [no gate — candidates only]
 plan-story     → plan/STORY_INTENT.md                 [gate: grilling interview]
 plan-chapters  → outline + conflict report            [gate: canon conflicts]
+develop-character → character profiles + cardboard check
 write-chapter  → beats → prose → canon check          [gate: beat review]
 reconcile      → review inbox → fanon promotion       [gate: promotion review]
 refine-harness → learn from edit diffs
 wiki-lint      → health report
+illustrate     → image prompts per chapter            [side branch, v0.8.0]
 ```
 
 Shared rules live in `CONVENTIONS.md`. Every skill references it.
@@ -211,6 +214,40 @@ two or more scenes, or agency in a scene gets a profile — own story, want / ne
 routed through the protagonist, off-page life, shift, reveal schedule — and a **cardboard check** run
 against the scene list, not the profile. Missing profile: `warning` in `plan-chapters`, `blocking` in
 `write-chapter`. Untested at the time of writing; the book 1 cast is its first run.
+
+## Illustrations (v0.8.0)
+
+`illustrate` writes image prompts per chapter for the user to run on OpenRouter. It is a side branch:
+no other stage reads `plan/illustration/`. Decisions that look arbitrary:
+
+- **Locked blocks are pasted, never rewritten.** Image models have no memory; a synonym is a new
+  person. So each style and character has an approved `locked-full` and `locked-short` block, and a
+  prompt over budget switches to the short one rather than trimming words. `prompt_budget.py` checks
+  verbatim presence mechanically — the §10 evidence for "the character is consistent" at the text
+  level. Whether the picture *looks* consistent only the user can judge.
+- **Identity is versioned by chapter range**, because the source's characters age across volumes
+  (Лилия is 8–10 in source book 1). Temporary state lives in the scene section, never in a version.
+- **`[visual:]` is a new provenance marker, not a tier.** Canon is silent on most faces; the choices
+  made for pictures must not leak into prose as facts, so they stay out of `wiki/` entirely.
+- **Two limits per model.** OpenRouter's `context_length` is not a prompt cap (Qwen-Image: listed
+  65K tokens, vendor cap 800 chars), and several models truncate silently — the tail, i.e. the style,
+  goes first. The table in the script is dated 2026-09-21; unverified rows are marked as such.
+- **Prompts are English by default** (`image_prompt_language`), flagged per §1 — a deliberate
+  exception to source-language-by-default, because prompt blocks are instructions to a model, not
+  text for a reader.
+
+- **Checklists, not prose rules.** Every lesson paid for with a wasted generation lives in
+  `references/pitfalls.md` (I/W/S/E ids) and is run item by item at named steps; SKILL.md keeps only
+  the process. A 480-line SKILL.md lost rules in the middle the way a long prompt loses details.
+- **Edit once the composition is liked.** Regeneration re-rolls everything; single-change image
+  edits fix details, and the end of a chain is checked for drifted faces and saturation and patched
+  locally with ImageMagick.
+
+**Tested 2026-09-21…23** on «Ядро души» book 1, chapters 1–4 (`fafic-yadro-dushi/plan/illustration/`):
+style, two characters, uniforms, a prop, a room, four chapter images; ch03 and ch04 were run from a
+cold session with only the skill text. A chapter bake-off moved the target model from Nano Banana 2
+to Seedream 5.0 Pro: over its 300-word soft limit Seedream lost the scene, within it it kept scene
+and identity on the first generation at ~$0.05 an image. Untested: character v2, a second book.
 
 ---
 
