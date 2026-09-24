@@ -83,6 +83,8 @@ Write `<book>/beats/ch<NN>.md` — one card per scene, in `wiki_language`:
 - **Conflict:** what opposes it
 - **Outcome:** how it ends — usually worse than it started
 - **Reaction / dilemma / decision:** the emotional beat that follows
+- **Point:** what the reader must understand when the scene ends — the realisation, subtext or irony
+  the scene exists for, stated plainly and with its *because*. Not the outcome restated
 - **Canon deps:** [src: ...] entries this scene relies on
 - **Fanon deps:** [fanon: ...]
 - **Voice notes:** which cards to re-read before each character's first line
@@ -92,6 +94,15 @@ Write `<book>/beats/ch<NN>.md` — one card per scene, in `wiki_language`:
   information. At least two; a different room does not count
 - **Event:** what happens on the page that changes the situation — not only what the POV thinks about it
 ```
+
+**Write the Point first, and write it with its *because*.** A card whose goal, conflict and outcome
+are all correct still loses a scene whose meaning lives in subtext. "Losses are counted and accepted"
+is an outcome. "Four dead is lucky, because the beasts' strength cores are worth more than soldiers —
+and the loot is split only at the end, so the dead drop out of the share" is a point. Measured on a
+real run: scenes drafted from cards without it were plausible and on-brief, and the source's author
+read every one as a different scene — the meaning was gone before a word of prose existed, and no
+drafter can restore a point the card never carried. If you cannot state the point, the scene does not
+have one yet: ask, don't draft.
 
 **Run the swap test on every card with a precedent.** Paste the canon scene in place of this one: if
 nothing downstream would notice, the scene is a re-staging, not a scene — rebeat it before drafting.
@@ -179,6 +190,7 @@ Run explicitly and report:
 | World limits | Are costs honored? |
 | Timeline | Any conflict with `timeline.md`? |
 | Beats | Does each scene deliver its card's goal, conflict, and outcome? |
+| Point | Can a reader reach each card's point from the page alone, its *because* included? Quote the lines that carry it. A point no line carries is missing from the scene, however well the outcome lands |
 | Precedent | Does any scene repeat a canon scene's shape — same staging, same moves, same observations? List every narrator observation re-performed from canon; each is cut or turned into an acknowledged callback |
 | Event | Does the chapter contain the external event its card named, on the page? |
 | New assertions | What does this chapter establish that no tier records? |
