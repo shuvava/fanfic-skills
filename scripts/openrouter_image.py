@@ -3,7 +3,7 @@
 
 Run by the user, with their own key — the skill writes prompts, it does not spend money.
 
-  export OPENROUTER_API_KEY=sk-or-...
+  # the key: OPENROUTER_API_KEY in the shell, or in .env at the project root (gitignored)
   openrouter_image.py plan/illustration/STYLE.md \
       --model google/gemini-3.1-flash-image openai/gpt-image-2 \
       --out plan/illustration/refs/bakeoff --resolution 1K
@@ -29,6 +29,8 @@ import time
 import urllib.error
 import urllib.request
 from pathlib import Path
+
+from envfile import load_env
 
 API = "https://openrouter.ai/api/v1/images"
 # Provider-side failures that pass on a plain retry (Seed returned 502/524 three times in one
@@ -77,9 +79,12 @@ def main():
         if not Path(r).is_file():
             print(f"error: reference image {r} not found", file=sys.stderr)
             return 3
+    env_file = load_env()  # ./.env; a variable already set in the shell wins
     key = os.environ.get("OPENROUTER_API_KEY")
     if not key and not a.dry_run:
-        print("error: OPENROUTER_API_KEY is not set in this shell", file=sys.stderr)
+        where = f"the shell or {env_file}" if env_file else "the shell, and there is no ./.env"
+        print(f"error: OPENROUTER_API_KEY is not set in {where}; "
+              f"add OPENROUTER_API_KEY=sk-or-... to .env in the project root", file=sys.stderr)
         return 3
 
     out = Path(a.out) if a.out else Path(a.file).parent / "refs"

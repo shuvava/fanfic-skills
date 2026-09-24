@@ -379,3 +379,36 @@ For a canon character it **extends** the canon page and never edits it (§2).
 
 **Depth is not exposition.** A profile is the planner's knowledge. What reaches the page is decided by
 its reveal schedule and by the book's constraints on how fast the world is revealed.
+
+---
+
+## 12. Secrets: one `.env` at the project root
+
+API keys live in **one** file, `.env` at the fic project root — the cwd every script runs from
+(§7). Not per skill, not per script. Scripts load it with `scripts/envfile.py` (standard library;
+`from envfile import load_env`); a variable already set in the shell wins over the file.
+
+| Key | Used by |
+|---|---|
+| `OPENROUTER_API_KEY` | `openrouter_image.py` — `illustrate`, `cover` |
+
+A new key is added to this table and to the plugin's root `.env.example`, never to a skill folder.
+
+**Before handing the user the first command that needs a key**, any skill:
+
+1. Checks that `.env` is ignored: `git check-ignore -q .env` (exit 0 = ignored). If not, appends to
+   the project's `.gitignore` and says so — before telling the user where the key goes, since one
+   `git add .` otherwise commits it:
+
+   ```
+   # secrets — API keys for the plugin's scripts (CONVENTIONS.md §12)
+   .env
+   .env.*
+   !.env.example
+   ```
+2. If the project root has no `.env.example`, writes one listing every key in the table above with
+   an empty value (committed: names, never values).
+3. Tells the user to copy `.env.example` to `.env` and fill in the key.
+
+**Never** create `.env`, ask for a key in chat, or read, `cat` or print `.env` — the key is the
+user's, and anything read lands in the transcript.

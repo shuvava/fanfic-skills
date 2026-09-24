@@ -29,6 +29,7 @@ reconcile      → review inbox → fanon promotion       [gate: promotion revie
 refine-harness → learn from edit diffs
 wiki-lint      → health report
 illustrate     → image prompts per chapter            [side branch, v0.8.0]
+cover          → book cover, text set locally         [side branch, v0.10.0]
 ```
 
 Shared rules live in `CONVENTIONS.md`. Every skill references it.
@@ -267,6 +268,25 @@ in this pipeline, since Opus drafts from the same kind of card. v0.9.0 adds `poi
 `plan-chapters` scene list and `Point` to the beat card (written first, with its *because*, and a
 scene without one is a question to ask, not a card to draft), and a canon-check row that quotes the
 lines carrying it. Untested at the time of writing.
+
+## Covers (v0.10.0)
+
+`cover` makes one cover per book: author, title, number in the series. Decisions:
+
+- **Text is composed locally by `compose_cover.py`, never rendered by an image model.** Models
+  misspell Cyrillic and drift names between rounds; a real font does not.
+- **Background and text are separate layers** — procedural parchment (the source series' own
+  typographic look; free, seeded) or an illustrated 2:3 image with calm bands left for text and a
+  soft `--scrim` behind them.
+- **The fic's author, not the canon author.** Imitating a source cover invites copying its byline;
+  the skill asks which name goes on top.
+- **SVG emblems go through `rsvg-convert`.** ImageMagick 7.1's built-in MSVG renderer produced a
+  fully transparent image for a plain stroked SVG; the script refuses an empty emblem.
+- **Platform limits are arguments** (`--min-w/--min-h/--max-mb`, defaults 200×285 px, 15 MB — the
+  rule the user gave); every output is checked and the report is the §10 evidence.
+- **One `.env` per project, read by a stdlib loader** (`scripts/envfile.py`, CONVENTIONS §12).
+  No `python-dotenv`: the scripts stay dependency-free and run on any `python3`. The shell wins over
+  the file; skills gitignore `.env` before telling the user where the key goes, and never read it.
 
 ## Known gaps / possible next work
 

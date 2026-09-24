@@ -48,7 +48,7 @@ opencode walks up from the cwd to the git worktree root looking for `.agents/`, 
 be a git repo (`git init` if not). Verify the skills loaded:
 
 ```bash
-opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|develop-character|write-chapter|reconcile|refine-harness|wiki-lint|illustrate'
+opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|develop-character|write-chapter|reconcile|refine-harness|wiki-lint|illustrate|cover'
 ```
 
 For a global install visible from every project, copy the same three into `~/.agents/` instead.
@@ -143,6 +143,7 @@ reconcile      → review inbox → fanon promotion          [review gate]
 refine-harness → learn from your edits
 wiki-lint      → health report
 illustrate     → image prompts per chapter               [style + character lock gates]
+cover          → book cover: author, title, series number [platform size check]
 ```
 
 Four human gates. Each catches errors one stage before they become expensive. `brainstorm` is
@@ -344,10 +345,28 @@ python3 scripts/prompt_budget.py check plan/illustration/book-01/ch05.md \
   --locked plan/illustration/STYLE.md plan/illustration/characters/лилия-v1.md
 ```
 
-`scripts/openrouter_image.py` runs a prompt block on one or more OpenRouter models with your key,
+`scripts/openrouter_image.py` runs a prompt block on one or more OpenRouter models with your key
+(`OPENROUTER_API_KEY` in the shell, or in the one `.env` at your project root — see `.env.example`
+and `CONVENTIONS.md` §12; the skills make sure `.env` is gitignored before you add a key),
 attaching reference images in order and printing API errors instead of saving empty files; `--block 2c` picks a labelled edit block.
 
 Limits and sources: `skills/illustrate/references/models.md`.
+
+## Book covers
+
+`cover` makes one cover per book with the author, the title and the number in the series. The text
+is never drawn by an image model — they misspell Cyrillic — but set by `scripts/compose_cover.py`
+with a real font over a procedural aged-parchment background (free, offline) or an illustrated one
+generated through `illustrate`'s locked style. An optional SVG emblem from the canon goes in the
+middle. Every output is checked against the platform's upload limits:
+
+```bash
+python3 scripts/compose_cover.py --author "Псевдоним" --title "Название" --series "Серия" --number 1 \
+  --emblem plan/cover/emblem.svg --min-w 200 --min-h 285 --max-mb 15 --out plan/cover/book-01/cover-r1.jpg
+python3 scripts/compose_cover.py --check plan/cover/book-01/cover.jpg
+```
+
+Needs ImageMagick 7 and, for SVG emblems, `rsvg-convert` (librsvg).
 
 ## Learning from your edits
 

@@ -15,7 +15,7 @@ description: >
 A picture per chapter, the same faces in every picture, one style for the whole series.
 
 Follow `../../CONVENTIONS.md`, especially §1 (language), §2 (tiers), §5 (honest silence), §8 (book
-scope) and §10 (completion claims). Reference files:
+scope), §10 (completion claims) and §12 (secrets). Reference files:
 
 | File | Holds | Read |
 |---|---|---|
@@ -60,6 +60,9 @@ in the source language is only what the model never reads or must copy literally
 | Text meant to appear *inside* the image, in quotation marks inside the English prompt | A sign in this world is not in English: `a wooden sign reading "Академия"` |
 
 Each character gets a fixed `prompt_name` (a transliteration) chosen once and used in every prompt.
+
+**API key.** The OpenRouter key lives in the project's single `.env` — set it up per
+`../../CONVENTIONS.md` §12 before the first generation command you hand over.
 
 ## Phase 0 — Route
 
@@ -271,11 +274,13 @@ Whenever the user shows or reports an image — bake-off, style round, character
 The user runs generation with their own key; `openrouter_image.py` sends a file's `prompt` block to
 the OpenRouter Image API, attaches `--ref` images in label order, saves the result and prints any API
 error in full. Give the user the command; **do not run it yourself unless they ask** — it spends
-their money. Never ask for the key in chat. Hand-written curl one-liners are a trap: they swallow the
+their money. Never ask for the key in chat, and **never read, print or `cat` `.env`** — the key
+lives there. Hand-written curl one-liners are a trap: they swallow the
 API's error and write the decoded `null` as a 3-byte "image", and a pasted `@` can arrive as `＠`.
 
+The key comes from the shell or the project's `.env` (§12).
+
 ```bash
-export OPENROUTER_API_KEY=sk-or-...        # the user's own, in their shell
 python3 "$SCRIPTS/openrouter_image.py" plan/illustration/STYLE.md \
   --model google/gemini-3.1-flash-image openai/gpt-image-2 --out plan/illustration/refs/bakeoff
 python3 "$SCRIPTS/openrouter_image.py" plan/illustration/book-01/ch05.md \
