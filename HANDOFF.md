@@ -251,6 +251,23 @@ and identity on the first generation at ~$0.05 an image. Untested: character v2,
 
 ---
 
+## The scene's point (v0.9.0)
+
+An experiment (branch `exp/finetune`, `experiments/finetune/README.md`) tried moving drafting to a
+LoRA-tuned small model in the author's voice, with Opus keeping the planning. Its decisive test had
+Opus write held-out scenes of the Russian series from scene briefs — goal, conflict, outcome,
+reaction — never shown the original. The author-reader judged every scene plausible, on-brief, and a
+**different scene**: in b01-ch25 the original's point is dark irony — four dead is *lucky*, because
+strength cores are worth more than soldiers, and the loot is split at the end so the dead drop out of
+the share. The brief said "the cost of losses" and never *why* losses are acceptable.
+
+**Meaning was lost at the card, before prose.** Every later stage — draft, re-voicing — could only
+keep or lose it, never add it; the fine-tuned drafter moved the text further still. The same gap sits
+in this pipeline, since Opus drafts from the same kind of card. v0.9.0 adds `point` to the
+`plan-chapters` scene list and `Point` to the beat card (written first, with its *because*, and a
+scene without one is a question to ask, not a card to draft), and a canon-check row that quotes the
+lines carrying it. Untested at the time of writing.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated

@@ -98,8 +98,10 @@ changes, which threads it touches. **Numbering restarts at 1 in every book** —
 identifier that no file name carries, and the first cross-book reference then points at the wrong
 chapter.
 
-**Layer 4 — Scene list.** One row per scene: POV, setting, goal, conflict, outcome, characters
-present, canon and fanon entries it depends on.
+**Layer 4 — Scene list.** One row per scene: POV, setting, goal, conflict, outcome, point,
+characters present, canon and fanon entries it depends on. `point` is what the reader must understand
+when the scene ends — subtext and irony included, with its *because* — and `write-chapter` carries
+it onto the beat card unchanged.
 
 Stop at four layers. Beat-level decomposition belongs to `write-chapter`, one chapter at a time —
 beating out forty scenes in advance is work that gets thrown away when chapter 3 changes. **The same
@@ -121,6 +123,9 @@ usually shorthand for nothing. Audit your own layer before presenting it:
 - **No borrowed rows.** "Like chapter 4 but at the palace" is not a chapter. Write it out.
 - **Every scene has a conflict and a change.** A Layer 4 row whose `outcome` restates its `goal` is a
   scene with nothing in it. Cut it, or give it opposition.
+- **Every scene has a point, and it is not the outcome.** A row whose `point` is empty or restates
+  `outcome` ("the heroes win") has not decided what the scene is *for*. Meaning that is not written
+  here is lost downstream: every later stage — beat card, draft — can only keep or lose it, never add it.
 - **Every row traces upward.** Each Layer 3 chapter implements a sentence of Layer 2; each Layer 4
   scene sits inside a Layer 3 chapter. An orphan is either a missing beat upstream or scope creep.
 - **Every intent element lands.** Walk `STORY_INTENT.md`'s premise, themes, central conflict and cast
