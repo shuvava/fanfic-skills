@@ -163,7 +163,7 @@ Keep at most twenty rows; `refine-harness` prunes to the most instructive when i
 | `plan-story` | plan | `STORY_INTENT.md`, before presenting it for ratification |
 | `plan-chapters` | plan | Layers 1–2 and the scene list's `point` column |
 | `write-chapter` §3 | plan | Beat cards' `Point` and `Event`, before the beat gate |
-| `write-chapter` §5 | prose | The draft, after the canon check passes |
+| `write-chapter` §5 | prose | The draft, after the canon check passes — skip `![…](…)` image lines; they are placed by `illustrate` |
 | The user | either | Any file, any time |
 
 ## Overused patterns (optional)

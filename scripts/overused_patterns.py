@@ -43,6 +43,8 @@ WORD_RE = re.compile(r"\w+(?:-\w+)*", re.UNICODE)
 SENT_RE = re.compile(r"(?<=[.!?…。！？])\s+")
 FRONTMATTER_RE = re.compile(r"\A---\n.*?\n---\n", re.DOTALL)
 HEADING_RE = re.compile(r"^#+ .*$", re.MULTILINE)
+# Illustration links placed by place_illustration.py — markup, not prose.
+IMAGE_RE = re.compile(r"\n*^!\[[^\]\n]*\]\([^)\n]*\)[ \t]*$", re.MULTILINE)
 FUNCTION_POS = {"CONJ", "PRCL", "PREP", "ADVB", "NPRO", "PRED", "INTJ", "COMP", "GRND"}
 MIN_DRAFT_WORDS = 3000
 
@@ -72,7 +74,7 @@ def read(patterns: list[str]) -> list[tuple[str, str]]:
     out = []
     for p in paths:
         t = Path(p).read_text(encoding="utf-8")
-        out.append((p, HEADING_RE.sub("", FRONTMATTER_RE.sub("", t))))
+        out.append((p, IMAGE_RE.sub("", HEADING_RE.sub("", FRONTMATTER_RE.sub("", t)))))
     return out
 
 

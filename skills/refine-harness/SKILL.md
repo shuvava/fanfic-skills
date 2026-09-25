@@ -37,7 +37,9 @@ Read across the whole project history, not just the last chapter. Patterns need 
 
 **Edit diffs — the primary signal.** For each chapter, diff its `snapshots/ch<NN>-v0.md` (Claude's
 untouched draft) against the current `ch<NN>-*.md` in the same drafts directory. If no snapshot
-exists, say so — the chapter predates snapshotting and cannot contribute edit signal.
+exists, say so — the chapter predates snapshotting and cannot contribute edit signal. Ignore
+`![…](…)` image lines and the `illustration:` frontmatter key: `illustrate` places them after the
+snapshot exists, and they are not the user editing prose.
 
 **In a series, gather across every book.** `plan/HARNESS.md` is series-wide, and the edit signal from
 book 1 is exactly what should stop book 2 repeating its mistakes. Do weight recency: a habit the user

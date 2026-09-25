@@ -172,7 +172,10 @@ A `blocking` conflict stops drafting.
   well-formed is not this author's humour.**
 
 Write to `<drafts>/ch<NN>-<slug>.md` with frontmatter recording `tier: generated`, POV, timeline
-position, threads touched, and `book: <NN>` in a series.
+position, threads touched, and `book: <NN>` in a series. **Redrafting a chapter that already has
+`illustration:` in its frontmatter:** keep the key, then re-run `place_illustration.py` from
+`illustrate` step 14 — the anchor may no longer exist, and a moment the chapter lost is the user's
+call, not a silent drop.
 
 **Then immediately write an untouched copy to `<drafts>/snapshots/ch<NN>-v0.md`.**
 

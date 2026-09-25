@@ -351,6 +351,17 @@ python3 scripts/prompt_budget.py check plan/illustration/book-01/ch05.md \
 and `CONVENTIONS.md` §12; the skills make sure `.env` is gitignored before you add a key),
 attaching reference images in order and printing API errors instead of saving empty files; `--block 2c` picks a labelled edit block.
 
+Once you approve a chapter's image, `scripts/place_illustration.py` puts it into the draft right
+after the paragraph holding the moment's anchor quote — one `![…](…)` line, relative to the draft,
+and an `illustration:` frontmatter key. An anchor that is missing or occurs twice writes nothing and
+the skill asks where the picture goes. The style checks, `naturalize` and `refine-harness` ignore
+the line.
+
+```bash
+python3 scripts/place_illustration.py drafts/book-01/ch05-<slug>.md \
+  --image plan/illustration/images/book-01/ch05.png --anchor "<anchor quote>" --caption "<moment>"
+```
+
 Limits and sources: `skills/illustrate/references/models.md`.
 
 ## Book covers
