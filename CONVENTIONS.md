@@ -421,3 +421,34 @@ A new key is added to this table and to the plugin's root `.env.example`, never 
 
 **Never** create `.env`, ask for a key in chat, or read, `cat` or print `.env` — the key is the
 user's, and anything read lands in the transcript.
+
+---
+
+## 13. Publication
+
+A chapter published while the book is still being written is a fixed point: readers have it, and
+their memory cannot be edited. `publish` owns it; every other stage respects it.
+
+**Authority, highest first:** `canon` > **published text** > drafted text > plan. Published text is
+not a tier — its facts still sit in `fanon-established` once `reconcile` has ratified them (and
+`publish` refuses a chapter that has not been reconciled) — but no later stage may contradict it.
+
+**How a stage knows.** A published draft has `published:` in its frontmatter — one entry per
+platform version — and a frozen copy at `<drafts>/snapshots/ch<NN>-published-<platform>-v<N>.md`.
+`publish/LEDGER.md` is the project-wide list. `publication.py status` shows all three.
+
+| Stage | On a published chapter |
+|---|---|
+| `write-chapter` | Redrafting it is `blocking`. Summaries of it are read from the published snapshot |
+| `plan-chapters`, beat conflict check | A scene contradicting it is `blocking`, as against canon |
+| `naturalize` | Review only, never auto-safe; accepted fixes go out through errata, so only typo-sized ones |
+| `illustrate` / `place_illustration.py` | Refused (exit 4) — a picture added later is a `publish` change |
+| `refine-harness` | `v0` → `published-v1` is the user's final edit; later diffs are errata, a different signal |
+| `wiki-lint` | Runs `publication.py lint`: records agree, no published draft drifted |
+
+**Changes after publication are errata, and errata are typo-only** — one misspelt word, a
+punctuation mark, a split or merged word. `publication.py errata-check` enforces the size; the
+author's recorded non-standard orthography is never "corrected" by an erratum.
+
+**Making a chapter public is the user's action.** A skill may prepare, upload as an unpublished
+draft and verify; it asks in chat before each publication, and a scheduled run stops before it.

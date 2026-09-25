@@ -38,6 +38,7 @@ Then, in this order:
 9. `canon/world/<topic>.md` for any system the chapter touches — especially `## Limits and costs`
 10. `wiki/fanon/` entries the chapter depends on
 11. `drafts/continuity.md` (series-wide, not per book) and summaries of the previous two chapters —
+    from their `snapshots/ch<NN>-published-*` copy where one exists, since that is what readers read —
     for the first chapter of a book, those are the last two chapters of the book before it
 
 **Carry summaries, not full prose.** Loading the whole manuscript dilutes attention and degrades
@@ -61,7 +62,10 @@ Read this chapter's row and its scenes and ask:
 - **Is it executable as written?** A scene whose `conflict` column is empty, or whose `outcome`
   restates its `goal`, cannot be drafted into anything — it will come out as connective tissue.
 - **Does the previous chapter's draft leave the characters where this one starts?** Drafted text
-  outranks the plan. Where they disagree, the draft is right and the outline is stale.
+  outranks the plan, and **published text outranks both** (`../../CONVENTIONS.md` §13): where they
+  disagree, the published chapter is right, then the draft, and the outline is stale.
+- **Is this chapter already published?** `published:` in its frontmatter → redrafting it is
+  `blocking`. Readers have it; a changed chapter goes out only as typo-only errata through `publish`.
 - **Is anything missing that you would have to invent?** Name it now. Inventing it mid-draft buries a
   fanon assertion inside three thousand words where `reconcile` has to dig it out.
 

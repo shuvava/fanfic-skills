@@ -260,6 +260,8 @@ blocks, an optional reference image, versions by chapter range, lock on explicit
     the picture goes, then re-run with an anchor that is unique. Never place it by guess. No draft
     yet (moment chosen from the beat sheet) → skip and say so; place it once the chapter is drafted.
     Do not touch `snapshots/` — `refine-harness` ignores image lines. Report the line it landed on.
+    **A published chapter is refused (exit 4)** — place the picture before `publish`; after it, a
+    new picture is the user's decision to republish, not a placement.
 
 ## Reviewing an image
 

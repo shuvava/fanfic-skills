@@ -190,6 +190,7 @@ each is discovered three books later otherwise.
 | **Start-state drift** | A scene assumes a state the previous book's drafted ending contradicts. | `blocking` |
 | **Prior-fanon contradiction** | A scene contradicts a `fanon-established` fact an earlier book set. | `warning` — the user may be retconning on purpose, but it is never a silent change |
 | **Continuity-ledger contradiction** | A scene contradicts `drafts/continuity.md` — something the earlier prose actually said. | `blocking`. The published text is not revisable by a plan |
+| **Published contradiction** | A scene contradicts a chapter with `published:` in its frontmatter, or re-plans one (`../../CONVENTIONS.md` §13). Applies within a book too. | `blocking` — readers have it; only typo-only errata can change it |
 | **Undelivered rung** | The Layer 2 ending does not reach this rung's end state. | `blocking` — the next book's start state is already written against it |
 | **Unplanted seed** | A `SERIES_ARC.md` seed with `Plant in` = this book that no scene plants. | `blocking` — the payoff book has nothing to pay off |
 | **Unpaid seed** | A seed with `Payoff target` = this book that no scene pays. | `warning`; either schedule it here or move the target and say so |

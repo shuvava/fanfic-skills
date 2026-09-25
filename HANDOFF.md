@@ -31,6 +31,7 @@ wiki-lint      → health report
 illustrate     → image prompts per chapter → placed in draft [side branch, v0.8.0; v0.12.0]
 cover          → book cover, text set locally         [side branch, v0.10.0]
 naturalize     → machine-sounding sentences → review  [called by plan/write stages, v0.11.0]
+publish        → gate → export → record; typo errata    [user confirms each publication, v0.13.0]
 ```
 
 Shared rules live in `CONVENTIONS.md`. Every skill references it.
@@ -336,6 +337,37 @@ the user; `scripts/place_illustration.py` reuses it as a locator. Decisions:
 - **Image lines are stripped by `style_fingerprint.py` and `overused_patterns.py`** (with their
   preceding blank line, so the measured text is byte-identical to the draft without the picture).
 - **Re-approval moves, never duplicates**: the frontmatter `illustration:` key names the old image.
+
+## Serial publication (v0.13.0, phase 1 of 5)
+
+The user publishes the fic on author.today while still writing it, to collect reader feedback
+(work: `https://author.today/work/657773`). Decided with the user: typo-only edits after
+publication, images inside chapter text, 2 chapters a week, `publish/` at the project root,
+comments pasted in and collected through their Chrome, runs on demand or on a schedule.
+
+Phase 1 (this version) has no browser: `export_chapter.py` (draft → platform format, round-trip
+`verify`), `publication.py` (`status`, `record`, `errata-check`, `lint`), the `publish` skill with
+the user publishing by hand, CONVENTIONS §13 and the locks in other stages. Decisions:
+
+- **Published text is an authority level, not a tier.** Its facts are fanon once reconciled; what
+  is new is that nothing may contradict it — so `publish` requires `reconcile` first.
+- **Three records, one script.** Frontmatter says "this chapter is published" to every stage that
+  opens the draft; the snapshot is the exact text readers got (for errata diffs and
+  `refine-harness`); the ledger is the project view. Only `record` writes them.
+- **Typo-only is measured.** Token diff against the last published version; one word within edit
+  ratio 0.6 and ±2 characters, punctuation, or split/merge passes; anything else is REWRITE. The
+  script cannot know the author's deliberate orthography (`кому нибудь`), so the skill must drop
+  such "fixes" by hand.
+- **Verify compares reader-visible text**, one paragraph per line: the same check runs on the
+  export (round-trip) and later on the text read back from the site, which is where the editor's
+  autocorrect will show.
+- **A scheduled run never publishes.** Publishing is public and per-chapter; the run prepares,
+  uploads as a draft, verifies, and stops for the user's yes.
+
+Next phases: 2 — map author.today's editor with the user watching (adapter `## Flow`);
+3 — browser upload / read-back / publish; 4 — `feedback` skill (paste, collect, triage into
+Point-not-landing, errata, canon, reveal-guessed, ideas); 5 — local scheduled tasks (Chrome is
+local, so no cloud routines).
 
 ## Known gaps / possible next work
 

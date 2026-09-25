@@ -41,6 +41,12 @@ exists, say so — the chapter predates snapshotting and cannot contribute edit 
 `![…](…)` image lines and the `illustration:` frontmatter key: `illustrate` places them after the
 snapshot exists, and they are not the user editing prose.
 
+**Published chapters give two signals — keep them apart** (`../../CONVENTIONS.md` §13). `v0` →
+`snapshots/ch<NN>-published-<platform>-v1.md` is the user's complete edit before readers saw it: the
+cleanest signal there is, and the one to diff for published chapters. Diffs between later
+`published-v<N>` are errata — typos readers or the user caught — and count as evidence only for
+spelling habits, never for style.
+
 **In a series, gather across every book.** `plan/HARNESS.md` is series-wide, and the edit signal from
 book 1 is exactly what should stop book 2 repeating its mistakes. Do weight recency: a habit the user
 corrected in book 1 and stopped correcting in book 2 is a rule that already landed, not a live one.

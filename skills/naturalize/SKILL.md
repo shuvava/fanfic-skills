@@ -44,6 +44,11 @@ Read `naturalness:` from `CANON.md` (default `review` when absent):
 
 Plans are never auto-applied in any mode: a plan edit changes what the book is about.
 
+**A published chapter** (`published:` in its frontmatter, `../../CONVENTIONS.md` §13) is always
+`review`, whatever the mode, and an accepted fix reaches readers only through `publish` errata — so
+only typo-sized fixes can. Say so in the review file's header rather than proposing rewrites the
+user cannot ship.
+
 ## Two readings
 
 **Prose mode** — chapters. Flag only what a reader stumbles on as an *error*:
