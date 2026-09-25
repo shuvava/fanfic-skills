@@ -141,7 +141,7 @@ usually shorthand for nothing. Audit your own layer before presenting it:
   reaction chapter; reaction chapters never run two in a row.
 - **The book starts early.** The inciting event — whatever makes this book's central question urgent —
   lands within the first ~10% of chapters. Setup that precedes it is compressed into it, not given its
-  own run of chapters. A real reader's verdict on three setup chapters was *«сюжет без сюжета»*.
+  own run of chapters. A real reader's verdict on three setup chapters was *a plot without a plot*.
 - **No re-staged canon scenes.** When a chapter's event has a canon precedent — an exam where canon
   already showed an exam — name the precedent in the row and say what differs. "The canon scene again,
   later" is a borrowed row.

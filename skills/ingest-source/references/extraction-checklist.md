@@ -316,8 +316,8 @@ convention is checkable rather than agreeable:
 | Feature | Source value | Literal example |
 |---|---|---|
 | Chapter length | ~1200 слов | — |
-| Ellipsis | ~21 на 1000 слов | `Похоже... Похоже... Это был не совсем сон...` |
-| Dialogue marker | `\- ` в начале строки, 99% реплик | `\- Привет, Феликс.` |
+| Ellipsis | ~21 на 1000 слов | `Ну... Кажется... Это был не сон...` |
+| Dialogue marker | `\- ` в начале строки, 99% реплик | `\- Привет, Анна.` |
 | Guillemets «» | не используются (0) | — |
 | Paragraph length | 1–3 предложения | — |
 ```

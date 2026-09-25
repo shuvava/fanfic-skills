@@ -229,7 +229,7 @@ no other stage reads `plan/illustration/`. Decisions that look arbitrary:
   verbatim presence mechanically — the §10 evidence for "the character is consistent" at the text
   level. Whether the picture *looks* consistent only the user can judge.
 - **Identity is versioned by chapter range**, because the source's characters age across volumes
-  (Лилия is 8–10 in source book 1). Temporary state lives in the scene section, never in a version.
+  (a child in volume 1 is a teenager by volume 3). Temporary state lives in the scene section, never in a version.
 - **`[visual:]` is a new provenance marker, not a tier.** Canon is silent on most faces; the choices
   made for pictures must not leak into prose as facts, so they stay out of `wiki/` entirely.
 - **Two limits per model.** OpenRouter's `context_length` is not a prompt cap (Qwen-Image: listed
@@ -246,7 +246,7 @@ no other stage reads `plan/illustration/`. Decisions that look arbitrary:
   edits fix details, and the end of a chain is checked for drifted faces and saturation and patched
   locally with ImageMagick.
 
-**Tested 2026-09-21…23** on «Ядро души» book 1, chapters 1–4 (`fafic-yadro-dushi/plan/illustration/`):
+**Tested 2026-09-21…23** on the test project's book 1, chapters 1–4 (its `plan/illustration/`):
 style, two characters, uniforms, a prop, a room, four chapter images; ch03 and ch04 were run from a
 cold session with only the skill text. A chapter bake-off moved the target model from Nano Banana 2
 to Seedream 5.0 Pro: over its 300-word soft limit Seedream lost the scene, within it it kept scene
@@ -340,10 +340,12 @@ the user; `scripts/place_illustration.py` reuses it as a locator. Decisions:
 
 ## Serial publication (v0.13.0, phase 1 of 5)
 
-The user publishes the fic on author.today while still writing it, to collect reader feedback
-(work: `https://author.today/work/657773`). Decided with the user: typo-only edits after
-publication, images inside chapter text, 2 chapters a week, `publish/` at the project root,
-comments pasted in and collected through their Chrome, runs on demand or on a schedule.
+Serialising a fic while it is still being written, to collect reader feedback. Design decisions:
+typo-only edits after publication, images inside chapter text, a per-project cadence,
+`publish/` at the project root, comments pasted in and collected through the user's Chrome, runs on
+demand or on a schedule. **Book-specific data — work ids, chapter ids, the user's settings, what a
+run observed — lives in the project (`CANON.md` `publishing:`, `publish/platforms/<platform>.md`),
+never in the plugin**; the adapter holds only what is true of the platform.
 
 Phase 1 (this version) has no browser: `export_chapter.py` (draft → platform format, round-trip
 `verify`), `publication.py` (`status`, `record`, `errata-check`, `lint`), the `publish` skill with

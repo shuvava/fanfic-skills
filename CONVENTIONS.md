@@ -205,6 +205,13 @@ done
 
 `raw/`, `wiki/`, `plan/`, and `drafts/` are always project-root-relative, in both markdown and bash.
 
+**The plugin is book-agnostic.** Skills, references and scripts hold what is true for every project:
+methods, platform facts, lessons. Anything about one book — its title, author, characters, work or
+chapter ids, URLs, the user's decisions, a run's results, verdicts on its sentences — belongs in the
+project: `CANON.md`, `plan/HARNESS.md`, `publish/platforms/<platform>.md`, the wiki. A lesson learned
+on a real run enters the plugin as the rule plus an invented example; the real case stays in the
+project. Before committing a plugin change, grep it for the test project's names and ids.
+
 ---
 
 ## 8. Book scope

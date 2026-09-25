@@ -19,7 +19,7 @@ Follow `../../CONVENTIONS.md`, especially §8 (book scope), §10 (completion cla
 
 | Platform | Adapter | Status |
 |---|---|---|
-| author.today | [references/platforms/author-today.md](references/platforms/author-today.md) | export and records built; browser flow **not yet mapped** |
+| author.today | [references/platforms/author-today.md](references/platforms/author-today.md) | export, records and browser flow built; delayed publication **not yet mapped** |
 
 ## Settings
 
@@ -29,10 +29,16 @@ Follow `../../CONVENTIONS.md`, especially §8 (book scope), §10 (completion cla
 publishing:
   platforms: [author-today]
   per_week: 2                       # cadence; sets the buffer warning
-  chapter_title: "{heading} {title}"  # "Глава 1. Слух": draft heading + frontmatter title
+  chapter_title: "{heading} {title}"  # draft heading + frontmatter title: "Глава 3. <title>"
   author-today:
-    work_edit_url: https://author.today/work/657773/edit/content
+    work_edit_url: https://author.today/work/<workId>/edit/content
 ```
+
+**The plugin knows platforms; the project knows its book.** The adapter holds what is true of the
+platform for every project. Everything about *this* work — its ids and URLs, the user's decisions
+(cadence, images, errata policy), what past runs observed (chapter ids, counters, read-back
+results) — goes in the project's `publish/platforms/<platform>.md`, created on first run. Read it
+after the adapter; never write a work id, chapter id, title or run date into the plugin.
 
 Everything this skill writes lives under `publish/` at the project root, plus the two records it
 keeps on each draft (§13): the frontmatter `published:` list and
@@ -41,8 +47,9 @@ keeps on each draft (§13): the frontmatter `published:` list and
 ```
 publish/
   LEDGER.md                                  # one row per publication, written by the script
+  platforms/<platform>.md                    # this work on that platform: ids, decisions, run notes
   exports/<platform>/b<NN>-ch<NN>.html|.txt  # what was pasted, + .json sidecar (title, images)
-  readback/<platform>/b<NN>-ch<NN>.txt       # text read back from the site after saving
+  readback/<platform>/b<NN>-ch<NN>.md        # read-back result: paragraphs, characters, diffs
 ```
 
 Resolve `<scripts>` per §7. All commands run from the project root.
@@ -92,14 +99,13 @@ image files`, stops the run: fix the cause, never hand-edit the export.
 
 ### 3. Put it on the platform
 
-**Not built yet — Phase 2 maps author.today's editor with the user watching.** Until the adapter's
-`## Flow` is filled in, the user publishes by hand: hand them the title, the export path and the
-image files in order from the sidecar, and wait for the chapter's URL. The HTML export's image paths
-are relative to the export, so opening it in a browser shows the chapter with its picture — select
-all, copy, paste into the platform's editor; a `plain` export (`--platform plain`) is the fallback
-for editors that drop formatting.
+Follow the adapter's `## Flow`. Without a browser, or when the user prefers, they publish by hand:
+hand them the title, the export path and the image files in order from the sidecar, and wait for
+the chapter's URL. The HTML export's image paths are relative to the export, so opening it in a
+browser shows the chapter with its picture — select all, copy, paste into the platform's editor; a
+`plain` export (`--platform plain`) is the fallback for editors that drop formatting.
 
-When the flow exists, it runs in the user's own Chrome (Claude in Chrome), which is already signed
+The flow runs in the user's own Chrome (Claude in Chrome), which is already signed
 in. **Never sign in, never type a password**: signed out → stop and ask the user to sign in.
 Upload as an unpublished draft first, then read the text back into
 `publish/readback/<platform>/b<NN>-ch<NN>.txt` and verify it:
@@ -177,4 +183,6 @@ changed since. `wiki-lint` runs it too.
 - **Published text changes only through errata**, and errata are typo-only.
 - **No completion claim without the script's output** — `round-trip: identical`, `verify`'s result,
   `record`'s lines — pasted in the report (§10).
+- **Plugin files stay book-agnostic.** A lesson from a run goes into the adapter as a platform fact
+  or a flow step; the run's specifics go into the project's `publish/platforms/<platform>.md`.
 - Content on the site follows the platform's rules; the user is the publisher of record.

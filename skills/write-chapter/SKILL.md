@@ -100,9 +100,7 @@ Write `<book>/beats/ch<NN>.md` — one card per scene, in `wiki_language`:
 ```
 
 **Write the Point first, and write it with its *because*.** A card whose goal, conflict and outcome
-are all correct still loses a scene whose meaning lives in subtext. "Losses are counted and accepted"
-is an outcome. "Four dead is lucky, because the beasts' strength cores are worth more than soldiers —
-and the loot is split only at the end, so the dead drop out of the share" is a point. Measured on a
+are all correct still loses a scene whose meaning lives in subtext. "The engagement is broken off" is an outcome. "Breaking it off is the kind move, because her father needs the dowry back more than he needs an ally — and whoever returns it first makes the other the debtor" is a point. Measured on a
 real run: scenes drafted from cards without it were plausible and on-brief, and the source's author
 read every one as a different scene — the meaning was gone before a word of prose existed, and no
 drafter can restore a point the card never carried. If you cannot state the point, the scene does not
@@ -110,13 +108,11 @@ have one yet: ask, don't draft.
 
 **Run the swap test on every card with a precedent.** Paste the canon scene in place of this one: if
 nothing downstream would notice, the scene is a re-staging, not a scene — rebeat it before drafting.
-The precedent is also where a card goes wrong quietly: "fill the format from the entrance exam" is an
-instruction to re-stage it, and a real author read the result as the same scene *один в один*.
+The precedent is also where a card goes wrong quietly: "fill the format from the canon scene" is an instruction to re-stage it, and a real author read the result as the same scene, beat for beat.
 
 **Run `naturalize` in plan mode over the cards' `Point` and `Event`** (unless `CANON.md` sets
 `naturalness: off`), and show its review file with the beats. A point written as concept-speak is
-drafted as concept-speak: on a real run the plan's «не становясь ничьим человеком» reappeared in later
-files word for word.
+drafted as concept-speak: on a real run a piece of the plan's abstract shorthand reappeared in later files word for word.
 
 **Show the beats to the user before drafting.** This is the cheapest gate in the pipeline — fixing a
 beat costs a line, fixing drafted prose costs a scene.
@@ -156,12 +152,8 @@ A `blocking` conflict stops drafting.
 - **Respect world limits.** If a rule has a recorded cost, pay it in the prose.
 - **Canon dependencies are constraints, not ingredients.** What a card lists under `Canon deps` is
   what the prose must not contradict — it is not a parts list to assemble the scene from. An
-  observation, joke or description the narrator already made in canon (noticing the windows are on
-  the "wrong" side, the bored examiner handing out sheets) may return only as an acknowledged
-  callback — "как и на вступительных" — never re-performed as a fresh discovery. A chapter built from
-  canon's details reads as a collage even when no sentence is copied: measured on a real run, a
-  drafted exam chapter shared **0%** of its 4-word sequences with the canon exam, and the author still
-  recognised it as the same scene. The defect is structural, so no n-gram check will catch it — only
+  observation, joke or description the narrator already made in canon (the same odd detail of a room, the same bored official) may return only as an acknowledged callback — "like last time" — never re-performed as a fresh discovery. A chapter built from
+  canon's details reads as a collage even when no sentence is copied: measured on a real run, a drafted chapter shared **0%** of its 4-word sequences with its canon precedent, and the author still recognised it as the same scene. The defect is structural, so no n-gram check will catch it — only
   reading the draft against the precedent will.
 - **Write sentences a person would write.** Read `## Naturalness examples` and `## Overused patterns`
   in `plan/HARNESS.md` before drafting, if present — they are this user's verdicts on what reads as

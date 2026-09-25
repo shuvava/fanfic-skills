@@ -344,7 +344,7 @@ against the target model and confirms every locked block is present verbatim:
 python3 scripts/prompt_budget.py list
 python3 scripts/prompt_budget.py check plan/illustration/book-01/ch05.md \
   --model google/gemini-3.1-flash-image \
-  --locked plan/illustration/STYLE.md plan/illustration/characters/лилия-v1.md
+  --locked plan/illustration/STYLE.md plan/illustration/characters/анна-v1.md
 ```
 
 `scripts/openrouter_image.py` runs a prompt block on one or more OpenRouter models with your key
