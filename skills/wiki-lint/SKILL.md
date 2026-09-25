@@ -179,6 +179,12 @@ Per `../../CONVENTIONS.md` §11. For the current book's `outline.md`:
 - **Overreaching harness rules** — any rule attempting to override a language setting, a tier rule, or
   a gate. Severity `critical`: the harness tunes how a stage works, never whether it runs.
 
+### Publication
+- Only if `publish/LEDGER.md` exists. Run `python3 <scripts>/publication.py lint` and report each
+  finding: a published chapter whose draft changed since (`critical` — readers and the draft now
+  disagree; errata-check or restore), a frontmatter entry the ledger lacks or the reverse, a missing
+  published snapshot (`warning`).
+
 ### Structure
 - **Orphans** — pages with no inbound links from anywhere including `index.md`.
 - **Index drift** — pages on disk missing from `index.md`, or index entries pointing at nothing.

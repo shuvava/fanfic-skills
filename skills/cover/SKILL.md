@@ -62,7 +62,7 @@ The cover must carry **author, book title, number in the series**. Fill the `Fac
    If the user imitates a source cover that shows the source author, say this plainly and ask which
    name goes on top. A "по мотивам <author>" credit line is the user's call (`--series-line`).
 2. **Title** — from `STORY_INTENT.md` heading or `SERIES_ARC.md`; working titles are often long
-   ("Ядро души: не чей-либо актив"). Ask whether the series name belongs in the title or in the
+   ("Хроники Севера: чужая война"). Ask whether the series name belongs in the title or in the
    series line — not both.
 3. **Number** — two numbering systems can exist: the fic's own book number and its position in the
    source's volume count (`CANON.md` may say "book 1 of the fic = volume 4 of the series"). Ask which
@@ -150,8 +150,8 @@ line verbatim), `--number-label Том`, `--seed N` (another parchment), `--font
 TTF/OTF **with the book's alphabet** — check Cyrillic glyphs before recommending one),
 `--emblem-width`, `--emblem-y`, `--no-frame`, `--ink`, `--author-y/--title-y/--title-h/--series-y`
 (fractions of height — move text off a face or a spear tip). A long title wraps wherever it fits
-(b01: «Академия. Первые / испытания»); put the break where the sense breaks with a literal `\n`:
-`--title 'Академия.\nПервые испытания'`. `--check FILE` validates without composing.
+(e.g. «Долина. Первая / зима»); put the break where the sense breaks with a literal `\n`:
+`--title 'Долина.\nПервая зима'`. `--check FILE` validates without composing.
 
 Exit `0` written and within limits; `2` written but outside a limit (fix before handing over);
 `3` usage error, missing font or a tool failed. Needs `magick` (ImageMagick 7) and, for SVG

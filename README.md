@@ -48,7 +48,7 @@ opencode walks up from the cwd to the git worktree root looking for `.agents/`, 
 be a git repo (`git init` if not). Verify the skills loaded:
 
 ```bash
-opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|develop-character|write-chapter|naturalize|reconcile|refine-harness|wiki-lint|illustrate|cover'
+opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|develop-character|write-chapter|naturalize|reconcile|refine-harness|wiki-lint|illustrate|cover|publish'
 ```
 
 For a global install visible from every project, copy the same three into `~/.agents/` instead.
@@ -145,6 +145,7 @@ refine-harness → learn from your edits
 wiki-lint      → health report
 illustrate     → image prompts per chapter               [style + character lock gates]
 cover          → book cover: author, title, series number [platform size check]
+publish        → gate → export → platform → record; typo-only errata [you confirm each publication]
 ```
 
 Four human gates. Each catches errors one stage before they become expensive. `brainstorm` is
@@ -343,7 +344,7 @@ against the target model and confirms every locked block is present verbatim:
 python3 scripts/prompt_budget.py list
 python3 scripts/prompt_budget.py check plan/illustration/book-01/ch05.md \
   --model google/gemini-3.1-flash-image \
-  --locked plan/illustration/STYLE.md plan/illustration/characters/лилия-v1.md
+  --locked plan/illustration/STYLE.md plan/illustration/characters/анна-v1.md
 ```
 
 `scripts/openrouter_image.py` runs a prompt block on one or more OpenRouter models with your key
@@ -379,6 +380,35 @@ python3 scripts/compose_cover.py --check plan/cover/book-01/cover.jpg
 ```
 
 Needs ImageMagick 7 and, for SVG emblems, `rsvg-convert` (librsvg).
+
+## Publishing while you write
+
+`publish` serialises the book chapter by chapter so readers' feedback arrives before the book is
+finished. A published chapter becomes a fixed point: readers remember it, so it outranks the draft
+and the outline, and changes only by **typo-only errata** (`CONVENTIONS.md` §13).
+
+```bash
+python3 scripts/publication.py status --platform author-today --per-week 2   # what's out, next, buffer
+python3 scripts/export_chapter.py export drafts/book-01/ch05-<slug>.md --platform author-today \
+  --out publish/exports/author-today/b01-ch05.html                          # + round-trip check
+python3 scripts/publication.py record drafts/book-01/ch05-<slug>.md --platform author-today --url <url>
+python3 scripts/publication.py errata-check drafts/book-01/ch05-<slug>.md --platform author-today
+```
+
+- **Gate:** canon check passed, `reconcile` done (every public fact ratified), naturalness reviewed,
+  no earlier chapter drifted, spoilers and the picture checked.
+- **In order:** `record` refuses to skip a chapter.
+- **Three records** stay in step: `published:` in the draft's frontmatter, a frozen
+  `snapshots/ch<NN>-published-<platform>-v<N>.md`, and `publish/LEDGER.md`.
+- **Locks elsewhere:** `write-chapter` won't redraft a published chapter, `plan-chapters` treats
+  contradicting one as `blocking`, `naturalize` is review-only on it, `place_illustration.py`
+  refuses it.
+- **You publish.** The skill prepares, uploads as a hidden draft and verifies the text read back
+  from the site; it asks before every publication, and a scheduled run stops there.
+
+Platforms are adapters (`skills/publish/references/platforms/`). author.today is the first; its
+browser flow is mapped in the next phase, and until then you paste the export yourself and the
+skill records the result. Reader-feedback collection comes after.
 
 ## Learning from your edits
 

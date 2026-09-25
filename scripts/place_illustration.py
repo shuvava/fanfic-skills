@@ -23,7 +23,10 @@ Behaviour
 - The link is written relative to the draft, so it renders in any markdown viewer.
 - Frontmatter gets `illustration: <path relative to the project root>` (the cwd).
 
-Exit: 0 placed (or unchanged), 2 anchor not found / ambiguous, 3 bad path.
+- A published chapter (frontmatter `published:`) is refused: readers have its text, and a
+  picture added later is a change `publish` has to make, not a silent edit.
+
+Exit: 0 placed (or unchanged), 2 anchor not found / ambiguous, 3 bad path, 4 published.
 """
 
 from __future__ import annotations
@@ -85,6 +88,10 @@ def main() -> int:
     text = args.draft.read_text(encoding="utf-8")
     front, body = split_frontmatter(text)
     head_lines = text[: len(text) - len(body)].count("\n")
+    if re.search(r"^published:", front, re.MULTILINE):
+        print(f"refused: {args.draft} is published — its text changes only through publish errata",
+              file=sys.stderr)
+        return 4
     old = re.search(r"^illustration:\s*(\S+)", front, re.MULTILINE)
     stale = {os.path.normpath(args.image)}
     if old:

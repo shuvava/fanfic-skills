@@ -43,7 +43,7 @@ by id in iteration logs ("S7: posture") so a round's fix is traceable.
 - **W1 Look a place up before inventing it.** Read what canon says about a room's furnishing; the
   user's taste fills only what canon leaves open. (The club had no bookshelves — books live in the
   academy's libraries.)
-- **W2 Draw what a viewer would see.** The lamp's bands and core are what Felix found *inside* when
+- **W2 Draw what a viewer would see.** The lamp's bands and core are what Mark found *inside* when
   he unscrewed it; forcing them outside turned an elegant globe into a cage.
 - **W3 Name the objects, exclude the rest.** "Trophies" in a fantasy room invites mounted monster
   heads canon never described: "silver cups and medals; no monster or animal heads".
@@ -70,7 +70,7 @@ Read the SCENE once per item.
 - **S2 The setting's rules.** Read the chapter for what the place forbids or requires: in an exam
   where "nobody may stand up", one standing girl is a canon error.
 - **S3 Anchor positions to the room, not the camera.** After a camera change "one row behind him"
-  put Eleonora lower and beside Felix; "one tier higher, farther from the blackboard than he is"
+  put Anna lower and beside Mark; "one tier higher, farther from the blackboard than he is"
   holds from any angle.
 - **S4 Name the contact point.** "Her quill tip on his back, not his head" — or a poke lands on the
   temple with a finger.
@@ -83,7 +83,7 @@ Read the SCENE once per item.
 - **S7 Name every held object** — the quill, not "writing" — or the model supplies the modern
   default (ballpoint pen, phone). Book covers: "a blank cover", or a title appears in English.
 - **S8 Tie similar costumes to their wearers.** When blocks differ in a few items the model swaps
-  them: "Felix, the boy, wears trousers, never a skirt; Eleonora, the girl, wears the skirt, never
+  them: "Mark, the boy, wears trousers, never a skirt; Anna, the girl, wears the skirt, never
   trousers".
 - **S9 Adults need their own clothing.** Uniform blocks dress the students; an undescribed
   "examiner" arrives in a suit and necktie.
@@ -95,7 +95,7 @@ Read the SCENE once per item.
   puts them on (the table), or they land on the stairs.
   Size a figure against the crowd's stated age, not against the crowd: "a head taller than everyone
   around him" in ch04 shrank the senior students into children. Give the crowd's age ("sixteen or
-  seventeen, taller than Felix") and then the big one relative to them.
+  seventeen, taller than Mark") and then the big one relative to them.
 - **S12 Frame the key prop.** If the chapter's prop matters, choose a camera that holds it; a shot
   at bench level pushed the examiner's table off-picture.
 - **S13 Background people get faces:** "ordinary, simply drawn faces, not resembling <named
@@ -103,27 +103,27 @@ Read the SCENE once per item.
   number and where they sit, or extras appear.
   Blur words in the crowd clause ("slightly out of focus") and trimming AVOID's "faceless or
   blank-faced" to "faceless" blanked every face in ch03's crowd: keep the full phrase, no blur.
-- **S14 Guard against duplicates of a named face** in the crowd: "anyone else with Felix's or
-  Eleonora's face" in AVOID — and still look for one when reviewing.
+- **S14 Guard against duplicates of a named face** in the crowd: "anyone else with Mark's or
+  Anna's face" in AVOID — and still look for one when reviewing.
   Hair colour is the usual twin: with a black-haired hero, add "no other black-haired boy" to
   AVOID before round 1 — an edit recolours one lookalike per request and ch04 had two.
 - **S15 Planted characters stay unrecognisable.** One planted for a later chapter may appear where
   the text puts them — small, doing what the text says — never in the pose the later chapter pays
-  off (the lecturer walking far rows, not standing over Felix's shoulder).
+  off (the lecturer walking far rows, not standing over Mark's shoulder).
 - **S16 Scene state never contradicts an identity block.** A chapter that needs a character to look
   different is scene state (a hood hides the hair) or a new version — never an edited block.
 - **S17 Relative height comes from the sheets and a height reference, not the verbs.** "Tilts her
-  head to look up into his face" with a low camera drew Felix a head taller. State the sheets'
+  head to look up into his face" with a low camera drew Mark a head taller. State the sheets'
   relative height ("half a head taller than him"), use a gaze and camera that fit it (upright, eye
   level — a lean costs height). Words alone still lose: each sheet fills its own canvas, so the model
   has no shared scale and falls back on "boy taller than girl". When two locked characters stand
   together, attach `refs/height-<a>-<b>-v<N>.png` as the last image ("height reference only; copy
   their relative height, not the poses") — built locally from the sheets' front views, feet on one
   baseline, scaled to the recorded heights. It took ch03 four rounds to learn this.
-  Name who is taller first, then measure by a landmark: "Eleonora is slightly taller: the top of
-  Felix's head is level with her eyebrows". "Half a head" overshot to a full head; the landmark
+  Name who is taller first, then measure by a landmark: "Anna is slightly taller: the top of
+  Mark's head is level with her eyebrows". "Half a head" overshot to a full head; the landmark
   alone, with no one named taller, came out reversed. On stairs keep "on the same step", or a step adds another half
-  head. Do not ban the opposite in AVOID ("Felix taller than Eleonora"): it pushes past the target.
+  head. Do not ban the opposite in AVOID ("Mark taller than Anna"): it pushes past the target.
 - **S18 A held object is gripped, and a paper shows no text.** "His right hand holds one folded
   sheet at his side" left the hand empty and the sheet floating by his thigh, covered in
   pseudo-Latin. Name the grip ("gripping it between thumb and fingers") and which face shows ("only

@@ -74,7 +74,7 @@ for one fight — goes in the chapter prompt's SCENE, never here.
 ---
 type: illustration-character
 name: <name as in the wiki>
-prompt_name: <transliterated name used inside prompts, fixed forever — e.g. Lilia>
+prompt_name: <transliterated name used inside prompts, fixed forever — e.g. Anna>
 version: 1
 status: draft            # draft → locked
 applies_from: b01/ch01
@@ -105,12 +105,12 @@ story fact and does not reach the wiki or the prose unless the user promotes it 
 ## Locked blocks
 
 ```locked-full
-Lilia: <distinguishing features first>, <age and build>, <face>, <hair>, <eyes>, <skin>,
+Anna: <distinguishing features first>, <age and build>, <face>, <hair>, <eyes>, <skin>,
 <signature clothing>, <signature prop>, <typical posture>.
 ```
 
 ```locked-short
-Lilia: <the three features that identify her at thumbnail size>, <age>, <signature clothing>.
+Anna: <the three features that identify her at thumbnail size>, <age>, <signature clothing>.
 ```
 
 ## Reference sheet prompt
@@ -146,7 +146,7 @@ chapter: b01/ch05
 source: drafts/book-01/ch05-<slug>.md
 model: google/gemini-3.1-flash-image
 style: STYLE.md v1 (full)
-characters: [Lilia v1 (full), Nelot v1 (short)]
+characters: [Anna v1 (full), Mark v1 (short)]
 elements: [era v2 (full), <place> v1 (short)]
 aspect_ratio: "3:2"
 status: draft            # draft → generated (on the user's approval)
@@ -172,13 +172,13 @@ Why this moment: its visual payoff, and what it does not give away.
 ```prompt
 SHOT: <one sentence — who does what, where, everyone's posture, camera distance and angle>.
 CHARACTERS:
-Image 1 is Lilia, the girl, as on her reference sheet. <Lilia locked block, verbatim>
-Image 2 is Nelot, the boy, as on his reference sheet. <Nelot locked block, verbatim>
+Image 1 is Anna, the girl, as on her reference sheet. <Anna locked block, verbatim>
+Image 2 is Mark, the boy, as on his reference sheet. <Mark locked block, verbatim>
 SCENE: <per-chapter state: expression, pose; what each hand does and holds>; <who wears what>;
 <background people: number, place, ordinary faces>; <setting with canon details, element blocks>;
 <light>; <mood>.
 <style locked block, verbatim>
-AVOID: watermark, signature, faceless or blank-faced people, anyone else with Lilia's or Nelot's
+AVOID: watermark, signature, faceless or blank-faced people, anyone else with Anna's or Mark's
 face; <era guard, verbatim>; <failures seen in earlier rounds>.
 ```
 
@@ -190,8 +190,8 @@ face; <era guard, verbatim>; <failures seen in earlier rounds>.
   "aspect_ratio": "3:2",
   "resolution": "2K",
   "input_references": [
-    {"type": "image_url", "image_url": {"url": "plan/illustration/refs/Lilia-v1.png"}},
-    {"type": "image_url", "image_url": {"url": "plan/illustration/refs/Nelot-v1.png"}}
+    {"type": "image_url", "image_url": {"url": "plan/illustration/refs/Anna-v1.png"}},
+    {"type": "image_url", "image_url": {"url": "plan/illustration/refs/Mark-v1.png"}}
   ]
 }
 ```

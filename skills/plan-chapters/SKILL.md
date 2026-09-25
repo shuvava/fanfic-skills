@@ -141,7 +141,7 @@ usually shorthand for nothing. Audit your own layer before presenting it:
   reaction chapter; reaction chapters never run two in a row.
 - **The book starts early.** The inciting event — whatever makes this book's central question urgent —
   lands within the first ~10% of chapters. Setup that precedes it is compressed into it, not given its
-  own run of chapters. A real reader's verdict on three setup chapters was *«сюжет без сюжета»*.
+  own run of chapters. A real reader's verdict on three setup chapters was *a plot without a plot*.
 - **No re-staged canon scenes.** When a chapter's event has a canon precedent — an exam where canon
   already showed an exam — name the precedent in the row and say what differs. "The canon scene again,
   later" is a borrowed row.
@@ -190,6 +190,7 @@ each is discovered three books later otherwise.
 | **Start-state drift** | A scene assumes a state the previous book's drafted ending contradicts. | `blocking` |
 | **Prior-fanon contradiction** | A scene contradicts a `fanon-established` fact an earlier book set. | `warning` — the user may be retconning on purpose, but it is never a silent change |
 | **Continuity-ledger contradiction** | A scene contradicts `drafts/continuity.md` — something the earlier prose actually said. | `blocking`. The published text is not revisable by a plan |
+| **Published contradiction** | A scene contradicts a chapter with `published:` in its frontmatter, or re-plans one (`../../CONVENTIONS.md` §13). Applies within a book too. | `blocking` — readers have it; only typo-only errata can change it |
 | **Undelivered rung** | The Layer 2 ending does not reach this rung's end state. | `blocking` — the next book's start state is already written against it |
 | **Unplanted seed** | A `SERIES_ARC.md` seed with `Plant in` = this book that no scene plants. | `blocking` — the payoff book has nothing to pay off |
 | **Unpaid seed** | A seed with `Payoff target` = this book that no scene pays. | `warning`; either schedule it here or move the target and say so |

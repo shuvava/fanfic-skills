@@ -53,7 +53,7 @@ Profile one character per run. A batch of twelve thin profiles is worse than thr
 7. `canon/plot/threads.md` — open threads the character touches.
 
 **Look up facts. Ask only decisions.** Anything the wiki answers is read, cited and stated, never
-asked. "Canon has him fail the practical exam to a rat-monster [src: ...]" is a statement.
+asked. "Canon has him lose his first duel [src: ...]" is a statement.
 
 ## 2. Build the profile, one decision at a time
 

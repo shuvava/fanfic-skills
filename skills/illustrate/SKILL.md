@@ -260,6 +260,8 @@ blocks, an optional reference image, versions by chapter range, lock on explicit
     the picture goes, then re-run with an anchor that is unique. Never place it by guess. No draft
     yet (moment chosen from the beat sheet) → skip and say so; place it once the chapter is drafted.
     Do not touch `snapshots/` — `refine-harness` ignores image lines. Report the line it landed on.
+    **A published chapter is refused (exit 4)** — place the picture before `publish`; after it, a
+    new picture is the user's decision to republish, not a placement.
 
 ## Reviewing an image
 
@@ -302,7 +304,7 @@ python3 "$SCRIPTS/openrouter_image.py" plan/illustration/STYLE.md \
   --model google/gemini-3.1-flash-image openai/gpt-image-2 --out plan/illustration/refs/bakeoff
 python3 "$SCRIPTS/openrouter_image.py" plan/illustration/book-01/ch05.md \
   --model google/gemini-3.1-flash-image --resolution 2K \
-  --ref plan/illustration/refs/Felix-v1.png plan/illustration/refs/Lilia-v1.png \
+  --ref plan/illustration/refs/Mark-v1.png plan/illustration/refs/Anna-v1.png \
   --out plan/illustration/images/book-01 --name ch05-r1
 python3 "$SCRIPTS/openrouter_image.py" plan/illustration/book-01/ch05-edit.md --block 2c \
   --model google/gemini-3.1-flash-image --resolution 2K \
@@ -322,7 +324,7 @@ done
 python3 "$SCRIPTS/prompt_budget.py" list
 python3 "$SCRIPTS/prompt_budget.py" check plan/illustration/book-01/ch05.md \
   --model google/gemini-3.1-flash-image \
-  --locked plan/illustration/STYLE.md plan/illustration/characters/лилия-v1.md \
+  --locked plan/illustration/STYLE.md plan/illustration/characters/анна-v1.md \
            plan/illustration/world/era.md
 ```
 
@@ -357,7 +359,7 @@ Append to `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] illustrate | style v1 locked
    metrics: rounds=4 model=google/gemini-3.1-flash-image
-## [YYYY-MM-DD] illustrate | Lilia v1 locked
+## [YYYY-MM-DD] illustrate | Anna v1 locked
    metrics: rounds=6 (4 gen + 2 edit) src_citations=5 visual_decisions=4 full_words=58 short_words=19
 ## [YYYY-MM-DD] illustrate | b01/ch05 image approved
    metrics: model=google/gemini-3.1-flash-image rounds=7 (4 gen + 2 edit + 1 local patch) refs=2 words=486 final=images/book-01/ch05.png placed=ch05-<slug>.md:27

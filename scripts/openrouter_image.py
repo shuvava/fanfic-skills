@@ -9,7 +9,7 @@ Run by the user, with their own key — the skill writes prompts, it does not sp
       --out plan/illustration/refs/bakeoff --resolution 1K
 
   openrouter_image.py plan/illustration/book-01/ch05.md --model google/gemini-3.1-flash-image \
-      --ref plan/illustration/refs/Felix-v1.png plan/illustration/refs/Lilia-v1.png
+      --ref plan/illustration/refs/Mark-v1.png plan/illustration/refs/Anna-v1.png
 
 Several --model values run the same prompt on each (a bake-off). --ref files are attached in the
 order given, which must match the "Image N is ..." labels in the prompt. Errors from the API are

@@ -5,7 +5,7 @@ Written by the `cover` skill. Text is set here with a real font, never by an ima
 misspell Cyrillic and cannot be trusted with a name. The background is either procedural aged
 parchment (free, offline) or an image the user generated or supplied (`--background art.png`).
 
-  compose_cover.py --author "Варп" --title "Ядро души" --series "Ядро души" --number 4 \
+  compose_cover.py --author "Автор" --title "Долина" --series "Хроники Севера" --number 2 \
       --emblem plan/cover/emblem.svg --out plan/cover/cover-r1.jpg
 
   compose_cover.py --check plan/cover/cover.jpg          # validate an existing file only
@@ -141,7 +141,7 @@ def main():
     ap.add_argument("--check", metavar="FILE", help="only validate an existing cover file")
     ap.add_argument("--author")
     ap.add_argument("--title")
-    ap.add_argument("--series", help="series name; with --number gives e.g. «Ядро души» · Книга 4")
+    ap.add_argument("--series", help="series name; with --number gives e.g. «Хроники Севера» · Книга 2")
     ap.add_argument("--number", help="number of this book in the series")
     ap.add_argument("--number-label", default="Книга", help="word before the number (default Книга)")
     ap.add_argument("--series-line", help="override the whole bottom line, verbatim")

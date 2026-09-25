@@ -19,8 +19,7 @@ Follow `../../CONVENTIONS.md`. Work in the text's own language; this skill never
 
 A model writes sentences that are grammatical and still not ones a person would write: a thought
 compressed into abstract shorthand, a collocation that almost exists, an image that does not form.
-Measured on a real run, the author-reader of a Russian series rejected a plan premise — «собирает
-пати чужими руками и не становясь ничьим человеком» — as *коряво*, and found the same defect
+Measured on a real run, the author-reader of a Russian series rejected a plan premise written as abstract shorthand as clumsy, and found the same defect
 throughout the chapters. Three instruments were tried against it and missed it:
 
 - **The style fingerprint** counts punctuation. Clumsy construction keeps the right punctuation.
@@ -44,6 +43,11 @@ Read `naturalness:` from `CANON.md` (default `review` when absent):
 
 Plans are never auto-applied in any mode: a plan edit changes what the book is about.
 
+**A published chapter** (`published:` in its frontmatter, `../../CONVENTIONS.md` §13) is always
+`review`, whatever the mode, and an accepted fix reaches readers only through `publish` errata — so
+only typo-sized fixes can. Say so in the review file's header rather than proposing rewrites the
+user cannot ship.
+
 ## Two readings
 
 **Prose mode** — chapters. Flag only what a reader stumbles on as an *error*:
@@ -51,36 +55,25 @@ Plans are never auto-applied in any mode: a plan edit changes what the book is a
 - a broken fixed expression or collocation (the word that almost belongs there);
 - agreement or government errors; a sentence whose end no longer connects to its start;
 - an image or comparison that does not form a picture;
-- a **garbled proverb or idiom — restore the canonical form, never paraphrase it.** On the real run
-  «своё отдать легко, чужое возвращать нечем» was "fixed" into a different thought; it was a broken
-  «берёшь чужие и на время, а отдаёшь свои и навсегда». A paraphrase changes the meaning; the
+- a **garbled proverb or idiom — restore the canonical form, never paraphrase it.** «Семь раз проверь, один раз отрежь» "fixed" into «проверяй всё тщательно» is a different thought; it is a broken «семь раз отмерь, один раз отрежь». A paraphrase changes the meaning; the
   proverb carries it.
 
 **Do not flag the author's comic register.** Deliberately pompous, bureaucratic or ceremonious phrasing
-about trivial things is the narrator's irony, not officialese — the reader judged «о чём
-красноречивее всего свидетельствовало целое эссе о любви к императору» and «с той особой
-вежливостью, какая бывает у людей, которые заранее знают, что им не откажут» *funnier* than their
-plain rewrites. Read `## Comic register` in `canon/overview.md` first; anything it records as a
+about trivial things is the narrator's irony, not officialese — on a real run the reader judged two such sentences *funnier* than their plain rewrites — the kind that hand over a spoon «с торжественностью, достойной коронации». Read `## Comic register` in `canon/overview.md` first; anything it records as a
 device is not a defect. Nor are the source's non-standard orthography, slang or coinages.
 
 **Plan mode** — STORY_INTENT, outline rows, beat-card `Point` and `Event`. Here the defect is
-**concept-speak**: abstract nouns, planner's jargon, a summary nobody would say aloud («кооперация
-против косной иерархии», «возврат приходит от людей и не приходит от институтов»). The fix is not a
+**concept-speak**: abstract nouns, planner's jargon, a summary nobody would say aloud («реализует стратегию независимости через горизонтальные связи», «ресурс доверия конвертируется в лояльность»). The fix is not a
 simpler abstraction but **concrete everyday language — an image or a sharp contrast**, the way the
-user would explain the idea to a friend. The reader's own fixes on the real run set the bar:
-«действуя чужими руками, как серый кардинал»; «можно ли работать в одной команде как партнёры, а не
-как начальник и дурак». The editor's first attempts («не власть и не Академия», «любой союз означает,
-что ты чей-то») were simpler and still *криво*.
+user would explain the idea to a friend. The bar is an image anyone would say aloud — «друзья, которые помогут, хотя ничего не обещали», not «связи вместо власти». On the real run the editor's first attempts were simpler abstractions and the reader still called them clumsy; the fixes they accepted were images and sharp contrasts.
 
 ## Fixing
 
-- **Never change meaning, facts or action.** A different verb is a different fact: «уверенно она это
-  делала» → «отказывала» was rejected. If the context does not settle the meaning, flag without a
+- **Never change meaning, facts or action.** A different verb is a different fact: «судя по тому, как привычно он это делал» → «воровал» adds a fact the sentence does not state. If the context does not settle the meaning, flag without a
   rewrite.
 - **The smallest repair.** Mend the broken place; do not rewrite the sentence around it.
 - **The plainest natural phrasing wins.** Do not replace one flourish with another.
-- **Never add meaning in plan mode.** «независимость в одиночку не берётся» became «ты просто один —
-  и тебя съедят» on the real run; the second half was invented. A plan fix restates, it does not
+- **Never add meaning in plan mode.** «доверие не покупается» → «доверие не покупается, а покупателей презирают» invents the second half. A plan fix restates, it does not
   extend.
 - **Project examples outrank these rules.** Read `## Naturalness examples` in `plan/HARNESS.md` before
   reading the text: they are this user's verdicts and the best evidence of their taste.
@@ -150,8 +143,8 @@ When the user says the review is done ("apply naturalness for ch05", "приме
 
 | Mode | Было | Вердикт | Почему |
 |---|---|---|---|
-| prose | «о чём красноречивее всего свидетельствовало…» | keep — оригинал смешнее | ирония рассказчика |
-| plan | «не становясь ничьим человеком» | → «действуя чужими руками, как серый кардинал» | образ вместо понятия |
+| prose | «с торжественностью, достойной коронации…» | keep — оригинал смешнее | ирония рассказчика |
+| plan | «через горизонтальные связи» | → «друзья, которые помогут, хотя ничего не обещали» | образ вместо понятия |
 ```
 
 Keep at most twenty rows; `refine-harness` prunes to the most instructive when it grows past that.

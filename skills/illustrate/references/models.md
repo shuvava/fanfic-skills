@@ -24,7 +24,7 @@ estimated.
 | Family | OpenRouter ids | Hard limit | Refs | Notes |
 |---|---|---|---|---|
 | **Nano Banana** | `google/gemini-2.5-flash-image` | 32 768 tokens | 3 | First generation. Few reference slots — lock with the short blocks. |
-| **Nano Banana Pro** | `google/gemini-3-pro-image` | 65 536 tokens | 14 | Reasons over the prompt before drawing. Best at multi-character scenes and at honouring labelled references ("Image 1 is Лилия"). Natural-language paragraphs beat keyword lists. |
+| **Nano Banana Pro** | `google/gemini-3-pro-image` | 65 536 tokens | 14 | Reasons over the prompt before drawing. Best at multi-character scenes and at honouring labelled references ("Image 1 is Анна"). Natural-language paragraphs beat keyword lists. |
 | **Nano Banana 2** | `google/gemini-3.1-flash-image` | 65 536 tokens | 14 | Pro-grade reference handling, cheaper. Good default for chapter images. |
 | **GPT Image** | `openai/gpt-image-1`, `-1-mini`, `-2`, `-2.5-*` | 32 000 chars | 16 | Vendor cap confirmed. Guidance: past a few hundred words earlier instructions fade. |
 | **FLUX.2** | `black-forest-labs/flux.2-pro`, `-max`, `-flex` | 32K tokens | 8 | BFL recommends 30–80 words for most images, 80+ for complex scenes. Supports `seed`. Accepts structured (JSON-like) prompts. |
@@ -42,7 +42,7 @@ characters can be anchored by image rather than by text alone.
 
 1. **Reference images** (`input_references`). An approved reference sheet of each character, passed
    with every chapter image, does more than any wording. Label them in the prompt in the same order
-   they are attached: "Image 1 is Лилия, Image 2 is Нелот." Keep the style reference, if any, last.
+   they are attached: "Image 1 is Анна, Image 2 is Марк." Keep the style reference, if any, last.
 2. **Byte-identical locked text.** The same words, in the same order, every time. A synonym ("raven"
    for "blue-black") is a different prompt, and the model draws a different person. Never paraphrase a
    locked block to save space — switch to its approved short variant instead.
@@ -111,8 +111,8 @@ POST https://openrouter.ai/api/v1/images
   "aspect_ratio": "3:2",
   "resolution": "2K",
   "input_references": [
-    {"type": "image_url", "image_url": {"url": "data:image/png;base64,<Лилия v1 sheet>"}},
-    {"type": "image_url", "image_url": {"url": "data:image/png;base64,<Нелот v1 sheet>"}}
+    {"type": "image_url", "image_url": {"url": "data:image/png;base64,<Анна v1 sheet>"}},
+    {"type": "image_url", "image_url": {"url": "data:image/png;base64,<Марк v1 sheet>"}}
   ]
 }
 ```
