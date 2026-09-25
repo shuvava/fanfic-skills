@@ -132,7 +132,8 @@ treats wiki pages as fact.
 ## 6. The harness override
 
 `plan/HARNESS.md` is a project-local file that overrides plugin defaults. It is written by
-`refine-harness` and ratified by the user. **Every skill must read it if it exists**, after reading its
+`refine-harness` and ratified by the user — except `## Naturalness examples`, which `naturalize`
+writes from verdicts the user already gave in a review file. **Every skill must read it if it exists**, after reading its
 own instructions and before acting.
 
 It may contain:
@@ -154,6 +155,14 @@ Extra checks to run over beats before drafting.
 
 ## Reconcile bias
 What to propose more or less aggressively, learned from rejections.
+
+## Naturalness examples
+The user's verdicts on proposed naturalness fixes — kept jokes, restored proverbs, their own
+rewrites. Written by `naturalize` directly (the user ratified each in its review file).
+
+## Overused patterns
+Words and phrases the drafts overuse relative to the source, confirmed by the user
+(`scripts/overused_patterns.py`). Places to look, not a ban list.
 
 ## Revision log
 | Rev | Date | Change | Evidence |

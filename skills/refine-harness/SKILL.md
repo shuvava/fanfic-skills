@@ -51,6 +51,12 @@ forgetting the same canon.
 
 **Lint findings.** Issues `wiki-lint` reports more than once.
 
+**Naturalness decisions.** The `<book>/naturalness/*.md` review files and the `naturalize` lines in
+`log.md`. A user rewriting sentences by hand in a chapter that `naturalize` passed means a kind of
+clumsiness the editor does not see — propose a `## Naturalness examples` row for it. A falling share
+of accepted-as-is fixes means the editor's rewrites drift from the user's taste even where it finds
+the right places.
+
 **Metrics.** The `metrics:` lines in `log.md`, for trend.
 
 ## 2. Classify the edits
@@ -131,6 +137,11 @@ Every run, review existing harness rules. Propose removing any that:
 - Duplicate something now in `CANON.md`
 
 An accumulating harness is the failure mode here. Removal is as valuable as addition.
+
+`## Naturalness examples` is written by `naturalize` from the user's own verdicts, so it skips the
+three-instance rule — and grows fastest. Past twenty rows, propose keeping the most instructive: one
+row per *kind* of verdict (a joke kept, a proverb restored, a plan idea made concrete) outweighs five
+rows of the same kind.
 
 ## Rules
 

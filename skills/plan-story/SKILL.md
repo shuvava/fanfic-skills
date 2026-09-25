@@ -159,6 +159,12 @@ Rating, boundaries, length target, chapter count.
 Also append each divergence to `CANON.md`'s `divergences` table, and each sanctioned invention to
 `wiki/fanon/proposed/`.
 
+**Then run `naturalize` in plan mode over the new `STORY_INTENT.md`** (unless `CANON.md` sets
+`naturalness: off`) and hand the user its review file. The intent is the text every later stage copies
+from, so concept-speak written here spreads: on a real run the premise's «не становясь ничьим
+человеком» — rejected by the user as *коряво* — reappeared in the cover brief verbatim. The user's own
+fix («действуя чужими руками, как серый кардинал») was an image, not a simpler abstraction; aim there.
+
 If an idea from `plan/IDEAS.md` fed this intent, mark it `promoted` there and note which section took
 it. An idea file where nothing is ever marked promoted is a busy one, not a productive one.
 

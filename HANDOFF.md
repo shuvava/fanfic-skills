@@ -30,6 +30,7 @@ refine-harness → learn from edit diffs
 wiki-lint      → health report
 illustrate     → image prompts per chapter            [side branch, v0.8.0]
 cover          → book cover, text set locally         [side branch, v0.10.0]
+naturalize     → machine-sounding sentences → review  [called by plan/write stages, v0.11.0]
 ```
 
 Shared rules live in `CONVENTIONS.md`. Every skill references it.
@@ -287,6 +288,37 @@ lines carrying it. Untested at the time of writing.
 - **One `.env` per project, read by a stdlib loader** (`scripts/envfile.py`, CONVENTIONS §12).
   No `python-dotenv`: the scripts stay dependency-free and run on any `python3`. The shell wins over
   the file; skills gitignore `.env` before telling the user where the key goes, and never read it.
+
+## Naturalness (v0.11.0)
+
+The author-reader's standing complaint about Opus's Russian was not voice but *mechanical language*:
+sentences a person would not write. His example was the plan's own premise — «собирает пати чужими
+руками и не становясь ничьим человеком» — and he found the same in every chapter.
+
+The fine-tune experiment (`exp/finetune`) tried to solve it with a model and could not: the style
+fingerprint counts punctuation, a list of overused words finds habits not constructions, and a 27B
+model tuned on the author measures sounding like *the author*, not like *a person*. A voice pass driven
+by that checker moved commas; the reader called it "very minor". What found the clumsy sentences was
+reading — Opus asked to flag what a native speaker would not write.
+
+Calibrating it on the reader's verdicts produced the rules in `skills/naturalize`, each from a
+specific rejection:
+- **Ironic pompous phrasing is the joke.** Four "officialese" fixes were rejected as less funny than
+  the originals; the prose mode now leaves the comic register alone.
+- **Meaning is untouchable.** «делала» → «отказывала» was rejected; a different verb is a different fact.
+- **Garbled proverbs are restored, not reworded.** «своё отдать легко, чужое возвращать нечем» was
+  "fixed" into another thought; it was «берёшь чужие и на время, а отдаёшь свои и навсегда».
+- **Plans need images, not simpler abstractions.** «не власть и не Академия» was still *криво*; the
+  reader's «как серый кардинал», «как партнёры, а не как начальник и дурак» set the bar.
+
+Modes live in `CANON.md` (`naturalness: off | review | auto-safe`, default review). Plans are never
+auto-applied. The user's verdicts go straight into `plan/HARNESS.md` → `## Naturalness examples`, which
+is what calibrates the next run — the rules above are only the defaults.
+`scripts/overused_patterns.py` measures what drafts overuse against the source (log-odds; lemmas and
+parts of speech with `pymorphy3` for Russian, dispersion otherwise).
+
+**Fine-tuning verdict:** not worth it for this pipeline. Writing (brief → prose, restyle) lost meaning;
+checking (contrastive log-ratio) worked statistically but did not find what the reader cares about.
 
 ## Known gaps / possible next work
 
