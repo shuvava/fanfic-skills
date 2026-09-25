@@ -109,6 +109,11 @@ nothing downstream would notice, the scene is a re-staging, not a scene — rebe
 The precedent is also where a card goes wrong quietly: "fill the format from the entrance exam" is an
 instruction to re-stage it, and a real author read the result as the same scene *один в один*.
 
+**Run `naturalize` in plan mode over the cards' `Point` and `Event`** (unless `CANON.md` sets
+`naturalness: off`), and show its review file with the beats. A point written as concept-speak is
+drafted as concept-speak: on a real run the plan's «не становясь ничьим человеком» reappeared in later
+files word for word.
+
 **Show the beats to the user before drafting.** This is the cheapest gate in the pipeline — fixing a
 beat costs a line, fixing drafted prose costs a scene.
 
@@ -154,6 +159,9 @@ A `blocking` conflict stops drafting.
   drafted exam chapter shared **0%** of its 4-word sequences with the canon exam, and the author still
   recognised it as the same scene. The defect is structural, so no n-gram check will catch it — only
   reading the draft against the precedent will.
+- **Write sentences a person would write.** Read `## Naturalness examples` and `## Overused patterns`
+  in `plan/HARNESS.md` before drafting, if present — they are this user's verdicts on what reads as
+  machine prose. Preventing a clumsy sentence is cheaper than reviewing it later.
 - **Deploy verbal tics sparingly** — three per character is the cap, and not all three every scene.
 - **Carry the comic register, delivery included.** Read `## Comic register` in `canon/overview.md`
   before drafting and hit its counts. A first draft reliably keeps the *device* — the source's
@@ -194,6 +202,7 @@ Run explicitly and report:
 | Precedent | Does any scene repeat a canon scene's shape — same staging, same moves, same observations? List every narrator observation re-performed from canon; each is cut or turned into an acknowledged callback |
 | Event | Does the chapter contain the external event its card named, on the page? |
 | New assertions | What does this chapter establish that no tier records? |
+| Naturalness | Run `naturalize` in prose mode once the rows above pass (skip if `naturalness: off`). Report its counts — flagged, auto-repaired, left for review — and the review file's path |
 
 Measure the style row rather than judging it:
 
@@ -211,6 +220,11 @@ plainly which deltas you are leaving and why.** A first draft typically comes ba
 strongest punctuation habits at a fraction of their density — that is the normal failure and it is
 worth one revision pass, because it is the difference between prose that reads like the author and
 prose that reads like a competent imitation.
+
+**Naturalness runs last** because every other row can rewrite sentences, and a fix reviewed before a
+canon revision would be reviewed twice. In `auto-safe` mode its repairs are Claude's own edits: apply
+them and overwrite `snapshots/ch<NN>-v0.md` as §4 allows while the user has not edited yet, so the
+snapshot stays "what Claude produced" and `refine-harness` does not count the repairs as user edits.
 
 **Report violations rather than silently fixing them.** A deliberate divergence is legitimate; the
 user decides which it is. This applies to canon, not to the fingerprint: a style delta is a defect to
@@ -249,7 +263,7 @@ assertions from the chapter are handed to `reconcile`, which routes them through
 Append to `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] write | b<NN>/ch<NN> <title>
-   metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n>
+   metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n> natural=<flagged>/<auto>
 ```
 Drop `b<NN>/` and `book=` in a flat project.
 Then suggest running `reconcile`.

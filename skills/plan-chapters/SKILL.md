@@ -121,6 +121,10 @@ usually shorthand for nothing. Audit your own layer before presenting it:
 - **No placeholders.** No `TBD`, no `(details later)`, no "something happens that forces the choice".
   If you do not know what happens, that is a question to ask, not a row to write.
 - **No borrowed rows.** "Like chapter 4 but at the palace" is not a chapter. Write it out.
+- **Plain words, not concept-speak.** A row the user would not say aloud to a friend — abstract nouns,
+  planner's jargon ("cooperation against rigid hierarchy") — is drafted the same way later. Run
+  `naturalize` in plan mode over Layers 1–2 and the `point` column (unless `naturalness: off`) and
+  hand its review file over with the layer.
 - **Every scene has a conflict and a change.** A Layer 4 row whose `outcome` restates its `goal` is a
   scene with nothing in it. Cut it, or give it opposition.
 - **Every scene has a point, and it is not the outcome.** A row whose `point` is empty or restates
