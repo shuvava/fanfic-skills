@@ -39,6 +39,8 @@ WORD_RE = re.compile(r"\w+(?:['’\-]\w+)*", re.UNICODE)
 BARE_WORD_RE = re.compile(r"\w+", re.UNICODE)
 HEADING_RE = re.compile(r"^#+ .*$", re.MULTILINE)
 FRONTMATTER_RE = re.compile(r"\A---\n.*?\n---\n", re.DOTALL)
+# Illustration links placed by place_illustration.py — markup, not prose.
+IMAGE_RE = re.compile(r"\n*^!\[[^\]\n]*\]\([^)\n]*\)[ \t]*$", re.MULTILINE)
 SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?…。！？])[\s\n]+")
 
 # Punctuation habits worth counting. Anything a writer can lean on hard enough that
@@ -85,7 +87,7 @@ def read(paths: list[Path]) -> list[tuple[Path, str]]:
     out = []
     for path in paths:
         text = path.read_text(encoding="utf-8")
-        out.append((path, HEADING_RE.sub("", FRONTMATTER_RE.sub("", text))))
+        out.append((path, IMAGE_RE.sub("", HEADING_RE.sub("", FRONTMATTER_RE.sub("", text)))))
     return out
 
 

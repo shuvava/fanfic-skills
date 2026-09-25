@@ -200,10 +200,12 @@ blocks, an optional reference image, versions by chapter range, lock on explicit
 2. Offer **two or three candidate moments** (table in templates.md): what happens, a short verbatim
    anchor quote, who is in it, the visual payoff, what it gives away. Prefer one clear action and at
    most three recognisable characters. Recommend one; **explain the chosen scene to the user before
-   any generation.**
-3. **Spoilers are a real cost** — an image sits at the head of its chapter. Flag a picture of the
-   chapter's turn or of anything a reveal schedule holds back; the user decides. Planted characters:
-   **S15**.
+   any generation.** The anchor is also where the image will sit in the chapter (step 14), so copy
+   it from the draft verbatim — escapes included — and make it long enough to occur **once**.
+3. **Spoilers are a real cost** — less inside the chapter, where the image appears at its moment, than
+   outside it: a chapter list, a thumbnail, a post announcing the chapter shows the picture before the
+   text. Flag a picture of the chapter's turn or of anything a reveal schedule holds back; the user
+   decides. Planted characters: **S15**.
 4. Every recognisable character needs a locked sheet whose range covers this chapter; every
    recurring element in frame needs one too. Missing → `blocking`: Phase 2 / 2b, or the user
    chooses to render it unrecognisable. Two locked characters standing together need a height
@@ -243,6 +245,21 @@ blocks, an optional reference image, versions by chapter range, lock on explicit
 13. **Close the chapter on the user's explicit approval:** copy the approved round to
     `plan/illustration/images/book-<NN>/ch<NN>.png` and verify the copy (`cmp`); set
     `status: generated` and `image:` with the round it came from; append to `wiki/log.md`.
+14. **Place it in the draft**, after the paragraph that holds the anchor:
+
+    ```bash
+    python3 "$SCRIPTS/place_illustration.py" drafts/book-01/ch05-<slug>.md \
+      --image plan/illustration/images/book-01/ch05.png \
+      --anchor "<anchor quote from ## Moment>" --caption "<the moment, a few words, wiki_language>"
+    ```
+
+    It writes one `![caption](../../plan/…)` line, relative to the draft so it renders anywhere, and
+    `illustration:` in the draft's frontmatter; nothing else in the draft changes. Re-approval moves
+    the picture rather than adding a second. **Anchor found 0 or 2+ times → nothing is written:** the
+    user has edited the text since the moment was chosen — show them the nearest lines and ask where
+    the picture goes, then re-run with an anchor that is unique. Never place it by guess. No draft
+    yet (moment chosen from the beat sheet) → skip and say so; place it once the chapter is drafted.
+    Do not touch `snapshots/` — `refine-harness` ignores image lines. Report the line it landed on.
 
 ## Reviewing an image
 
@@ -330,7 +347,9 @@ plan/illustration/
 ```
 
 Shared across the series, like `plan/HARNESS.md` (§8), except the per-book folders.
-`plan/illustration/` is read by no other stage: nothing here is canon or fanon. Delete temporary
+`plan/illustration/` is read by no other stage: nothing here is canon or fanon. The one thing this
+skill writes outside it is the approved image's link line and `illustration:` key in the chapter
+draft (step 14) — markup, not prose, and stripped by every script that measures prose. Delete temporary
 rounds only when the user asks.
 
 Append to `wiki/log.md`:
@@ -341,7 +360,7 @@ Append to `wiki/log.md`:
 ## [YYYY-MM-DD] illustrate | Lilia v1 locked
    metrics: rounds=6 (4 gen + 2 edit) src_citations=5 visual_decisions=4 full_words=58 short_words=19
 ## [YYYY-MM-DD] illustrate | b01/ch05 image approved
-   metrics: model=google/gemini-3.1-flash-image rounds=7 (4 gen + 2 edit + 1 local patch) refs=2 words=486 final=images/book-01/ch05.png
+   metrics: model=google/gemini-3.1-flash-image rounds=7 (4 gen + 2 edit + 1 local patch) refs=2 words=486 final=images/book-01/ch05.png placed=ch05-<slug>.md:27
    findings: canon/wiki gaps met on the way
 ```
 

@@ -151,6 +151,7 @@ elements: [era v2 (full), <place> v1 (short)]
 aspect_ratio: "3:2"
 status: draft            # draft → generated (on the user's approval)
 image: plan/illustration/images/book-01/ch05.png   # set on approval: = ch05-r<N>.png, date
+placed: drafts/book-01/ch05-<slug>.md:27          # set by step 14; the line place_illustration.py reported
 ---
 
 # b01/ch05 — иллюстрация

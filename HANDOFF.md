@@ -28,7 +28,7 @@ write-chapter  → beats → prose → canon check          [gate: beat review]
 reconcile      → review inbox → fanon promotion       [gate: promotion review]
 refine-harness → learn from edit diffs
 wiki-lint      → health report
-illustrate     → image prompts per chapter            [side branch, v0.8.0]
+illustrate     → image prompts per chapter → placed in draft [side branch, v0.8.0; v0.12.0]
 cover          → book cover, text set locally         [side branch, v0.10.0]
 naturalize     → machine-sounding sentences → review  [called by plan/write stages, v0.11.0]
 ```
@@ -319,6 +319,23 @@ parts of speech with `pymorphy3` for Russian, dispersion otherwise).
 
 **Fine-tuning verdict:** not worth it for this pipeline. Writing (brief → prose, restyle) lost meaning;
 checking (contrastive log-ratio) worked statistically but did not find what the reader cares about.
+
+## Illustration placement (v0.12.0)
+
+An approved chapter image now goes into the draft at its moment, not only into
+`plan/illustration/images/`. `illustrate` already chose each moment with a verbatim anchor quote for
+the user; `scripts/place_illustration.py` reuses it as a locator. Decisions:
+
+- **After the anchor's paragraph, not at the chapter head.** The picture illustrates a moment; at the
+  head it also spoils it. The spoiler rule now worries about the picture *outside* the chapter.
+- **Anchor must occur exactly once, or nothing is written.** A user edit since the moment was chosen
+  can remove or duplicate it; a guessed position is worse than a question.
+- **Splice by offset, one line in, nothing else changed.** Rejoining paragraphs normalised whitespace
+  across the draft, which `refine-harness` would read as user edits. Snapshots are left alone and
+  `refine-harness` ignores image lines instead — the snapshot is frozen once the user edits.
+- **Image lines are stripped by `style_fingerprint.py` and `overused_patterns.py`** (with their
+  preceding blank line, so the measured text is byte-identical to the draft without the picture).
+- **Re-approval moves, never duplicates**: the frontmatter `illustration:` key names the old image.
 
 ## Known gaps / possible next work
 
