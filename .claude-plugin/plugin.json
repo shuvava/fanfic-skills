@@ -1,6 +1,6 @@
 {
   "name": "fanfic-wiki",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Extract a canon wiki from source material, plan collaboratively, and write fanfiction chapters that preserve the source's language, voice, and canon.",
   "author": {
     "name": "fanfic-wiki"

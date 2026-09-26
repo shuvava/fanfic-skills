@@ -20,6 +20,7 @@ Detect the language of the material in `raw/` during `wiki-init` and record it i
 | Generated chapter prose | **source language** |
 | Conversation with the user, questions, reports, conflict warnings | user's language |
 | Image-generation prompt blocks (`illustrate`) | `image_prompt_language`, default `en` — text meant to appear *inside* the image stays in the source language |
+| Translations of the fic's chapters (`translate`) | the target language in `CANON.md` `translations:` — made from `drafts/` only, and never read back by any stage as a source of facts |
 
 So if the book is in Russian, character pages and chapters are written in Russian while Claude talks
 to the user in whatever language the user is using.
@@ -43,6 +44,8 @@ how the register maps into the output language. Flag this explicitly to the user
 
 **Never silently switch languages.** If a skill is about to produce output in a language other than
 `source_language`, say so first and confirm. Do not translate `raw/` under any circumstances.
+`translate` renders the user's own chapters into another language on request; `raw/`, the wiki and
+canon quotations stay untranslated even then.
 
 **Mixed-language sources.** If `raw/` contains multiple languages (e.g., a Russian novel with French
 dialogue), record `source_language` as the primary and preserve the code-switching in voice cards —
@@ -406,7 +409,7 @@ API keys live in **one** file, `.env` at the fic project root — the cwd every 
 
 | Key | Used by |
 |---|---|
-| `OPENROUTER_API_KEY` | `openrouter_image.py` — `illustrate`, `cover` |
+| `OPENROUTER_API_KEY` | `openrouter_image.py` — `illustrate`, `cover`; `openrouter_translate.py` — `translate` |
 
 A new key is added to this table and to the plugin's root `.env.example`, never to a skill folder.
 

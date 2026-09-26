@@ -48,7 +48,7 @@ opencode walks up from the cwd to the git worktree root looking for `.agents/`, 
 be a git repo (`git init` if not). Verify the skills loaded:
 
 ```bash
-opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|develop-character|write-chapter|naturalize|reconcile|refine-harness|wiki-lint|illustrate|cover|publish'
+opencode debug skill | grep -E 'wiki-init|ingest-source|brainstorm|plan-story|plan-chapters|develop-character|write-chapter|naturalize|reconcile|refine-harness|wiki-lint|illustrate|cover|publish|translate'
 ```
 
 For a global install visible from every project, copy the same three into `~/.agents/` instead.
@@ -146,6 +146,7 @@ wiki-lint      → health report
 illustrate     → image prompts per chapter               [style + character lock gates]
 cover          → book cover: author, title, series number [platform size check]
 publish        → gate → export → platform → record; typo-only errata [you confirm each publication]
+translate      → chapter → target language, block for block [glossary gate; notes review]
 ```
 
 Four human gates. Each catches errors one stage before they become expensive. `brainstorm` is
@@ -409,6 +410,44 @@ python3 scripts/publication.py errata-check drafts/book-01/ch05-<slug>.md --plat
 Platforms are adapters (`skills/publish/references/platforms/`). author.today is the first; its
 browser flow is mapped in the next phase, and until then you paste the export yourself and the
 skill records the result. Reader-feedback collection comes after.
+
+## Translating the fic
+
+`translate` makes a second edition of your chapters in another language — English by default —
+one chapter at a time. It translates **your drafts only**: `raw/` and the wiki are never translated.
+
+→ *"Translate chapter 1 into English."*
+
+The first run settles the decisions every later chapter depends on — how names are rendered,
+where ты/вы goes in a language without it, whose dialogue punctuation — in
+`translations/en/STYLE.md`, and seeds `translations/en/GLOSSARY.md` from the wiki. Then per chapter:
+
+- **Glossary gate.** New names and terms in the chapter get one rendering each, ratified by you
+  before the chapter is written. Two spellings of one name read as two people.
+- **Block for block.** One English paragraph per original paragraph, scene breaks and pictures in
+  place. That alignment is what makes the rest checkable.
+- **Check, then a meaning pass.** The script catches dropped or merged paragraphs, leftover Cyrillic,
+  glossary drift, and paragraphs whose length ratio suggests a missing sentence; Claude then re-reads
+  scene against scene for facts, point, jokes and voice.
+- **Notes, not silent choices.** Puns, idioms and ambiguous lines go to
+  `translations/en/book-01/notes/ch01.md` for you to decide.
+- **The original changes, the translation follows.** `stale` names the changed paragraphs; only those
+  are retranslated, so your edits to the English survive.
+
+```bash
+python3 scripts/translation.py prepare drafts/book-01/ch05-<slug>.md --lang en   # freeze the source
+python3 scripts/translation.py terms   drafts/book-01/ch05-<slug>.md --lang en   # glossary candidates
+python3 scripts/translation.py check   translations/en/book-01/ch05-<slug>.md
+python3 scripts/translation.py stale   translations/en/book-01/ch05-<slug>.md
+python3 scripts/translation.py status  --lang en
+```
+
+The first full translation can be written by Claude (default) or by a model on OpenRouter with your
+key — `translation_engine: openrouter` and `translation_model: <id>` in `CANON.md`, run through
+`scripts/openrouter_translate.py`. Either way the same check, meaning pass and notes follow.
+`--out` writes a bake-off entry per model; `--harvest` has a strong model propose names, idioms
+and slang into `PHRASEBOOK.md`/`GLOSSARY.md` once (you tick, `translation.py accept` files them),
+so a cheaper model can translate with those decisions.
 
 ## Learning from your edits
 

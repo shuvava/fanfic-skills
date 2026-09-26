@@ -165,6 +165,8 @@ that changes wording, adds or removes a word, or touches paragraph count). Exit 
 - Then export, put the new text on the platform (same flow, editing the existing chapter), verify,
   get the user's yes, and `record` — which writes `v<N+1>`. Log it as `publish | b<NN>/ch<NN> errata
   → author-today v<N+1>` with `typos=<n>`.
+- If `translations/` exists, the chapter's translations are now stale: `translation.py status`, then
+  `translate` updates only the changed blocks.
 
 ## Lint
 

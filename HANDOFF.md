@@ -32,6 +32,7 @@ illustrate     → image prompts per chapter → placed in draft [side branch, v
 cover          → book cover, text set locally         [side branch, v0.10.0]
 naturalize     → machine-sounding sentences → review  [called by plan/write stages, v0.11.0]
 publish        → gate → export → record; typo errata    [user confirms each publication, v0.13.0]
+translate      → chapters into another language         [glossary gate, notes review, v0.14.0]
 ```
 
 Shared rules live in `CONVENTIONS.md`. Every skill references it.
@@ -370,6 +371,43 @@ Next phases: 2 — map author.today's editor with the user watching (adapter `##
 3 — browser upload / read-back / publish; 4 — `feedback` skill (paste, collect, triage into
 Point-not-landing, errata, canon, reveal-guessed, ideas); 5 — local scheduled tasks (Chrome is
 local, so no cloud routines).
+
+## Translation (v0.14.0)
+
+`translate` renders the user's chapters into another language (English by default), chapter by
+chapter. Decisions:
+
+- **Drafts only.** `raw/` stays untranslated (§1) and is not the user's text; the wiki and canon
+  quotes stay in the source language. Translations are downstream only — no stage reads
+  `translations/` as facts, so a translator's "fix" can never become a fic fact.
+- **Block for block is the load-bearing rule.** One target paragraph per source paragraph makes
+  omissions (length ratio against the chapter median), drift (glossary `Avoid` variants), leftover
+  source script and errata (`stale` by block) mechanical. A free re-paragraphing would make all of
+  them model judgement.
+- **The glossary is a gate, before the chapter.** Names fixed at chapter 1 cost a row; fixed at
+  chapter 6 they cost a replace across the book and a reader who learned the wrong one. `Match`
+  takes stems (`Анн*`) because the source inflects.
+- **Script counts, model judges** again: `terms` lists capitalised mid-sentence forms, not names;
+  the meaning pass (same facts, same point, same intent) is read, not measured.
+- **The scene's `Point` is read before translating**, for the v0.9.0 reason: a point lost in
+  transfer cannot be recovered by any later stage.
+- **`naturalize` runs on the English** — it works in the text's own language, which makes it a
+  translationese detector for free.
+- **OpenRouter engine** (`openrouter_translate.py`): an optional drafter, not a replacement for the
+  checks. Items go out numbered `[[N]]` and a reply with any item missing, merged or extra is retried
+  once and then refused, so a misaligned file is never written; `--blocks` updates stale paragraphs
+  in place. No default model — ids change faster than the plugin. Refuses anything outside `drafts/`.
+- **Harvest → phrasebook → cheap drafter.** Decisions (names, idioms, slang, puns) are listable, so a
+  strong model makes them once and they persist in `GLOSSARY.md`/`PHRASEBOOK.md`; voice is not
+  listable, so whether a cheap drafter is good enough is settled by the bake-off, not assumed. Only
+  rows occurring in a chunk are sent. Harvest proposals must quote the chapter exactly (the
+  naturalize rule) or they are dropped.
+- **Stale retranslates changed blocks only**, so the user's edits to the English survive an erratum
+  to the original. `v0` is frozen once, for learning from those edits.
+
+Untested on a real chapter at the time of writing: the script is tested on an invented fixture
+(alignment, leftover script, glossary drift, omission by ratio, stale, `--from` a published
+snapshot); the skill text has not had a run.
 
 ## Known gaps / possible next work
 
