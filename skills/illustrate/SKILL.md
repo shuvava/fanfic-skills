@@ -377,7 +377,8 @@ Shared across the series, like `plan/HARNESS.md` (§8), except the per-book fold
 `plan/illustration/` is read by no other stage: nothing here is canon or fanon. The one thing this
 skill writes outside it is the approved image's link line and `illustration:` key in the chapter
 draft (step 14) — markup, not prose, and stripped by every script that measures prose. Delete temporary
-rounds only when the user asks.
+rounds only when the user asks — or when `publishing.after_record.cleanup_rounds` in `CANON.md` says
+so, which `publish` does after the chapter goes out (`publication.py cleanup-rounds`).
 
 Append to `wiki/log.md`:
 

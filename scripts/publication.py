@@ -3,8 +3,10 @@
 
 Standard library only. Run from the project root.
 
-    python3 publication.py status  --platform author-today [--per-week 2]
+    python3 publication.py status  --platform author-today [--per-week 2 | --every-days 2]
     python3 publication.py record  <draft.md> --platform author-today --url <chapter url> [--date YYYY-MM-DD]
+    python3 publication.py next-slot --platform author-today --every-days 2 --time 19:00 --tz Europe/Moscow
+    python3 publication.py cleanup-rounds <draft.md> [--dry-run]
     python3 publication.py errata-check <draft.md> --platform author-today
     python3 publication.py lint
 
@@ -22,7 +24,9 @@ this script keeps them in step:
 chapter to publish with the drafted buffer in weeks. `record` writes all three records after a
 publication and refuses to skip a chapter. `errata-check` diffs the draft's reader-visible text
 against the last published version and passes only typo-sized changes. `lint` cross-checks the
-three records.
+three records. `next-slot` gives the next date on a fixed publishing interval, counted from the
+last publication in the ledger. `cleanup-rounds` deletes a chapter's intermediate illustration
+rounds once its approved image is placed.
 
 Exit: 0 ok, 1 violations / drift / lint findings, 2 refused (order, nothing to record),
 3 bad path or not published.
@@ -32,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+from zoneinfo import ZoneInfo
 import difflib
 import re
 import sys
@@ -162,10 +167,15 @@ def cmd_status(args) -> int:
     print(f"| chapter | draft | {args.platform} | log |\n|---|---|---|---|")
     for r in rows:
         print("| " + " | ".join(r) + " |")
+    per_week = 7 / args.every_days if args.every_days else args.per_week
+    cadence = f"one every {args.every_days:g} days" if args.every_days else f"{per_week:g}/week"
+    last = last_date(args.platform)
+    if last and last > dt.date.today():
+        print(f"\nscheduled ahead: last publication on the ledger is {last} (timer not fired yet)")
     if nxt:
         print(f"\nnext: {label(chapter_id(nxt))} {nxt}")
-        print(f"buffer: {unpublished} drafted, unpublished = {unpublished / args.per_week:.1f} weeks "
-              f"at {args.per_week}/week" + ("  ← under one week" if unpublished < args.per_week else ""))
+        print(f"buffer: {unpublished} drafted, unpublished = {unpublished / per_week:.1f} weeks "
+              f"at {cadence}" + ("  ← under one week" if unpublished < per_week else ""))
     else:
         print("\nnext: nothing drafted is unpublished — buffer 0 weeks")
     if issues:
@@ -200,6 +210,67 @@ def cmd_record(args) -> int:
     with LEDGER.open("a", encoding="utf-8") as fh:
         fh.write(f"| {cid[0]:02d} | {cid[1]:02d} | {args.platform} | {version} | {date} | {args.url} | {d} |\n")
     print(f"recorded {label(cid)} {args.platform} v{version} {date}\n  snapshot: {snap}\n  ledger: {LEDGER}")
+    return 0
+
+
+def ledger_rows() -> list[list[str]]:
+    if not LEDGER.is_file():
+        return []
+    rows = []
+    for ln in LEDGER.read_text(encoding="utf-8").splitlines():
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
+        if len(cells) == 7 and cells[0].isdigit():
+            rows.append(cells)
+    return rows
+
+
+def last_date(platform: str) -> dt.date | None:
+    """The latest publication date on the ledger for a platform — a delayed one may be in the future."""
+    dates = [dt.date.fromisoformat(r[4]) for r in ledger_rows() if r[2] == platform and r[3] == "1"]
+    return max(dates) if dates else None
+
+
+def cmd_next_slot(args) -> int:
+    """Next moment on a fixed interval: last publication + every_days, never in the past."""
+    tz = ZoneInfo(args.tz)
+    hh, mm = (int(x) for x in args.time.split(":"))
+    now = dt.datetime.now(tz)
+    last = last_date(args.platform)
+    day = last + dt.timedelta(days=args.every_days) if last else now.date()
+    slot = dt.datetime.combine(day, dt.time(hh, mm), tzinfo=tz)
+    min_ahead = dt.timedelta(minutes=args.min_ahead)
+    while slot < now + min_ahead:                         # a gap in publishing: first free slot from today
+        slot += dt.timedelta(days=1)
+    utc = slot.astimezone(dt.timezone.utc)
+    print(f"last on ledger: {last or '—'}")
+    print(f"next slot: {slot.date().isoformat()} {slot:%H:%M} {args.tz}  =  {utc:%Y-%m-%dT%H:%M:%SZ}")
+    print(f"date={slot.date().isoformat()}")
+    print(f"utc={utc:%Y-%m-%dT%H:%M:%SZ}")
+    return 0
+
+
+IMAGE_EXT = {".png", ".jpg", ".jpeg", ".webp"}
+
+
+def cmd_cleanup_rounds(args) -> int:
+    """Delete ch<NN>-* image rounds beside the approved `illustration:` image; keep the approved one."""
+    m = FRONTMATTER_RE.match(args.draft.read_text(encoding="utf-8"))
+    ill = re.search(r"^illustration:\s*(\S+)", m.group(1), re.M) if m else None
+    if not ill:
+        print(f"{args.draft}: no `illustration:` in frontmatter — nothing to clean", file=sys.stderr)
+        return 0
+    approved = Path(ill.group(1))
+    if not approved.is_file():
+        print(f"refused: approved image {approved} is missing — not deleting its rounds", file=sys.stderr)
+        return 2
+    num = re.match(r"(ch\d+)", args.draft.name).group(1)
+    rounds = sorted(p for p in approved.parent.glob(f"{num}-*")
+                    if p.is_file() and p.suffix.lower() in IMAGE_EXT and p.resolve() != approved.resolve())
+    for p in rounds:
+        if not args.dry_run:
+            p.unlink()
+        print(f"{'would delete' if args.dry_run else 'deleted'}: {p}")
+    print(f"{len(rounds)} round file(s); kept {approved}")
     return 0
 
 
@@ -261,12 +332,7 @@ def cmd_errata(args) -> int:
 
 def cmd_lint(args) -> int:
     findings = []
-    rows = []
-    if LEDGER.is_file():
-        for ln in LEDGER.read_text(encoding="utf-8").splitlines():
-            cells = [c.strip() for c in ln.strip().strip("|").split("|")]
-            if len(cells) == 7 and cells[0].isdigit():
-                rows.append(cells)
+    rows = ledger_rows()
     ledger = {(r[6], r[2], r[3]) for r in rows}
     seen = set()
     for d in drafts():
@@ -294,6 +360,16 @@ def main() -> int:
     s = sub.add_parser("status")
     s.add_argument("--platform", required=True)
     s.add_argument("--per-week", type=float, default=2)
+    s.add_argument("--every-days", type=float, help="fixed interval; overrides --per-week")
+    n = sub.add_parser("next-slot")
+    n.add_argument("--platform", required=True)
+    n.add_argument("--every-days", type=int, required=True)
+    n.add_argument("--time", default="19:00", help="readers' local time, HH:MM")
+    n.add_argument("--tz", default="UTC", help="readers' time zone, e.g. Europe/Moscow")
+    n.add_argument("--min-ahead", type=int, default=60, help="minutes a slot must be ahead of now")
+    c = sub.add_parser("cleanup-rounds")
+    c.add_argument("draft", type=Path)
+    c.add_argument("--dry-run", action="store_true")
     r = sub.add_parser("record")
     r.add_argument("draft", type=Path)
     r.add_argument("--platform", required=True)
@@ -308,7 +384,8 @@ def main() -> int:
         print(f"not a file: {args.draft}", file=sys.stderr)
         return 3
     return {"status": cmd_status, "record": cmd_record, "errata-check": cmd_errata,
-            "lint": cmd_lint}[args.cmd](args)
+            "lint": cmd_lint, "next-slot": cmd_next_slot,
+            "cleanup-rounds": cmd_cleanup_rounds}[args.cmd](args)
 
 
 if __name__ == "__main__":
