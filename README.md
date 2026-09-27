@@ -137,9 +137,9 @@ wiki-init      → structure + language detection
 ingest-source  → canon wiki pages                        [tier: canon, immutable]
 brainstorm     → plan/IDEAS.md + plan/SERIES_ARC.md      [no gate — candidates only]
 plan-story     → plan/STORY_INTENT.md                    [grilling gate]
-plan-chapters  → outline + conflict report               [conflict gate]
+plan-chapters  → outline + conflict report + synopsis    [conflict gate]
 develop-character → character profiles + cardboard check [depth threshold, CONVENTIONS §11]
-write-chapter  → beats → prose → canon check             [beat gate]
+write-chapter  → beats (in short + to decide) → prose → canon check [beat gate]
 naturalize     → flag machine-sounding sentences, propose fixes [review gate; off | review | auto-safe]
 reconcile      → review inbox → fanon promotion          [review gate]
 refine-harness → learn from your edits
@@ -211,6 +211,13 @@ the work. A session's `kill_rate` goes in the log; a session that killed nothing
 A blocking conflict asks one question: intentional AU divergence, or error? Intentional divergences
 get recorded in `CANON.md` and stop being conflicts. Catching this at the beat stage costs a line;
 catching it after drafting costs a scene.
+
+The outline also has to fill a publisher's synopsis form — setting, protagonist, antagonist,
+inciting event, climax, twist, resolution, main intrigue — from its first two layers alone. A field
+that cannot be filled is a hole in the story ("the exam is passed" is a result, not a climax), found
+while it costs one question. The filled form becomes `SYNOPSIS.md`: a full synopsis for editors and
+a spoiler-free annotation that `publish` puts on the book's page. It is derived from the outline and
+never drafted from.
 
 ## A series is planned one book at a time
 
@@ -310,7 +317,7 @@ project/
 ├── CANON.md              # schema, language, divergences, preferences
 ├── raw/                  # immutable, untranslated
 ├── plan/                 # IDEAS.md, SERIES_ARC.md, HARNESS.md — series-wide
-│                         #   STORY_INTENT.md, outline.md, conflicts.md, beats/ — per book,
+│                         #   STORY_INTENT.md, outline.md, conflicts.md, SYNOPSIS.md, beats/ — per book,
 │                         #   nested under book-<NN>-<slug>/ once there is a second book
 │                         #   illustration/ — image style, locked character looks, chapter prompts
 ├── drafts/               # chapters + snapshots/, nested per book in a series
