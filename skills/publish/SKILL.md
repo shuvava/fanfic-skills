@@ -30,9 +30,20 @@ publishing:
   platforms: [author-today]
   per_week: 2                       # cadence; sets the buffer warning
   chapter_title: "{heading} {title}"  # draft heading + frontmatter title: "Глава 3. <title>"
+  schedule:                         # optional: delayed publication on a fixed interval
+    every_days: 2                   # one chapter every N days, counted from the last on the ledger
+    time: "19:00"                   # readers' local time
+    tz: Europe/Moscow               # readers' time zone — not the browser's
+  after_record:                     # optional: what closing a run does without asking
+    mark_outline: true              # note the chapter as published in the book's outline
+    cleanup_rounds: true            # delete the chapter's intermediate illustration rounds
+    commit: true                    # commit the project repo
   author-today:
     work_edit_url: https://author.today/work/<workId>/edit/content
 ```
+
+`schedule` replaces `per_week` for the buffer (`7 / every_days` chapters a week). `after_record` is
+the user's standing permission for those three steps; without it each is offered, not done.
 
 **The plugin knows platforms; the project knows its book.** The adapter holds what is true of the
 platform for every project. Everything about *this* work — its ids and URLs, the user's decisions
@@ -58,6 +69,7 @@ Resolve `<scripts>` per §7. All commands run from the project root.
 
 ```bash
 python3 <scripts>/publication.py status --platform author-today --per-week 2
+python3 <scripts>/publication.py status --platform author-today --every-days 2   # with `schedule`
 ```
 
 It lists chapters in order with the published version, **DRIFTED** where the draft changed after
@@ -127,6 +139,21 @@ and the upload as a draft, then stops and tells the user the chapter is ready fo
 platform has its own delayed publication, the user may approve a date in chat and the run sets it
 — that approval is the yes.
 
+**Fixed interval.** With `publishing.schedule` set and no date in the user's request, the date is
+the next slot, not a question:
+
+```bash
+python3 <scripts>/publication.py next-slot --platform author-today --every-days 2 --time 19:00 \
+  --tz Europe/Moscow
+```
+
+It counts from the latest date on the ledger — a delayed chapter whose timer has not fired counts —
+adds the interval, and moves to the first slot still ahead if publishing stalled. It prints the
+readers' local time and the UTC moment the platform's timer takes. The user's request to publish
+the next chapter, with the standing schedule, is the yes for that slot; say the date in the report.
+A date the user names outranks the slot. A time the user did not give is `schedule.time`, and the
+report says it was the default.
+
 ### 5. Record
 
 After the user confirms the chapter is live and gives or confirms its URL:
@@ -137,12 +164,36 @@ python3 <scripts>/publication.py record drafts/book-01/ch05-<slug>.md --platform
 ```
 
 It freezes the draft into `snapshots/ch05-published-author-today-v1.md`, adds the `published:`
-entry to the draft's frontmatter, and appends a ledger row. Then append to `wiki/log.md`:
+entry to the draft's frontmatter, and appends a ledger row. For a delayed publication pass
+`--date <timer date>`. Then append to `wiki/log.md`:
 
 ```
 ## [YYYY-MM-DD] publish | b<NN>/ch<NN> <title> → author-today v1
    metrics: words=<n> images=<n> verify=identical|manual buffer_weeks=<n.n> url=<url>
 ```
+
+### 6. Close the run
+
+Each step runs without asking when `publishing.after_record` enables it; otherwise offer it in one
+line.
+
+1. **Mark the outline** (`mark_outline`). The book's `outline.md` carries a published note next to
+   the chapter list (`CONVENTIONS.md` §13 — published text outranks the plan). Add this chapter with
+   its platform, date and, for a timer, the time: «гл. 7 — 2026-09-30 (по таймеру, 19:00 МСК)».
+   Edit the existing note; create one under the block's heading if there is none.
+2. **Delete illustration rounds** (`cleanup_rounds`), only after the approved image is placed:
+   ```bash
+   python3 <scripts>/publication.py cleanup-rounds drafts/book-01/ch05-<slug>.md
+   ```
+   It deletes the `ch<NN>-*` image files beside the draft's `illustration:` image and keeps that
+   one; prompt and edit files (`.md`) stay — they are the illustration's history. Also clear this
+   run's scratch files.
+3. **Commit the project** (`commit`) — only if the project is a git repo. Stage the files this run
+   and the chapter's earlier stages created or changed (draft, snapshots, beats, reviews,
+   illustration files, exports, read-back, ledger, platform notes, wiki, outline); list them first
+   and never stage `.env` or anything `.gitignore` excludes. One commit per chapter, message
+   `Publish b<NN>/ch<NN> «<title>» on <platform>` plus the timer date if delayed. Never push unless
+   the user asks.
 
 ## Errata — typos only
 
@@ -180,6 +231,7 @@ changed since. `wiki-lint` runs it too.
 ## Rules
 
 - **The user makes every chapter public.** Ask per chapter; scheduled runs stop before publishing.
+  A standing `schedule` sets the date, never the decision to publish.
 - **Never sign in or handle credentials.** The user's Chrome session is theirs.
 - **In order, no skips.** The script enforces it; do not work around it with a hand-edited ledger.
 - **Published text changes only through errata**, and errata are typo-only.
