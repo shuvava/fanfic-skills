@@ -298,18 +298,62 @@ language: <output_language>
   chapter 1, so anything scheduled for a later reveal is out.
 - Give a situation and a question, not a list of themes. "A story about friendship and betrayal" is
   concept-speak, and every other book's annotation says the same thing.
-- Match the book's voice. A first-person book often gets a first-person annotation.
+- Match the book's voice. A first-person book often gets a first-person annotation. The voice may
+  be the narrator's; the words must still be ones a stranger understands.
 - Keep it short, a few hundred to a thousand characters. The platform's limit is in its `publish`
   adapter.
 
-**The synopsis** tells everything:
-- Tell it in order, ending, twist and climax included. An editor reads it to judge whether the story
-  works, and a synopsis that hides the ending is just another annotation.
-- Write present tense, third person, and join events by cause ("so", "because"). A list of scenes
-  is not a synopsis.
-- Write it for an outsider. Leave out project apparatus: thread codes, block numbers, chapter
-  numbers, tiers, `[src:]` citations. Introduce each name at first mention with who they are.
-- Length is one to three pages. It is Layer 2 retold, not Layer 3.
+**The synopsis** retells the whole book, ending included, to someone who has never opened the
+series. Write it the way a person retells a book to a friend, not the way the outline is written.
+On a real run a synopsis assembled from outline rows was rejected whole ("not human language",
+"much worse than the example"), though every fact in it was right. `synopsis_check.py` found that
+half its sentences contained a five-word run copied from the outline. What the good example the
+user supplied did, and the rejected one did not:
+
+- **Tell it fresh, from the events.** Take from the outline *what happens and why*, then close it
+  and write your own sentences. The outline's phrasing is shorthand for people who already know the
+  story: paradox closers («получил допуск — и не владеет ничем, включая собственное имя»), a
+  scene's meaning in place of the scene, a verdict at the end of every paragraph. In a synopsis
+  these read as riddles.
+- **One thread, told in steps.** Each paragraph is one step of the protagonist's story: situation →
+  problem → what they try → what it costs → what changes. Subplots appear only where they hit that
+  thread. Never "Meanwhile, in parallel…" — that is the outline's line structure showing through.
+- **Few names.** Name the protagonist, the antagonist and the two or three people who change the
+  plot, five or six in total. Everyone else is "a classmate", "two outcasts nobody else would
+  take", "his brothers". A fight is told by its outcome and the protagonist's part in it, not a
+  roll call of who struck what.
+- **Explain every world word at first use, or drop it.** Before writing, list the words a stranger
+  would not know: world terms, ranks, game jargon, creature and place names. Each one is explained in
+  half a sentence where it first appears («ядро — источник силы внутри человека»), or replaced by a
+  plain description («хищные цветы у воды»), or cut.
+- **Name motives and feelings plainly.** «Она хочет, чтобы глава клуба её заметил», «он злится и
+  решает отомстить». A reader follows people, not mechanisms.
+- **Plain sentences.** Subject, verb, what happened, joined by «но», «поэтому», «тогда». Aim at
+  15–20 words; none over 30. No semicolon chains, no colon lists, no dash that ends a paragraph on
+  an aphorism.
+- Present tense, third person. No project apparatus: thread codes, block and chapter numbers, tiers,
+  `[src:]`. One to two pages.
+
+Invented example, «Хроники Севера». Assembled from the outline, rejected:
+> Анна получает место в совете, которого добивалась, — и не владеет в нём ничем, включая
+> собственный голос; параллельно Марк ведёт проект, о котором не говорит вслух.
+
+Retold:
+> Анну принимают в совет. Но голосовать за неё там будет Марк: её место оплатил его род. Анна
+> злится и решает найти в совете союзников, о которых Марк не узнает.
+
+**Check before showing.** Run the mechanical check, fix everything it reports, then reread the text
+as the stranger would:
+
+```bash
+python3 <scripts>/synopsis_check.py <book>/SYNOPSIS.md --section <synopsis heading> \
+  --against <book>/outline.md <book>/STORY_INTENT.md
+```
+
+`COPIED` means a sentence carries a five-word run from the plan: rewrite it, do not reword around
+the run. Then read it once more with two questions only: is there a word this reader does not know,
+and is there a sentence you would not say aloud when retelling the book? The script cannot answer
+either.
 
 **Keep it current.** `derived_from` records the outline version it was built from. When Layer 1 or 2
 changes, regenerate the synopsis in the same run, and ask the user before changing an annotation

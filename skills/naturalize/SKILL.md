@@ -108,7 +108,7 @@ mode: prose | plan
 date: <YYYY-MM-DD>
 ---
 
-### 1. <what is wrong, one line>
+### 1. <where a reader stumbles, one line, in plain words>
 - было: <exact quote>
 - стало: <proposed fix, or empty when meaning is unclear>
 - решение: [ ] принять  [ ] отклонить  [ ] свой вариант:
@@ -116,6 +116,13 @@ date: <YYYY-MM-DD>
 
 Quotes must be exact substrings of the target — check each one before writing the file, and drop or
 re-quote any that do not match. Section labels follow `wiki_language`.
+
+**The heading is the reader's stumble, not the editor's diagnosis.** Write what a reader would ask
+or feel: «непонятно, что значит "вес посредника"», «фразу приходится читать дважды», «так никто не
+говорит». Never this skill's own terms (concept-speak, «понятие вместо образа», «образ не
+складывается», «канцелярит»). On a real run the user could not tell what an item headed «понятие
+вместо живой фразы» was about. A heading that needs this file to decode it fails the same test as
+the sentence it flags.
 
 Tell the user where the file is and how many items it holds, in one line. **Do not print the items
 into the conversation** unless asked: the file is where they decide.

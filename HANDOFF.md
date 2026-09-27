@@ -431,6 +431,11 @@ per chapter. Decisions:
 - **Synopsis and annotation are different texts for different readers.** The synopsis is for an
   editor, tells the ending and is never published. The annotation is for readers, stops at the
   inciting event and is checked against reveal schedules. `publish` takes only the annotation.
+- **Retold, not assembled.** The first synopsis on a real book was built from outline sentences and
+  the user rejected it next to a human-written example: riddles, a dozen names, unexplained world
+  words. `synopsis_check.py` measured 23 of 45 sentences carrying a five-word run from the outline;
+  the retold version has none and half the sentence length. The skill now asks for a retelling to a
+  stranger, and the script gates the copying. Explaining world words stays a reread.
 - **The annotation is public, but it is not errata.** It may change with the outline, and each
   change needs the user's yes. The author.today annotation field is `to map`.
 
