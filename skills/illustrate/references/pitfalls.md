@@ -25,10 +25,12 @@ by id in iteration logs ("S7: posture") so a round's fix is traceable.
   them — a model exaggerates whatever it is told to draw. Record them in the facts table.
 - **I8 Use the model's own vocabulary.** An anime model knows "sidelocks", "hime cut", "ahoge" from
   its captions; the named structure hid the ears where "hair covering her ears" did not.
-- **I9 Minors.** Canon age under 18: hems no shorter than just above the knee; no framing, pose or
-  wording that sexualises; no bust emphasis — say so when asked and offer the nearest acceptable
-  option. A girl who "reads as a boy" is fixed by cut and build: tailoring (waisted, flared rather
-  than boxy), narrow shoulders, small waist, softer face.
+- **I9 Minors.** Canon age under 18: ordinary scene-appropriate clothing is allowed — shorts,
+  sportswear, swimwear where the scene is a beach or pool — under neutral framing: full figure or
+  eye-level camera, nothing centred on the body. Never, whatever the clothing: no framing, pose or
+  wording that sexualises; no bust or body emphasis — say so when asked and offer the nearest
+  acceptable option. A girl who "reads as a boy" is fixed by cut and build: tailoring (waisted, flared
+  rather than boxy), narrow shoulders, small waist, softer face.
 - **I10 Clothing names everything a model would guess:** sleeves or sleeveless, open or closed and
   how it fastens, what is worn over what, what shows at neck and cuffs. "Doublet" alone came out
   sleeveless, then as an open jacket with a belt buckled across the gap.
