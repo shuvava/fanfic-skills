@@ -165,3 +165,12 @@ Read the SCENE once per item.
   rendering and record the decision, or — only if every future character benefits — change the
   style block and log it in `STYLE.md`.
 - **E10 A round that made it worse is reverted,** not buried under qualifiers.
+- **E11 Tint or recolour a bounded surface locally, not by edit.** "Tint the reflection inside the
+  mirror copper" also coloured the mirror's frame, turned the reflected clothes into glittering foil
+  and pushed the whole picture's palette off — the user rejected it. A colour change confined to a
+  region (a mirror, a window, a frame, a banner) is a `magick` job: a mask per region, a recoloured
+  copy composited through it, then E6 on the whole image. Free, exact, and nothing outside the mask
+  moves.
+- **E12 Expression and eye shape fight.** An edit asking for "wide honest eyes" undid the previous
+  edit's narrow eyes. When the scene's expression needs a shape the sheet forbids, say so before the
+  chain and let the user choose which one wins.

@@ -7,7 +7,8 @@ description: >
   locked blocks plus a scene chosen from that chapter, checked against the target model's prompt
   budget. Use when the user says "illustrate chapter N", "image prompt", "prompt for Nano Banana /
   FLUX / OpenRouter", "character reference sheet", "иллюстрация к главе", "промпт для картинки",
-  or wants to fix how a character or the art style looks. Writes prompts; the user runs generation.
+  or wants to fix how a character or the art style looks. Writes prompts; runs generation itself when
+  the project sets `image_autorun: true` and no decision is pending, otherwise hands the command over.
 ---
 
 # Illustrate
@@ -43,11 +44,15 @@ expression, pose, place, light — goes into the scene section.
 
 ## Settings
 
-`CANON.md` carries one key for this skill; add it on first run and say so:
+`CANON.md` carries two keys for this skill; add them on first run and say so:
 
 ```yaml
 image_prompt_language: en      # language of prompt blocks; default en — see models.md
+image_autorun: false           # true — Claude runs single generations itself (see "Running generation")
 ```
+
+`image_autorun` is the user's standing permission to spend on image rounds. Default `false`; set it to
+`true` only when the user asks for it, and say what it does and does not cover.
 
 This is a language switch under §1, so **flag it once, in these terms**: *everything sent to the
 model is English* — the whole prompt block is translated, whatever the source language. What stays
@@ -239,7 +244,8 @@ blocks, an optional reference image, versions by chapter range, lock on explicit
 ### Check, hand over, iterate
 
 10. Run the budget check (below) and paste its output into `## Budget check`, dated per round.
-11. Give the user the generation command (below) with `--name ch<NN>-r<N>`.
+11. Run the generation or hand the command over, per "Running generation" (below), with
+    `--name ch<NN>-r<N>`.
 12. Review each returned image (below). Log every round in `## Iterations`: what the user said,
     what you found, which pitfall ids it maps to, exactly what changed.
 13. **Close the chapter on the user's explicit approval:** copy the approved round to
@@ -290,10 +296,29 @@ Whenever the user shows or reports an image — bake-off, style round, character
 
 ## Running generation
 
-The user runs generation with their own key; `openrouter_image.py` sends a file's `prompt` block to
+Generation runs on the user's own key; `openrouter_image.py` sends a file's `prompt` block to
 the OpenRouter Image API, attaches `--ref` images in label order, saves the result and prints any API
-error in full. Give the user the command; **do not run it yourself unless they ask** — it spends
-their money. Never ask for the key in chat, and **never read, print or `cat` `.env`** — the key
+error in full. It spends the user's money, so who presses the button is decided by `image_autorun`:
+
+| `image_autorun` | Who runs it |
+|---|---|
+| `false` (default) | The user. Give the command; run it yourself only when they ask for that round |
+| `true` | You — **one generation at a time, only when nothing is waiting on the user**. Report the file and the cost the script prints, then review the image |
+
+**Stop and ask instead of running, even with `image_autorun: true`,** when any of these holds:
+
+- a choice is still open — the moment, a `[visual:]` decision you proposed and the user has not seen,
+  a canon conflict, which of two fixes to take;
+- the budget check did not exit `0`;
+- it is a bake-off or a model comparison (several paid images at once) or a model other than the
+  file's `model:`;
+- the round would change the composition the user has not yet seen or approved — after a round the
+  user has not looked at, the next run waits for them;
+- three rounds have not fixed the same defect (**E9**);
+- the step is a lock, an approval or closing the chapter — those are never automatic.
+
+Automatic is for the rounds whose content the user already agreed to: the first round of a prompt they
+were shown, and an edit or regeneration that carries out the fix they chose. Never ask for the key in chat, and **never read, print or `cat` `.env`** — the key
 lives there. Hand-written curl one-liners are a trap: they swallow the
 API's error and write the decoded `null` as a 3-byte "image", and a pasted `@` can arrive as `＠`.
 
@@ -379,6 +404,7 @@ a cost signal: many rounds on one feature means the wording is fighting the mode
 - **Never claim a prompt fits** without a fresh `prompt_budget.py check` of that file, its exit code
   and output pasted (§10). The check proves size and verbatim blocks, not that the picture will look
   right — only the user's eyes do.
-- **Never generate images or call the API yourself** unless the user asks.
+- **Generate images yourself only under `image_autorun: true`** and none of the stop conditions in
+  "Running generation", or when the user asks for that round.
 - **Every workflow correction the user makes goes into this skill** — the process here, the lesson
   into `references/pitfalls.md` with an id and the failure that taught it.
