@@ -77,9 +77,17 @@ detail can be resolved here with the user and noted in the beats.
 
 ## 3. Beat out the chapter
 
-Write `<book>/beats/ch<NN>.md` — one card per scene, in `wiki_language`:
+Write `<book>/beats/ch<NN>.md` in `wiki_language`: two short sections for the user who reviews it,
+then one card per scene for the drafter:
 
 ```markdown
+## <"In short", in wiki_language>
+4–6 sentences: what happens, why, and what the reader should understand or feel when the chapter ends.
+
+## <"To decide", in wiki_language>
+1. <question> — <recommended answer, one line of why>
+(or one line: nothing to decide)
+
 ## Scene <n> — <slug>
 - **POV:** <character>
 - **Setting:** <where, when>
@@ -99,6 +107,29 @@ Write `<book>/beats/ch<NN>.md` — one card per scene, in `wiki_language`:
 - **Event:** what happens on the page that changes the situation — not only what the POV thinks about it
 ```
 
+**The two top sections are for the reviewer, and they are written last.** A card is 1000+ words of
+apparatus the drafter needs — goals, dependencies, citations, conflict tables — and the person at the
+beat gate has to find the chapter and the questions inside it. On a real run a world detail the user
+later questioned in the finished prose had been written in the beats all along, too deep in a dense card to catch.
+
+- **In short** retells the chapter the way you would tell a friend about it, in your own words.
+  Close the cards and write it. The rules are the synopsis rules (`plan-chapters` → Synopsis and
+  annotation): events in order, motives named, plain sentences. No field names, no `[src:]`, no
+  scene numbers, no copied `Point`. The reader of this section knows the world, so world words need
+  no explaining. End on what the reader should take away, and name the chapter's `Point` in everyday
+  words.
+- **To decide** lists every question the user must answer before drafting, pulled up from wherever
+  it arose (the outline review, a missing voice card, a conflict the check found). Each has your
+  recommendation. Write the question the way you would ask it aloud, not in editor's terms. Nothing
+  to decide is one line, and a real result.
+- **Draft from the scenes, never from In short.** It compresses, and a draft written from it loses
+  what the compression dropped. When the user edits the cards, rewrite In short to match.
+- Check it for runs copied from the plan:
+  ```bash
+  python3 <scripts>/synopsis_check.py <book>/beats/ch<NN>.md --section "<In short heading>" \
+    --against <book>/outline.md
+  ```
+
 **Write the Point first, and write it with its *because*.** A card whose goal, conflict and outcome
 are all correct still loses a scene whose meaning lives in subtext. "The engagement is broken off" is an outcome. "Breaking it off is the kind move, because her father needs the dowry back more than he needs an ally — and whoever returns it first makes the other the debtor" is a point. Measured on a
 real run: scenes drafted from cards without it were plausible and on-brief, and the source's author
@@ -115,7 +146,10 @@ The precedent is also where a card goes wrong quietly: "fill the format from the
 drafted as concept-speak: on a real run a piece of the plan's abstract shorthand reappeared in later files word for word.
 
 **Show the beats to the user before drafting.** This is the cheapest gate in the pipeline — fixing a
-beat costs a line, fixing drafted prose costs a scene.
+beat costs a line, fixing drafted prose costs a scene. Lead with In short and To decide, pasted into
+the conversation, and point to the file for the cards. The user decides from the top sections and
+opens the cards when something needs a closer look. An answer to To decide goes into the cards, and
+In short is rewritten if the answer changed the chapter.
 
 **Profile gate.** Every character in the chapter above the depth threshold
 (`../../CONVENTIONS.md` §11) needs a profile in `wiki/fanon/proposed/characters/` — read it before

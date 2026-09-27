@@ -139,7 +139,7 @@ brainstorm     → plan/IDEAS.md + plan/SERIES_ARC.md      [no gate — candidat
 plan-story     → plan/STORY_INTENT.md                    [grilling gate]
 plan-chapters  → outline + conflict report + synopsis    [conflict gate]
 develop-character → character profiles + cardboard check [depth threshold, CONVENTIONS §11]
-write-chapter  → beats → prose → canon check             [beat gate]
+write-chapter  → beats (in short + to decide) → prose → canon check [beat gate]
 naturalize     → flag machine-sounding sentences, propose fixes [review gate; off | review | auto-safe]
 reconcile      → review inbox → fanon promotion          [review gate]
 refine-harness → learn from your edits

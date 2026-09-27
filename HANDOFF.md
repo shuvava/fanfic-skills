@@ -436,6 +436,11 @@ per chapter. Decisions:
   words. `synopsis_check.py` measured 23 of 45 sentences carrying a five-word run from the outline;
   the retold version has none and half the sentence length. The skill now asks for a retelling to a
   stranger, and the script gates the copying. Explaining world words stays a reread.
+- **Beat cards open with In short and To decide.** Not a chapter synopsis kept beside the plan:
+  a review aid inside the card, written last, for the one person at the beat gate. The cards
+  themselves are 1000+ words of drafter's apparatus, and a world detail the user later questioned in
+  the prose had been in the card the whole time. The drafter never reads In short, so the
+  compression cannot leak into prose; `synopsis_check.py` keeps plan rows out of it.
 - **The annotation is public, but it is not errata.** It may change with the outline, and each
   change needs the user's yes. The author.today annotation field is `to map`.
 
