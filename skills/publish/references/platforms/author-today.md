@@ -26,7 +26,7 @@ Every fact is marked **known** (observed on a live run) or **to map**.
 | Saved chapter: listed on the Текст tab as «<title> — не опубликовано / опубликовано (N знаков)»; edit page `/work/edit/chapter/<chapterId>`; row icons on hover: edit, read, preview, delete. The site's character counter equals `verify`'s character count | known |
 | Toasts: «Часть "…" была успешно сохранена в черновике» / «…была успешно опубликована» | known |
 | Work's Текст tab shows «до следующего обновления: N зн.» — an update threshold of **15 000 characters** since the last update. What crossing it does for readers (feed, notifications) | known threshold; effect **to map** — may favour publishing in ~15k-character batches |
-| «Опубликовать автоматически» — what it opens (date/time?) | to map |
+| «Опубликовать автоматически» — a checkbox that opens a date-and-time picker (knockout `autoPublish` / `autoPublishTime`, a moment in the **browser's time zone**; hidden field `AutoPublishTime` in UTC). With it checked, «Опубликовать» becomes **«Запланировать публикацию»**; toast «…будет опубликована автоматически по таймеру»; the chapter list shows the date instead of «не опубликовано». **«Сохранить черновик» does not save the schedule** | known |
 | Editing a published chapter: notifies readers? | to map |
 | Where comments live (per chapter / per work), pagination | to map (feedback) |
 
@@ -48,6 +48,11 @@ Every fact is marked **known** (observed on a live run) or **to map**.
 6. Read back (below).
 7. «Опубликовать» on the chapter's edit page — **STOP: user**, per chapter, every time. Record the
    reader URL with `publication.py record`.
+   **Delayed publication:** the user's yes names a date **and a time zone for readers** — the picker
+   runs in the browser's zone, which may not be the readers'. Tick «Опубликовать автоматически», set
+   the time on the page's own model, press «Запланировать публикацию», then confirm the saved UTC time
+   by re-fetching the edit page (`autoPublishTime`). Record with `record --date <publication date>`;
+   the draft must not change before the timer fires.
 
 **Moving text in and out of the page.** Never retype chapter text into a script call — kilobytes
 of hand-copied Cyrillic is where a letter changes. Load files through a temporary

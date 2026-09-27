@@ -19,7 +19,7 @@ Follow `../../CONVENTIONS.md`, especially §8 (book scope), §10 (completion cla
 
 | Platform | Adapter | Status |
 |---|---|---|
-| author.today | [references/platforms/author-today.md](references/platforms/author-today.md) | export, records and browser flow built; delayed publication **not yet mapped** |
+| author.today | [references/platforms/author-today.md](references/platforms/author-today.md) | export, records, browser flow and delayed publication built |
 
 ## Settings
 
