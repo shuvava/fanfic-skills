@@ -7,6 +7,8 @@ description: >
   plan-story finishes. Handles both a standalone work and one book of a multi-book series, keeping
   each book's plan separate and its start state matched to the previous book's end state.
   Surfaces canon contradictions at planning time, when they cost one question instead of a rewrite.
+  Also writes the book's synopsis and reader annotation from the finished outline — use when the
+  user says "write the synopsis", "we need an annotation", "напиши синопсис", "нужна аннотация".
 ---
 
 # Plan Chapters
@@ -153,6 +155,32 @@ usually shorthand for nothing. Audit your own layer before presenting it:
   list the way its cardboard check does: a character whose every appearance serves the protagonist is
   an outline problem to fix now, not a prose problem to discover at chapter 30.
 
+### Synopsis check — Layers 1–2
+
+Before showing Layer 2, fill in the fields a publisher's synopsis form asks for, one line each,
+from Layers 1–2 alone. Treat the form as a test: a field you cannot fill from the layers is a hole
+in the story, not in the form, and here it costs one question.
+
+| Field | Filled when | Typical hole |
+|---|---|---|
+| Setting | place, time and the circumstances the conflict depends on | rarely fails — canon supplies it |
+| Protagonist | who, what they want, what in them stands in the way | no want: the hero only reacts, all book |
+| Antagonist | a person, or opposing circumstances named concretely ("the rule that…", not "obstacles") | complications that share no source, so nothing pushes back twice |
+| Inciting event | the event that makes the central question urgent | the "book starts early" check above |
+| Climax | a scene on the page where the central conflict is decided by what the protagonist does | a result reported instead of a scene where it is decided |
+| Twist | a reversal the reader did not expect that follows from something planted earlier — name where | none, or one with nothing planted: a coincidence |
+| Resolution | what differs from the start state, for the protagonist and for the central conflict | the ending restates the start |
+| Main intrigue | the one question the reader carries across the book; answered here or handed to the next rung | a list of subplots and no single question |
+
+Invented example, «Хроники Севера»: "Anna wins the trial" is a result, not a climax. The climax is
+the scene where she testifies against Mark in open court, knowing it costs her the family name.
+
+"Circumstances" as antagonist and "no twist" are legitimate answers when they are chosen. Record
+them as choices. In a series, a main intrigue handed forward must exist in the next rung of
+`SERIES_ARC.md` or as a seed there; otherwise the book ends on a question nobody plans to answer.
+Show the filled table with Layer 2. A field left empty is a question for the user, like a
+placeholder.
+
 **Report what the self-review found rather than silently fixing it.** "Clean — three scenes had no
 conflict and were cut, the loyalty theme lands nowhere after chapter 5" is worth more than a
 clean-looking layer, because it tells the user where the outline is weakest while it is still cheap.
@@ -217,6 +245,69 @@ Three outcomes:
 
 Never resolve a blocking conflict unilaterally. Never proceed past one unresolved.
 
+## Synopsis and annotation
+
+Once the lint has no unresolved `blocking` conflict, write `<book>/SYNOPSIS.md`. For a book outlined
+earlier, run only the synopsis check and this section when the user asks for a synopsis or an
+annotation.
+
+**It is derived, not a plan.** It is built from `STORY_INTENT.md`, Layers 1–2 of the outline, the
+synopsis check and, in a series, the next rung of `SERIES_ARC.md`. Nothing downstream reads it as
+input: beat cards, drafts and the lint read the outline. Two plot summaries that both steer the
+writing will drift apart, and nothing can tell which one is right. If the synopsis needs something
+the outline does not say, that is a gap in the outline. Fix the outline first.
+
+For chapters already drafted, the text outranks their outline rows. For published chapters the
+published text outranks everything (`../../CONVENTIONS.md` §13). Retell what the reader got.
+
+Write it in `output_language`, not `wiki_language`: editors, contest juries and readers outside the
+project read it. Then run `naturalize` in plan mode over it (unless `naturalness: off`). The
+annotation is the first text a reader sees.
+
+```markdown
+---
+type: synopsis
+book: <NN>
+derived_from: outline.md <outline's last_updated>
+created: <YYYY-MM-DD>
+language: <output_language>
+---
+
+# <title>
+
+## Setting
+## Series position        (series only: book N, what the previous book left the protagonist with)
+## Main characters        (3–6, one line each: who they are, what they want)
+## Antagonist             (a person, or the circumstances, from the synopsis check)
+## Annotation             (for readers, no spoilers)
+## Synopsis               (for an editor, everything)
+## Main intrigue          (and what carries into the next book)
+```
+
+**The annotation** sells the premise:
+- It goes up to the inciting event and no further. The climax, the twist and the ending never
+  appear in it.
+- Check it against the reveal section of every character profile it mentions. It is read before
+  chapter 1, so anything scheduled for a later reveal is out.
+- Give a situation and a question, not a list of themes. "A story about friendship and betrayal" is
+  concept-speak, and every other book's annotation says the same thing.
+- Match the book's voice. A first-person book often gets a first-person annotation.
+- Keep it short, a few hundred to a thousand characters. The platform's limit is in its `publish`
+  adapter.
+
+**The synopsis** tells everything:
+- Tell it in order, ending, twist and climax included. An editor reads it to judge whether the story
+  works, and a synopsis that hides the ending is just another annotation.
+- Write present tense, third person, and join events by cause ("so", "because"). A list of scenes
+  is not a synopsis.
+- Write it for an outsider. Leave out project apparatus: thread codes, block numbers, chapter
+  numbers, tiers, `[src:]` citations. Introduce each name at first mention with who they are.
+- Length is one to three pages. It is Layer 2 retold, not Layer 3.
+
+**Keep it current.** `derived_from` records the outline version it was built from. When Layer 1 or 2
+changes, regenerate the synopsis in the same run, and ask the user before changing an annotation
+already on a platform (`publish` → Book page). `wiki-lint` reports a synopsis older than its outline.
+
 ## Artifacts
 
 `<book>/outline.md` — all four layers, `tier: fanon-proposed`, with every canon dependency cited. In
@@ -229,6 +320,8 @@ was planned against, so the next book can check itself against something written
 | Severity | Scene | Conflict | Canon says | Plan says | Resolution |
 |---|---|---|---|---|---|
 ```
+
+`<book>/SYNOPSIS.md` — synopsis and annotation, derived from the outline (above).
 
 Facts the plan invents go to `wiki/fanon/proposed/` — not into `wiki/canon/`, ever. The fanon tier is
 series-wide and stays that way; it is not split per book, because book 3 needs what book 1 invented.
@@ -246,8 +339,10 @@ Append to `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] plan-chapters | b<NN> — <n> chapters, <n> conflicts (<n> blocking)
    metrics: book=<NN> chapters=<n> scenes=<n> blocking=<n> warnings=<n> notices=<n> seeds_planted=<n> seeds_paid=<n>
+## [YYYY-MM-DD] plan-chapters | b<NN> synopsis — from outline <last_updated>
 ```
-Drop `b<NN>` and `book=` in a flat project.
+The synopsis line is logged whenever `SYNOPSIS.md` is written, alone on a synopsis-only run. Drop
+`b<NN>` and `book=` in a flat project.
 
 ## Rules
 
@@ -260,5 +355,7 @@ Drop `b<NN>` and `book=` in a flat project.
 - **The drafted text outranks the ladder.** Where `SERIES_ARC.md` and the previous book's chapters
   disagree, the chapters are right and the ladder gets corrected.
 - Report honestly when the plan is clean. Zero conflicts is a real result.
+- **The synopsis follows the outline, never leads it.** No stage drafts from `SYNOPSIS.md`, and a
+  change that starts there goes into the outline first.
 - Keep it proportional: a one-shot needs Layers 1 and 4 only. Do not build a four-layer hierarchy for
-  two thousand words.
+  two thousand words. Run its synopsis check over Layer 1, and write `SYNOPSIS.md` only on request.

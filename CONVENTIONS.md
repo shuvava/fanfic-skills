@@ -256,8 +256,8 @@ Citations are `raw/`-relative and carry the volume when there is one — see §4
 
 | Layout | When | Paths |
 |---|---|---|
-| **flat** | one book, one-shot, or no `plan/SERIES_ARC.md` | `plan/STORY_INTENT.md`, `plan/outline.md`, `plan/conflicts.md`, `plan/beats/ch<NN>.md`, `drafts/ch<NN>-<slug>.md`, `drafts/snapshots/ch<NN>-v0.md` |
-| **series** | `plan/SERIES_ARC.md` has more than one rung, or the user says it is a series | `plan/book-<NN>-<slug>/{STORY_INTENT.md,outline.md,conflicts.md,beats/ch<NN>.md}`, `drafts/book-<NN>/ch<NN>-<slug>.md`, `drafts/book-<NN>/snapshots/ch<NN>-v0.md` |
+| **flat** | one book, one-shot, or no `plan/SERIES_ARC.md` | `plan/STORY_INTENT.md`, `plan/outline.md`, `plan/conflicts.md`, `plan/SYNOPSIS.md`, `plan/beats/ch<NN>.md`, `drafts/ch<NN>-<slug>.md`, `drafts/snapshots/ch<NN>-v0.md` |
+| **series** | `plan/SERIES_ARC.md` has more than one rung, or the user says it is a series | `plan/book-<NN>-<slug>/{STORY_INTENT.md,outline.md,conflicts.md,SYNOPSIS.md,beats/ch<NN>.md}`, `drafts/book-<NN>/ch<NN>-<slug>.md`, `drafts/book-<NN>/snapshots/ch<NN>-v0.md` |
 
 Shared in both layouts, never per book: `CANON.md`, `wiki/`, `plan/HARNESS.md`, `plan/IDEAS.md`,
 `plan/SERIES_ARC.md`, `drafts/continuity.md`.
@@ -290,6 +290,7 @@ git mv raw/ch*.md raw/_meta.md raw/book-01/
 
 mkdir -p plan/book-01-<slug> drafts/book-01
 git mv plan/STORY_INTENT.md plan/outline.md plan/conflicts.md plan/beats plan/book-01-<slug>/
+git mv plan/SYNOPSIS.md plan/book-01-<slug>/   # if it exists
 git mv drafts/ch*.md drafts/snapshots drafts/book-01/
 ```
 

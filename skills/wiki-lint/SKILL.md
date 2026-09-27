@@ -153,6 +153,10 @@ Only if `plan/IDEAS.md` or `plan/SERIES_ARC.md` exist — they are optional.
   `pending`. Severity `high` for the same reason, one book earlier.
 - **Book without a start state** — an `outline.md` with `book: <NN>` greater than 1 that records no
   start state. Severity `medium`; nothing downstream can check the ladder held.
+- **Stale synopsis** — a `SYNOPSIS.md` whose `derived_from` is older than its outline's
+  `last_updated`. Severity `medium`: the annotation readers see may describe a plot the outline has
+  left. Fix: regenerate it with `plan-chapters`. If an annotation is already posted, `publish` asks
+  before replacing it.
 - **Never-promoted ideas** — a shortlisted idea that plainly reached `outline.md` or
   `STORY_INTENT.md` but is still `shortlisted`. Severity `low`; the loop is not being closed, so
   the file cannot show which ideas actually paid off.

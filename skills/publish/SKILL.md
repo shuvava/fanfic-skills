@@ -5,8 +5,9 @@ description: >
   platform's format, publish it (the user confirms every publication), record what readers got,
   and push typo-only errata. Use when the user says "publish the next chapter", "publish chapter
   5", "what's published", "fix a typo in the published chapter", "опубликуй главу", "выложи
-  следующую главу", "что уже опубликовано", "исправь опечатку в опубликованной", or a scheduled
-  publishing run starts. Platforms: author.today now; one adapter per platform.
+  следующую главу", "что уже опубликовано", "исправь опечатку в опубликованной", "update the
+  annotation", "обнови аннотацию", or a scheduled publishing run starts. Platforms: author.today
+  now; one adapter per platform.
 ---
 
 # Publish
@@ -76,6 +77,29 @@ It lists chapters in order with the published version, **DRIFTED** where the dra
 publication, the stages `wiki/log.md` records for each (`write✓ reconcile✗ naturalize✓`), the next
 chapter, and the buffer — drafted, unpublished chapters in weeks at the cadence. Report the table.
 Under one week of buffer, say so plainly: the schedule is about to overtake the writing.
+Also compare the annotation on the site with the book's `SYNOPSIS.md` (Book page, below), and say
+if they differ.
+
+## Book page — the annotation
+
+The annotation is the first text a reader sees, before any chapter. It comes from the `## Annotation`
+section of the book's `SYNOPSIS.md`. **Never use `## Synopsis`**: it contains the ending. If there is
+no `SYNOPSIS.md`, offer `plan-chapters` → Synopsis and annotation first. Do not write an annotation
+here: text that no outline check has seen is how a blurb ends up promising a book that does not
+exist.
+
+1. Check for spoilers against the reveal section of every profile the annotation mentions, the same
+   check as the gate below. The reader sees it before chapter 1.
+2. Show the text with its character count and the platform's limit from the adapter. **Ask the user
+   and wait for a yes.** The annotation is public.
+3. Put it on the platform by the adapter's flow, then read it back.
+4. Record the posted text and date under `## Annotation on the site` in the project's
+   `publish/platforms/<platform>.md`. Status compares against this record.
+
+Changing the annotation later is not errata. It is not chapter text, and it may change when the
+outline changes. But it is public, so every change needs the user's yes. When the outline turns in
+a direction the posted annotation no longer describes, say so. An annotation that promises a
+different book loses exactly the readers it attracted.
 
 ## Publish the next chapter
 
@@ -93,6 +117,7 @@ Every row is evidence from this session (§10), not memory:
 | Naturalness reviewed | `naturalize✓`, unless `naturalness: off` | `warning` — the user may publish anyway |
 | No drift in earlier chapters | status shows no DRIFTED | `blocking` — errata or restore first |
 | Spoilers | the chapter against the reveal section of every profile it mentions — `## Reveal schedule`, or its `wiki_language` name (`## Раскрытие читателю`) — in `wiki/fanon/proposed/characters/`; its picture per `illustrate` step 3. A hint earlier than scheduled is noted in that profile, so later chapters do not re-reveal it | `warning` — the user decides |
+| Book page | first chapter only: the project's platform notes record an annotation on the site | `warning` — offer Book page above. The first chapter makes the work visible, and a work page without an annotation is one readers skip |
 | Illustration | `illustration:` in frontmatter if `plan/illustration/` has an approved image for this chapter | `warning` — offer `illustrate` step 14 first; after publication the picture is locked out |
 
 Report the table. A `blocking` row stops the run; say what to run.

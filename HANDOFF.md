@@ -22,7 +22,7 @@ wiki-init      → structure + source-language detection
 ingest-source  → canon wiki pages                     [tier: canon, immutable]
 brainstorm     → plan/IDEAS.md + SERIES_ARC.md        [no gate — candidates only]
 plan-story     → plan/STORY_INTENT.md                 [gate: grilling interview]
-plan-chapters  → outline + conflict report            [gate: canon conflicts]
+plan-chapters  → outline + conflict report + synopsis [gate: canon conflicts]
 develop-character → character profiles + cardboard check
 write-chapter  → beats → prose → canon check          [gate: beat review]
 reconcile      → review inbox → fanon promotion       [gate: promotion review]
@@ -411,6 +411,28 @@ chapter. Decisions:
 Untested on a real chapter at the time of writing: the script is tested on an invented fixture
 (alignment, leftover script, glossary drift, omission by ratio, stale, `--from` a published
 snapshot); the skill text has not had a run.
+
+## Synopsis and annotation (v0.16.0)
+
+The user brought a publisher's synopsis template — setting, protagonist, antagonist, inciting event,
+climax, twist, resolution, main intrigue — and asked whether the plugin should write one per book or
+per chapter. Decisions:
+
+- **Book, not chapter.** A chapter already has its Layer 3 row, Layer 4 scenes, a beat card and,
+  once drafted, a summary. A fourth copy would add nothing but drift. The template's fields
+  (antagonist, twist, resolution) describe an arc, and a chapter has no arc of its own.
+- **The template is a check first.** `plan-chapters` fills it from Layers 1–2 before Layer 2 is
+  shown. An unfillable field is a story hole caught at the cost of one question. Reading a real outline's
+  Layer 1 against it found a result standing in for a climax, an unnamed antagonist and no stated main
+  intrigue, none of which the existing self-review asked about.
+- **`SYNOPSIS.md` is derived and read by no stage.** It is built from intent + Layers 1–2 and
+  records `derived_from`; `wiki-lint` flags it when the outline is newer. Two plot summaries that
+  both steered drafting would drift apart with no way to tell which was right.
+- **Synopsis and annotation are different texts for different readers.** The synopsis is for an
+  editor, tells the ending and is never published. The annotation is for readers, stops at the
+  inciting event and is checked against reveal schedules. `publish` takes only the annotation.
+- **The annotation is public, but it is not errata.** It may change with the outline, and each
+  change needs the user's yes. The author.today annotation field is `to map`.
 
 ## Known gaps / possible next work
 
