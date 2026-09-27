@@ -12,7 +12,7 @@ description: >
 Compile one source chunk into the canon tier. A single ingest typically touches 8–15 pages.
 
 Follow `../../CONVENTIONS.md`. **All output is written in `wiki_language` from
-`CANON.md`; verbatim quotations are copied exactly from `raw/` and never translated.**
+`CANON.md`; verbatim quotations are copied exactly from `raw/`, as the source.**
 
 ## Before starting
 
@@ -199,7 +199,7 @@ the old, record both under `## Contradictions` with citations. The user adjudica
 
 - **No completion claim without fresh evidence** — `../../CONVENTIONS.md` §10. "Cited" means the
   `[src:]` path resolves against `raw/` as written; test it, do not assume the shape is right.
-- **Never edit or translate anything in `raw/`.**
+- **Never edit anything in `raw/`.** (Translating a `raw/` chapter via the `translate` skill is fine — it reads `raw/` and writes to `translations/`; `raw/` itself stays untouched.)
 - **Never write outside `wiki/canon/`.** Ingest produces canon and nothing else.
 - **Never fill a section with plausible filler.** "Not established in ingested sources" is a correct
   and useful entry.

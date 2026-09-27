@@ -77,8 +77,9 @@ git init                                                 # so a bad ingest can b
 claude
 ```
 
-`raw/` is never edited and never translated, by any skill, ever. Everything else in the project is
-generated from it.
+`raw/` is never edited, by any skill, ever. Chapters in `raw/` may be translated via the `translate`
+skill — it reads `raw/` and writes to `translations/`, never back into `raw/`. Everything else in the
+project is generated from it.
 
 Then talk to Claude. Skills trigger from what you say; you never type a skill name.
 
@@ -154,7 +155,8 @@ deliberately not one of them — nothing it produces is committed, so there is n
 
 ## Three invariants
 
-**1. `raw/` is never edited and never translated.** It is the source of truth.
+**1. `raw/` is never edited.** It is the source of truth; `translate` may render a chapter from it
+into `translations/`, but `raw/` itself never changes.
 
 **2. Everything is produced in the source's language by default.** Verbatim quotations are *never*
 translated — register, rhythm, archaism, address forms, and honorifics are the substance of a voice
@@ -414,7 +416,8 @@ skill records the result. Reader-feedback collection comes after.
 ## Translating the fic
 
 `translate` makes a second edition of your chapters in another language — English by default —
-one chapter at a time. It translates **your drafts only**: `raw/` and the wiki are never translated.
+one chapter at a time. It translates **your chapters only**: `drafts/` and `raw/` chapters go in,
+the wiki is never translated.
 
 → *"Translate chapter 1 into English."*
 

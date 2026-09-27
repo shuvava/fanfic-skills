@@ -37,7 +37,7 @@ source is characterization data that voice cards will need.
 ```
 project-root/
 ├── CANON.md                    # schema, conventions, language, divergences
-├── raw/                        # immutable sources — never edited, never translated
+├── raw/                        # immutable sources — never edited (may be translated via skill translate)
 ├── plan/                       # STORY_INTENT.md, outline.md, conflicts.md, HARNESS.md
 │   └── beats/                  # ch<NN>.md — one beat sheet per chapter
 ├── drafts/                     # tier: generated — chapters + continuity.md
@@ -72,7 +72,7 @@ then wrong in every path for the rest of the project.
 ## 3. Place source material
 
 Copy (never move — preserve the user's original) source files into `raw/`. State plainly in `CANON.md`
-that `raw/` is never edited and never translated.
+that `raw/` is never edited (it may be translated via the `translate` skill).
 
 ## 4. Split a single-file source into chapters
 

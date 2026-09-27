@@ -22,10 +22,11 @@ current_book:                    # series only; the book being planned or drafte
 ## Language
 
 All wiki pages, plans, and generated prose are produced in `wiki_language` / `output_language`.
-Verbatim quotations from `raw/` are **never translated**, regardless of other settings.
+Verbatim quotations from `raw/` are carried as-is — they are the source.
 Conversation with the user happens in whatever language the user is using.
 
-`raw/` is never edited and never translated.
+`raw/` is never edited (it is the source), but chapters in `raw/` may be translated
+via the `translate` skill, on equal footing with `drafts/`.
 
 ## Layers and tiers
 
