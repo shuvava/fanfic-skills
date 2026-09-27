@@ -175,6 +175,13 @@ in the story, not in the form, and here it costs one question.
 Invented example, «Хроники Севера»: "Anna wins the trial" is a result, not a climax. The climax is
 the scene where she testifies against Mark in open court, knowing it costs her the family name.
 
+**Before calling a field a hole, read the protagonist's profile** in `wiki/fanon/proposed/characters/`.
+Its ratified shift section says where the change happens and what kind of change it is. Layer 2 may
+give that scene one clause. On a real run, a check made from the layers alone recommended a new scene
+for a change the profile had already placed, and the user had to be asked again. Where the profile
+and the intent describe the change differently, that mismatch is the finding. Fix the intent's
+wording; do not add a scene.
+
 "Circumstances" as antagonist and "no twist" are legitimate answers when they are chosen. Record
 them as choices. In a series, a main intrigue handed forward must exist in the next rung of
 `SERIES_ARC.md` or as a seed there; otherwise the book ends on a question nobody plans to answer.
