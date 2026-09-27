@@ -176,10 +176,17 @@ call, not a silent drop.
 **Then immediately write an untouched copy to `<drafts>/snapshots/ch<NN>-v0.md`.**
 
 This snapshot is the baseline `refine-harness` diffs the user's edits against — the only record of
-what Claude produced before anyone touched it. Write it once, at first draft, and never update it. If
-the user asks for a revision before they've edited anything themselves, overwrite the snapshot too;
-once they have edited, the snapshot is frozen. Without it there is no feedback signal and refinement
+what Claude produced before anyone touched it. Without it there is no feedback signal and refinement
 has nothing to learn from.
+
+**It is frozen the moment the chapter is handed to the user** (§6). Until then Claude's own passes —
+the fingerprint revisions and `naturalize` repairs in §5 — update it, because they are still what
+Claude produced. After hand-off it never changes: **a revision the user asks for is a user edit, even
+when Claude types it.** "This is unclear", "that reads clumsy", "add a joke here" — each is the user's
+correction, and it is exactly the signal the snapshot exists to keep. Measured on a real run: with the
+snapshot overwritten after each requested revision, three chapters showed an edit rate of 0, 0 and
+0.07 while the log recorded twenty revisions the user had asked for — the signal survived only in
+prose log entries and had to be collected by hand.
 
 ## 5. Canon-check the draft
 
@@ -222,8 +229,9 @@ prose that reads like a competent imitation.
 
 **Naturalness runs last** because every other row can rewrite sentences, and a fix reviewed before a
 canon revision would be reviewed twice. In `auto-safe` mode its repairs are Claude's own edits: apply
-them and overwrite `snapshots/ch<NN>-v0.md` as §4 allows while the user has not edited yet, so the
-snapshot stays "what Claude produced" and `refine-harness` does not count the repairs as user edits.
+them and update `snapshots/ch<NN>-v0.md` before hand-off (§4), so the snapshot stays "what Claude
+produced" and `refine-harness` does not count the repairs as user edits. Fixes the user accepts from
+the review file are theirs — they land after hand-off and never touch the snapshot.
 
 **Report violations rather than silently fixing them.** A deliberate divergence is legitimate; the
 user decides which it is. This applies to canon, not to the fingerprint: a style delta is a defect to
