@@ -97,7 +97,10 @@ override, and Claude flags the lossy step when they diverge.
 ### 5. Snapshots exist so refinement has a baseline
 
 `write-chapter` writes `drafts/snapshots/ch<NN>-v0.md` — an untouched copy of the first draft, frozen
-once the user edits.
+when the chapter is handed to the user. Claude's own passes before hand-off (fingerprint, `naturalize`
+repairs) update it; anything after — including revisions Claude types because the user asked — is a
+user edit (v0.15.1). The earlier rule, "overwrite while the user has not edited yet", zeroed the
+signal: on a real run three chapters diffed at 0, 0 and 0.07 against twenty requested revisions.
 
 **Why:** without it there is no way to diff what Claude wrote against what the user kept, and
 `refine-harness` has nothing to learn from. `wiki-lint` flags chapters missing a snapshot.

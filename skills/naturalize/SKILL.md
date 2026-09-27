@@ -93,7 +93,8 @@ Applied without asking only when **all** hold:
 
 Anything else goes to the review file. Every applied repair is still listed in it, marked applied,
 so the user can revert it. Repairs are Claude's own edits: apply them before the chapter's
-`snapshots/ch<NN>-v0.md` is frozen (`write-chapter` §4), so the snapshot stays "what Claude produced".
+`snapshots/ch<NN>-v0.md` is frozen at hand-off (`write-chapter` §4), so the snapshot stays "what Claude
+produced".
 
 ## The review file
 
@@ -127,6 +128,8 @@ When the user says the review is done ("apply naturalness for ch05", "приме
    that no longer matches (the text changed since) is reported, not guessed.
 2. After a replacement inside a larger sentence, re-read the joined sentence: a fix quoted from mid-
    sentence can leave the old head or tail dangling. This happened on the real run twice.
+   **Do not update the chapter's snapshot:** an accepted fix is the user's edit, and `refine-harness`
+   learns from it (`write-chapter` §4).
 3. Record every **rejection** and every **own variant** in `plan/HARNESS.md` → `## Naturalness
    examples` (below). These are the user's explicit verdicts, ratified in the review file itself, so
    they go in directly — the three-instance rule of `refine-harness` is for inferred patterns, not
