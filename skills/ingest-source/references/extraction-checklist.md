@@ -353,6 +353,27 @@ The last line matters as much as the counts. Record where the humour *lives* —
 character wit, situational absurdity, understatement — because a drafter that relocates it writes
 jokes the source would never make.
 
+**When the narrator is the comedian, record what the narrator *does*, not only the punctuation.** Counts
+are necessary and not sufficient. On a real run a chapter corrected only for delivery — scare quotes,
+colons, stacked marks brought to the author's numbers — read to the user as the same chapter. The
+variant that gave the narrator back his comic behaviour was the one they called organic. A drafter
+left with devices and counts writes a narrator who is wise, fair and explains his own jokes. List the
+moves the narrator repeats, each with a citation:
+
+```markdown
+- **Comic moves of the narrator:**
+  - хвастается — и тут же проговаривается: «как человек опытный, волновался я совсем немного —
+    ручку сгрыз всего одну» [src: ...];
+  - мелочный расчёт вслух: прикидывает, сколько пирожков стоит дружба [src: ...];
+  - деловой цинизм: план «проверить сначала на ком то менее нужном» [src: ...];
+  - земная линза: чужой мир меряет играми, кино, школой прежней жизни [src: ...];
+  - отступление, которое разрастается до абсурда и обрывается [src: ...];
+  - удачный ответ приходит, когда собеседник уже ушёл [src: ...].
+```
+
+The examples above are invented; the source decides which moves exist. Three to six is typical.
+One citation each is enough, because a move is a habit, not an event.
+
 ### Non-standard orthography — the section a model will silently repair
 
 **Look specifically for places where the source departs from standard spelling or punctuation, and
