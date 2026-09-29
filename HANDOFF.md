@@ -444,6 +444,24 @@ per chapter. Decisions:
 - **The annotation is public, but it is not errata.** It may change with the outline, and each
   change needs the user's yes. The author.today annotation field is `to map`.
 
+## Comic behaviour of the narrator (v0.16.1)
+
+The user found the generated chapters less funny than the source: the irony survived, the
+impression did not. One published chapter was redrafted three ways, each adding a layer:
+
+- **Delivery only** (scare quotes, colons, stacked marks brought to the author's counts; the
+  closing summary cut to a sting). The user saw no real difference from the original. The draft
+  had been running scare quotes at 3× the author's rate, and fixing that alone did not help.
+- **+ the narrator's comic behaviour** (a boast that gives itself away, petty calculation, a
+  shameless practical plan, the prior-world lens, a tangent that escalates, the retort that comes
+  too late). The user called it the most organic.
+- **+ staged situational gags.** No better than the previous layer, and the gag built on an
+  inference failed outright.
+
+So counts are the floor and the narrator's behaviour is the lever. `ingest-source` now records
+`Comic moves of the narrator`, and `write-chapter` asks for one per scene plus three joke-failure
+patterns from the user's line edits. n=1 chapter, one reader.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated

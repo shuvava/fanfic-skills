@@ -199,7 +199,28 @@ A `blocking` conflict stops drafting.
   the punctuation that makes a narrator sound like they are talking rather than composing. Measured on
   a real run, a draft matched the author's scare-quoting to within 4% while dropping his exclamations
   by 92%. The jokes were structurally right and the voice was gone. **Humour that is merely
-  well-formed is not this author's humour.**
+  well-formed is not this author's humour.** The counts cut both ways: a later draft ran scare
+  quotes at three times the author's rate, and the quotes stopped marking anything.
+- **Let the narrator be funny, not only remark on funny things.** Counts are the floor. On a real run
+  a chapter brought to the author's numbers read as unchanged, and the one the user called organic
+  gave the narrator his comic behaviour back. Use the `Comic moves of the narrator` recorded in
+  `## Comic register`, at least one per scene: a boast that gives itself away, petty counting, a
+  shamelessly practical plan, the good retort that arrives once the other person has left.
+  The default a model drifts to is a narrator who is wise and fair and ends the chapter by explaining
+  what everyone felt, and that narrator is not funny. Where the source's narrator draws a conclusion,
+  keep it to a sentence or two and end on a sting, not a summary.
+- **Three ways a joke fails in the draft** (from a user's verdicts on a test chapter; examples invented):
+  - *A punchline that negates instead of reversing.* «Мои друзья не приносили мне пирожки — они их
+    уносили» is weaker than the antithesis said straight: «Его друзья носили ему пирожки. Мои — уносили
+    их у меня!»
+  - *A gag the reader has to solve.* If the point sits in an inference two lines away («Карту,
+    кстати, Анна читала прекрасно. Причем обе»), most readers see no joke. Set the premise up where it
+    will be seen, then let the line land by itself.
+  - *A shorthand label for an idea.* «завидовал ему за пятерых с пирожками» packs a paragraph of
+    reasoning into a phrase the reader has not been given. Name the thing: «за друзей, которые
+    были у него с детства».
+  Broken collocations kill jokes too («город не выдал мне ни одного друга» → «друзей мне в этом
+  городе не полагалось»): the comic line is the one sentence that must read effortlessly.
 
 Write to `<drafts>/ch<NN>-<slug>.md` with frontmatter recording `tier: generated`, POV, timeline
 position, threads touched, and `book: <NN>` in a series. **Redrafting a chapter that already has
