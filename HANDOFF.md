@@ -474,6 +474,31 @@ Phase 3 after `reconcile` without waiting to be asked, and `publish` blocks a ch
 so §8 now defines per-book settings: one value, or a map keyed by fic book number, resolved for the
 chapter's own book.
 
+## Outside readers (v0.17.0)
+
+The user noticed that published chapters still had clumsy and illogical sentences that `naturalize`
+had let through. A pilot on seven chapters tried other models as **critics**. They point at
+sentences with exact quotes and never rewrite; a model *writing* the text lost meaning in the
+earlier fine-tune experiment.
+
+- **Against the user's own edits (first draft → published):** Claude as a separate critic 0.40
+  precision, the best non-Anthropic model 0.41, two others 0.27–0.28. Base rate: 0.20.
+- **The user's blind read reversed that ranking.** They read 29 sentences they had left unchanged
+  but a critic had flagged, without knowing which model wrote each remark. 22 of the 29 held a real
+  defect.
+  - Real share per critic: 1.00, 0.75, 0.65 (Claude), 0.43 (the "best" model by edit precision).
+    That model's hits against edits were mostly coincidences: the user had changed something else
+    in the same sentence.
+  - Claude plus two outside models covered 20 of the 22.
+- **Failure mode:** two outside models "corrected" the author's dialogue punctuation. So the critic
+  prompt carries the whole `canon/overview.md`.
+
+So `naturalize` runs outside readers (`critics:` in `CANON.md`, `scripts/critique.py`) after its own
+reading, and adjudicates their flags against the user's verdicts before anything reaches the review
+file. Per-critic counts go to the log, so a noisy critic can be dropped on evidence. Scoring against
+edits alone would have picked the wrong model; the blind read is the measure. n=3 chapters, one
+reader.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated

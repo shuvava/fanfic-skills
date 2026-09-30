@@ -24,6 +24,7 @@ source_language: <ISO 639-1 code>
 wiki_language: <same as source by default>
 output_language: <same as source by default>
 naturalness: review   # off | review | auto-safe — see skills/naturalize
+critics: [claude]     # outside readers of each draft; add OpenRouter ids — see skills/naturalize
 ```
 
 Do not ask the user what language they want unless they raise it. The default is: the source's

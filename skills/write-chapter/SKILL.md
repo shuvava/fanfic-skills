@@ -263,7 +263,7 @@ Run explicitly and report:
 | Precedent | Does any scene repeat a canon scene's shape — same staging, same moves, same observations? List every narrator observation re-performed from canon; each is cut or turned into an acknowledged callback |
 | Event | Does the chapter contain the external event its card named, on the page? |
 | New assertions | What does this chapter establish that no tier records? |
-| Naturalness | Run `naturalize` in prose mode once the rows above pass (skip if `naturalness: off`). Report its counts — flagged, auto-repaired, left for review — and the review file's path |
+| Naturalness | Run `naturalize` in prose mode once the rows above pass (skip if `naturalness: off`), outside readers included (`critics:` in `CANON.md`). Report its counts — flagged, auto-repaired, left for review, and per critic — and the review file's path |
 
 Measure the style row rather than judging it:
 
@@ -287,6 +287,12 @@ canon revision would be reviewed twice. In `auto-safe` mode its repairs are Clau
 them and update `snapshots/ch<NN>-v0.md` before hand-off (§4), so the snapshot stays "what Claude
 produced" and `refine-harness` does not count the repairs as user edits. Fixes the user accepts from
 the review file are theirs — they land after hand-off and never touch the snapshot.
+
+**Outside readers are part of this row, not an extra pass.** Your own reading misses what another
+reader catches: on a blind read of three published chapters, the user found a real defect in 22 of 29
+sentences they had let through, and no single critic caught more than half of them. Two outside
+models plus a fresh-context Claude caught 20. Their flags reach the user only through `naturalize`'s review file, after you have
+sorted them against the user's verdicts — never as a raw list.
 
 **Report violations rather than silently fixing them.** A deliberate divergence is legitimate; the
 user decides which it is. This applies to canon, not to the fingerprint: a style delta is a defect to
@@ -325,7 +331,7 @@ assertions from the chapter are handed to `reconcile`, which routes them through
 Append to `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] write | b<NN>/ch<NN> <title>
-   metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n> natural=<flagged>/<auto>
+   metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n> natural=<flagged>/<auto> critics=<name>:<kept>/<flagged>,…
 ```
 Drop `b<NN>/` and `book=` in a flat project.
 Then suggest running `reconcile`.

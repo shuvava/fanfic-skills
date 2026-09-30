@@ -140,7 +140,7 @@ plan-story     → plan/STORY_INTENT.md                    [grilling gate]
 plan-chapters  → outline + conflict report + synopsis    [conflict gate]
 develop-character → character profiles + cardboard check [depth threshold, CONVENTIONS §11]
 write-chapter  → beats (in short + to decide) → prose → canon check [beat gate]
-naturalize     → flag machine-sounding sentences, propose fixes [review gate; off | review | auto-safe]
+naturalize     → flag machine-sounding sentences, plus outside critics; propose fixes [review gate; off | review | auto-safe]
 reconcile      → review inbox → fanon promotion          [review gate]
 refine-harness → learn from your edits
 wiki-lint      → health report
@@ -361,6 +361,10 @@ python3 scripts/prompt_budget.py check plan/illustration/book-01/ch05.md \
 (`OPENROUTER_API_KEY` in the shell, or in the one `.env` at your project root — see `.env.example`
 and `CONVENTIONS.md` §12; the skills make sure `.env` is gitignored before you add a key),
 attaching reference images in order and printing API errors instead of saving empty files; `--block 2c` picks a labelled edit block.
+
+`scripts/critique.py` sends a drafted chapter to the outside readers listed in `critics:` in
+`CANON.md` (OpenRouter models, same key) and prepares the prompt for Claude's own fresh-context
+critic. They only point at sentences; `naturalize` decides which flags reach you.
 
 Once you approve a chapter's image, `scripts/place_illustration.py` puts it into the draft right
 after the paragraph holding the moment's anchor quote — one `![…](…)` line, relative to the draft,
