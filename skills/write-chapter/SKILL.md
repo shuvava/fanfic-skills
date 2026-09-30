@@ -330,6 +330,12 @@ Append to `wiki/log.md`:
 Drop `b<NN>/` and `book=` in a flat project.
 Then suggest running `reconcile`.
 
+**If `illustration_required` is true for this chapter's book (`CANON.md`, per-book setting —
+`../../CONVENTIONS.md` §8), the chapter is not finished without its picture.**
+After `reconcile`, go straight on to `illustrate` Phase 3 and offer its candidate moments in the same
+reply as the reconcile report. Do not wait to be asked: on a real run the user had to point out that a
+chapter handed off as done had no picture, when every chapter before it had one.
+
 ## Rules
 
 - **Review the outline before drafting against it.** Stale plans produce drafts that contradict
