@@ -95,8 +95,8 @@ agreement before expanding it** — corrections are cheap at one paragraph and e
 complication or reversal.
 
 **Layer 3 — Chapter list.** One row per chapter: number, working title, POV, what happens, what
-changes, which threads it touches, and its **hook** — the question the reader carries out of the
-chapter and the chapter that answers it (see *Chapter hooks* below). **Numbering restarts at 1 in every book** — book 2 chapter 1 is
+changes, which threads it touches, and its **cut** where it has one — the moment inside a scene
+where the chapter breaks off (see *Chapter endings* below). **Numbering restarts at 1 in every book** — book 2 chapter 1 is
 `b02/ch01`, not `ch09`. Continuing the count across books makes the chapter number a global
 identifier that no file name carries, and the first cross-book reference then points at the wrong
 chapter.
@@ -115,38 +115,41 @@ same waste an order of magnitude larger, and it gets discarded when book 2 chang
 **Match the source's structural conventions** from `canon/overview.md`: chapter length, scene count,
 how chapters open and close. A continuation that reads right structurally matters as much as voice.
 
-### Chapter hooks
+### Chapter endings
 
-A chapter ends on a question the reader wants answered, so they open the next one. It matters most
-in a serial, where the next chapter is days away and the reader decides at the last line whether to
-come back. Plan the hook in Layer 3, not in the prose: a hook invented in the last paragraph of a
-draft promises something the outline never delivers.
+The ending that makes a reader open the next chapter is a **cut**: the chapter stops inside a scene,
+at a moment whose outcome the reader cares about, and the next chapter opens in the same minute. It
+matters most in a serial, where the reader decides at the last line whether to come back. Source
+authors who write to a fixed chapter length do this often — they cut the stream at its tensest point
+and put the narrator's reflection at the start of the next chapter, not at the end of this one.
 
-A hook is **concrete**: a person, object, event or deadline the reader can name. It comes from
-something already planned — an event this chapter sets moving, a decision whose cost has not
-landed, an arrival, a question asked and not yet answered. Kinds that work (invented examples):
+**Pick the moment by its stakes, not by a quota.** Test: imagine the next chapter opening on the
+worst outcome. If the reader would not mind either way, the moment is too weak to cut on. Moments
+that pass:
 
-| Kind | Example |
-|---|---|
-| Open question with a name | «В списке первым стоял не я. Пора было узнать, кто такой этот Мартен.» |
-| Deadline | «До экзамена оставалось два дня, а учебник так и лежал у Анны.» |
-| Arrival or interruption | «В дверь постучали — трижды, как стучит только ректор.» |
-| Decision with an unpaid cost | «Письмо ушло. Отец прочтет его в пятницу — после того, как братья расскажут свое.» |
-| New fact that reverses the last one | «Ключ подошел. Только замок оказался уже открыт.» |
+- the protagonist's secret is about to come out;
+- someone is about to be hurt, or already is and help is not coming;
+- a fact arrives that breaks a plan;
+- someone with power over the protagonist has asked, and the answer is due now.
 
-Not a hook:
-- **A vague omen.** «Что-то подсказывало мне, что это еще не конец» names nothing; the reader has
-  no question to carry. Replace it with the thing the omen is about.
-- **A resolution.** The chapter closes every question and the hero goes to bed. The comic sting can
-  stay — put the open question next to it.
-- **A spoiler.** «Тогда я еще не знал, что вижу его в последний раз» spends a later payoff to buy
-  one chapter of suspense.
-- **A cheat.** A threat the next chapter dismisses in its first line. A reader fooled twice stops
-  trusting the hooks.
+Invented examples. Strong: the healer on duty counts his fee while the loser of a duel bleeds, and
+Anna could heal him herself — at the cost of showing that she can. Weak: a stranger at the notice
+board glances at her; whether he moves aside decides nothing.
 
-Pick up the hook within the next chapter or two. A hook left hanging for five chapters is a
-thread, not a hook — record it in `threads.md`. The last chapter of a book resolves the book's
-central question and hooks into the next rung of `SERIES_ARC.md`, if there is one.
+**A chapter with no such moment ends closed**, as the source ends its chapters — a sting is fine.
+Do not bolt a hook onto it:
+
+- **a vague omen** («Что-то подсказывало мне, что это еще не конец») names nothing;
+- **an invented scene** added at the end to make a cliffhanger is a staged moment in a voice that
+  is not the narrator's;
+- **cutting the chapter's point** to make room for a hook loses what the chapter was for;
+- **a spoiler** («Тогда я еще не знал, что…») spends a later payoff;
+- **a cheat** — a threat the next chapter dismisses in its first line — teaches the reader to
+  stop trusting the endings.
+
+A cut per chapter is a quota, and a quota fills with weak moments: in a real run, cutting every other
+chapter put a cut on a glance nobody cared about, and the user rejected it. Mark cuts in the Layer 3
+rows where a moment passes the test and nowhere else. The row after a cut opens with its continuation.
 
 ### Self-review before showing a layer
 
@@ -181,8 +184,8 @@ usually shorthand for nothing. Audit your own layer before presenting it:
 - **No re-staged canon scenes.** When a chapter's event has a canon precedent — an exam where canon
   already showed an exam — name the precedent in the row and say what differs. "The canon scene again,
   later" is a borrowed row.
-- **Every chapter ends on a hook, and every hook is answered.** A Layer 3 row with no hook, or with
-  a hook no later row picks up, is a `warning` — see *Chapter hooks*.
+- **Every cut passes the stakes test** (*Chapter endings*), and the row after it opens with its
+  continuation. A cut on a moment that decides nothing is a `warning`.
 - **Fold test.** If the next chapter could open with one line summarising this one and lose nothing,
   merge them.
 - **Every character above the depth threshold has a profile** (`../../CONVENTIONS.md` §11). A

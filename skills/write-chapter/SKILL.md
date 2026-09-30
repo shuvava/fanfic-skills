@@ -66,9 +66,8 @@ Read this chapter's row and its scenes and ask:
   disagree, the published chapter is right, then the draft, and the outline is stale.
 - **Is this chapter already published?** `published:` in its frontmatter → redrafting it is
   `blocking`. Readers have it; a changed chapter goes out only as typo-only errata through `publish`.
-- **Is the previous chapter's hook picked up?** Read its last paragraph. The question it left must be
-  answered or pushed further in this chapter, not forgotten — a dropped hook tells the reader the
-  endings do not mean anything.
+- **Did the previous chapter end on a cut?** Then this chapter opens in the same minute and settles
+  it — first scene, first lines. A cut the next chapter forgets was a cheat.
 - **Is anything missing that you would have to invent?** Name it now. Inventing it mid-draft buries a
   fanon assertion inside three thousand words where `reconcile` has to dig it out.
 
@@ -108,9 +107,8 @@ then one card per scene for the drafter:
 - **What is new:** what this scene has that the precedent does not — stakes, obstacle, outcome,
   information. At least two; a different room does not count
 - **Event:** what happens on the page that changes the situation — not only what the POV thinks about it
-- **Hook:** last scene only — the concrete question the chapter's final lines leave open, from the
-  outline's `hook` column, and the chapter that answers it. An outline planned without that column
-  gets a proposed hook under To decide
+- **Cut:** last scene only, when the outline marks one — the exact line or action the chapter stops
+  on, and why the reader cares how it turns out. Omit the field for a closed ending
 ```
 
 **The two top sections are for the reviewer, and they are written last.** A card is 1000+ words of
@@ -215,11 +213,10 @@ A `blocking` conflict stops drafting.
   The default a model drifts to is a narrator who is wise and fair and ends the chapter by explaining
   what everyone felt, and that narrator is not funny. Where the source's narrator draws a conclusion,
   keep it to a sentence or two and end on a sting, not a summary.
-- **End on the hook.** The chapter's last lines raise the question from the `Hook` field, and
-  nothing comes after it: no calm coda, no summary of what everyone felt. A comic sting and a hook
-  combine well — the joke lands, then the question. «Что-то мне подсказывало…» is not a hook; name
-  what the something is. The kinds that work and the ones that don't are in `plan-chapters` →
-  *Chapter hooks*.
+- **End where the card says.** On a cut, stop on the line or the unfinished action — no reflection
+  after it; the narrator's conclusion opens the next chapter. On a closed ending, end as the source
+  does, and do not add a hook line: «Что-то мне подсказывало…» is weaker than no hook at all
+  (`plan-chapters` → *Chapter endings*).
 - **Three ways a joke fails in the draft** (from a user's verdicts on a test chapter; examples invented):
   - *A punchline that negates instead of reversing.* «Мои друзья не приносили мне пирожки — они их
     уносили» is weaker than the antithesis said straight: «Его друзья носили ему пирожки. Мои — уносили
@@ -269,7 +266,7 @@ Run explicitly and report:
 | Would-never-do | Does any character act outside their recorded code? |
 | World limits | Are costs honored? |
 | Timeline | Any conflict with `timeline.md`? |
-| Hook | Do the last lines leave the question from the `Hook` field open, concretely, with nothing after it? Is the previous chapter's hook picked up? |
+| Ending | A cut stops on its moment with nothing after it; a closed ending carries no bolted-on omen; a previous chapter's cut is settled in the opening |
 | Beats | Does each scene deliver its card's goal, conflict, and outcome? |
 | Point | Can a reader reach each card's point from the page alone, its *because* included? Quote the lines that carry it. A point no line carries is missing from the scene, however well the outcome lands |
 | Precedent | Does any scene repeat a canon scene's shape — same staging, same moves, same observations? List every narrator observation re-performed from canon; each is cut or turned into an acknowledged callback |
