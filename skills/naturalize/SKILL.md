@@ -112,6 +112,7 @@ date: <YYYY-MM-DD>
 - было: <exact quote>
 - стало: <proposed fix, or empty when meaning is unclear>
 - решение: [ ] принять  [ ] отклонить  [ ] свой вариант:
+- заметили: <who flagged it — claude-editor, then each outside critic; see Outside readers>
 ```
 
 Quotes must be exact substrings of the target — check each one before writing the file, and drop or
@@ -126,6 +127,66 @@ the sentence it flags.
 
 Tell the user where the file is and how many items it holds, in one line. **Do not print the items
 into the conversation** unless asked: the file is where they decide.
+
+## Outside readers (prose mode)
+
+Your reading is one reader. Measured on a real run: in a blind read of three published chapters, the
+user marked a real defect in 22 of 29 sentences they had let through. No single critic found more
+than half of those 22, and each found some that no other critic did. Other models, and a fresh
+Claude that never saw the drafting, stumble on different sentences than you do. Their best catches
+are logic the page undoes: a claim the next line contradicts, a count that does not add up, a
+premise the reader was never given.
+
+`critics:` in `CANON.md` lists them. `claude` is a fresh-context subagent; any other entry is an
+OpenRouter model id and needs `OPENROUTER_API_KEY` (`../../CONVENTIONS.md` §7; without it, say so
+once and run `claude` alone). Absent key in `CANON.md` means `[claude]`; `[]` turns outside readers off. They never run in plan mode, when
+`naturalness: off`, or on a published chapter unless the user asks.
+
+```yaml
+critics: [claude, <openrouter id>, <openrouter id>]
+```
+
+Run them after your own reading and your auto-safe repairs, on the repaired text:
+
+```bash
+D=<book>/naturalness/critics/<chapter stem>
+python3 <scripts>/critique.py run    <chapter> --dir $D   # the OpenRouter critics, in parallel
+python3 <scripts>/critique.py prompt <chapter> --dir $D   # writes $D/prompt.md
+```
+
+Give `$D/prompt.md` to a subagent **as its whole task, with no summary of this conversation**. A
+critic that shares the drafter's context shares its blind spots. Save its reply as
+`$D/claude.reply.json`, then:
+
+```bash
+python3 <scripts>/critique.py add   <chapter> --dir $D --reply $D/claude.reply.json
+python3 <scripts>/critique.py merge <chapter> --dir $D    # $D/merged.md, all flags by sentence
+```
+
+The script drops a quote that is not an exact substring of the chapter.
+
+**Then you decide each sentence in `merged.md`.** A critic's flag is a claim, not a verdict:
+
+- **Reject:**
+  - the author's comic register;
+  - the source's orthography or dialogue layout. On the real run two outside models "corrected"
+    the author's dialogue punctuation;
+  - word-order preferences with no stumble;
+  - an overused pattern with no error;
+  - anything whose fix changes a fact.
+  
+  `## Naturalness examples` outranks every critic.
+- **Keep** the rest as review items, merged with your own item when you flagged the same sentence.
+  `стало` is the critic's suggestion only if it passes Fixing above; otherwise write your own, or
+  leave it empty.
+- **Auto-safe mode:** a kept flag that meets all three repair conditions is applied like your own.
+- **The review file's header:**
+  - count what each critic raised and what you kept;
+  - count rejections by reason, so the user can see what was filtered.
+
+When the user's decisions are applied, add per-critic counts to the log line (`critics=gpt:3/5,…` =
+accepted/shown). After a few chapters that is the evidence for dropping a critic that is mostly noise,
+or adding one.
 
 ## Applying decisions
 
@@ -144,6 +205,7 @@ When the user says the review is done ("apply naturalness for ch05", "приме
 4. Log to `wiki/log.md`:
    ```
    ## [YYYY-MM-DD] naturalize | <target> — <n> flagged, <n> accepted, <n> own, <n> rejected, <n> auto
+      critics=<name>:<accepted>/<shown>,…
    ```
 
 ### `## Naturalness examples` in `plan/HARNESS.md`

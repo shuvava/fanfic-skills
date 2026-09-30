@@ -422,7 +422,7 @@ API keys live in **one** file, `.env` at the fic project root — the cwd every 
 
 | Key | Used by |
 |---|---|
-| `OPENROUTER_API_KEY` | `openrouter_image.py` — `illustrate`, `cover`; `openrouter_translate.py` — `translate` |
+| `OPENROUTER_API_KEY` | `openrouter_image.py` — `illustrate`, `cover`; `openrouter_translate.py` — `translate`; `critique.py` — `naturalize` |
 
 A new key is added to this table and to the plugin's root `.env.example`, never to a skill folder.
 
