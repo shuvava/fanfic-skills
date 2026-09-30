@@ -179,6 +179,9 @@ figures are described in the scene and need no sheet.
 8. **Lock on explicit approval.** Set `status: locked`, `locked`, and record the approved image in
    `## Reference images` — the user saves it to `plan/illustration/refs/<prompt_name>-v<N>.png`;
    confirm the file is there before saying it is recorded.
+   Then delete the sheet's rounds and review crops and commit, as in Phase 3 step 15 — keep the
+   approved `refs/` image, a face crop a prompt still references (move it to `refs/`), and the
+   `.md` files; note the deletion in `## Reference images`.
 
 **Versions.** When the story changes the character for good — grows up, is scarred, cuts her hair —
 create `<name>-v<N+1>.md` with `applies_from`, set `applies_to` on the old one, and run steps 4–8
@@ -274,6 +277,21 @@ blocks, an optional reference image, versions by chapter range, lock on explicit
     Do not touch `snapshots/` — `refine-harness` ignores image lines. Report the line it landed on.
     **A published chapter is refused (exit 4)** — place the picture before `publish`; after it, a
     new picture is the user's decision to republish, not a placement.
+15. **Clean up, then commit — without asking.** Once the image is approved and placed, the rounds
+    are leftovers: count `rounds=` for the log line from `## Iterations` first, then delete them and
+    every crop you made while reviewing:
+
+    ```bash
+    python3 "$SCRIPTS/publication.py" cleanup-rounds drafts/book-01/ch05-<slug>.md   # keeps ch05.png
+    rm -f <scratchpad>/*.png                                                        # review crops
+    ```
+
+    Add a `## Iterations` row saying the rounds were deleted and which one the approved image came
+    from, then commit the chapter's files by explicit path (`git commit -o -- <paths>`): the project
+    may be shared with parallel sessions, and a bare `git commit` sweeps up their staged work. Keep
+    the prompt and edit `.md` files — they are the history. On a real run a user had to ask for this
+    after every chapter; `publish`'s `cleanup_rounds` is only the fallback for a chapter closed
+    before this step existed.
 
 ## Reviewing an image
 
@@ -382,9 +400,10 @@ plan/illustration/
 Shared across the series, like `plan/HARNESS.md` (§8), except the per-book folders.
 `plan/illustration/` is read by no other stage: nothing here is canon or fanon. The one thing this
 skill writes outside it is the approved image's link line and `illustration:` key in the chapter
-draft (step 14) — markup, not prose, and stripped by every script that measures prose. Delete temporary
-rounds only when the user asks — or when `publishing.after_record.cleanup_rounds` in `CANON.md` says
-so, which `publish` does after the chapter goes out (`publication.py cleanup-rounds`).
+draft (step 14) — markup, not prose, and stripped by every script that measures prose. Temporary
+rounds and review crops are deleted when their step closes — a lock (Phases 1–2b) or an approved
+chapter image (step 15) — and the project is committed; only approved images, `refs/` and the `.md`
+files stay.
 
 Append to `wiki/log.md`:
 
