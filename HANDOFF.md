@@ -462,6 +462,18 @@ So counts are the floor and the narrator's behaviour is the lever. `ingest-sourc
 `Comic moves of the narrator`, and `write-chapter` asks for one per scene plus three joke-failure
 patterns from the user's line edits. n=1 chapter, one reader.
 
+## A picture in every chapter (v0.16.2)
+
+A chapter was handed off as done — drafted, checked, reconciled — with no picture, although every
+chapter before it had one; the user had to point it out. Nothing in the pipeline knew that pictures
+were a rule here rather than an option, and `publish` treated a missing one as a warning.
+
+`illustration_required` in `CANON.md` records the rule. `write-chapter` then goes on to `illustrate`
+Phase 3 after `reconcile` without waiting to be asked, and `publish` blocks a chapter that has no
+`illustration:`. The user asked for it per book, since one book may be illustrated and the next not,
+so §8 now defines per-book settings: one value, or a map keyed by fic book number, resolved for the
+chapter's own book.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated

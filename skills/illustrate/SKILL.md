@@ -49,7 +49,13 @@ expression, pose, place, light — goes into the scene section.
 ```yaml
 image_prompt_language: en      # language of prompt blocks; default en — see models.md
 image_autorun: false           # true — Claude runs single generations itself (see "Running generation")
+illustration_required: false   # true — every chapter gets an approved picture before it is published; per book: {1: true, 2: false}
 ```
+
+`illustration_required` is the user's rule that a chapter without a picture is not finished: `write-chapter`
+hands off to Phase 3 after `reconcile`, and `publish` blocks a chapter that has none. Set it when the user
+says every chapter needs a picture. It is a per-book setting (`../../CONVENTIONS.md` §8): a map by fic
+book number when books differ — one book illustrated, the next text only.
 
 `image_autorun` is the user's standing permission to spend on image rounds. Default `false`; set it to
 `true` only when the user asks for it, and say what it does and does not cover.

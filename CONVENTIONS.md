@@ -276,6 +276,18 @@ Resolve in this order: `CANON.md` `current_book` → the highest-numbered `plan/
 has undrafted chapters → ask. **Never guess from the highest-numbered directory alone** — a finished
 book 2 and an unstarted book 3 look the same on disk.
 
+**Per-book settings.** A `CANON.md` key that can differ between fic books takes either one value for
+the whole project or a map keyed by fic book number; a book the map does not list gets the key's
+default. Resolve it for the book the chapter belongs to, never for `current_book`: publishing the
+last chapter of book 1 while book 2 is current must use book 1's value.
+
+```yaml
+illustration_required: true                 # every book
+illustration_required: {1: true, 2: false}  # per book; an unlisted book → default (false)
+```
+
+Keys that accept this form say so where they are defined.
+
 **Chapter numbers restart at 1 in each book.** A chapter is identified across the project as
 `b<NN>/ch<NN>` — `b02/ch03`. Cite it that way in `continuity.md`, `log.md`, and any cross-book
 reference; a bare `ch03` in a series project is ambiguous and will eventually be read as the wrong

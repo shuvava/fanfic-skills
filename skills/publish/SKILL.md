@@ -118,7 +118,7 @@ Every row is evidence from this session (§10), not memory:
 | No drift in earlier chapters | status shows no DRIFTED | `blocking` — errata or restore first |
 | Spoilers | the chapter against the reveal section of every profile it mentions — `## Reveal schedule`, or its `wiki_language` name (`## Раскрытие читателю`) — in `wiki/fanon/proposed/characters/`; its picture per `illustrate` step 3. A hint earlier than scheduled is noted in that profile, so later chapters do not re-reveal it | `warning` — the user decides |
 | Book page | first chapter only: the project's platform notes record an annotation on the site | `warning` — offer Book page above. The first chapter makes the work visible, and a work page without an annotation is one readers skip |
-| Illustration | `illustration:` in frontmatter if `plan/illustration/` has an approved image for this chapter | `warning` — offer `illustrate` step 14 first; after publication the picture is locked out |
+| Illustration | `illustration:` in frontmatter if `plan/illustration/` has an approved image for this chapter; with `illustration_required` true in `CANON.md` for the chapter's book (per-book setting, §8), the key must be there whether or not an image exists | `warning` — offer `illustrate` step 14 first; after publication the picture is locked out. **`blocking`** where `illustration_required` is true for the chapter's book — run `illustrate` Phase 3 |
 
 Report the table. A `blocking` row stops the run; say what to run.
 
