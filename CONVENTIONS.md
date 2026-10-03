@@ -336,6 +336,34 @@ cost signal, analogous to button-press cost in an agent benchmark. It is a proxy
 measure of quality**: a chapter the user loves and polishes heavily scores worse than a mediocre one
 they ignore. Use it to detect trends across many chapters, never to judge a single one.
 
+### Shadow prediction at review gates
+
+`naturalize` and `reconcile` put each review item in front of the user. Some items the user always
+waves through; others they nearly always change. Before any item could go through without being
+shown, there has to be evidence that the waved-through kind can be told apart in advance. Shadow
+prediction collects that evidence. **It changes nothing about what the user sees.** Every item is
+still shown, and every decision is still theirs.
+
+- **Predict each item `low` or `high`.** That is the chance the user's decision differs from the
+  default the item carries: the proposed fix in `naturalize`, the recommendation in `reconcile`.
+  Each skill lists its own signals. Use those signals, not a felt percentage, because a model's own
+  probability estimates are poorly calibrated. Write the prediction and the signals that decided it
+  on the item, **before** the user sees it.
+- **Score it after the user decides.** An item is *changed* when the user's decision is not the
+  default: a rejected or rewritten fix, a reverted auto-repair, an overridden recommendation. Log
+  `shadow=low:<changed>/<n> high:<changed>/<n>` on the skill's log line.
+- **Name each miss.** For each `low` item the user changed, add one line to the log entry saying
+  which signal it lacked. A miss nobody explains repeats, and the same signal is missing again
+  next chapter.
+- **Stakes are separate from probability.** A wrong naturalness fix costs one sentence and is easy
+  to revert. A wrong fanon entry is read as truth by every later chapter. Even a reliable `low`
+  bucket only earns a lighter gate where being wrong is cheap. Reconcile items stay shown whatever
+  their prediction.
+
+Never use a prediction as grounds to skip, hide or pre-apply an item. A later rule may do that for
+one bucket, but only on accumulated evidence. A reasonable bar: across at least five chapters and
+twenty `low` items, at most one changed. Even then, the user switches it on, never the skill.
+
 ---
 
 ## 10. Completion claims
