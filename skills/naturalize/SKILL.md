@@ -113,6 +113,7 @@ date: <YYYY-MM-DD>
 - стало: <proposed fix, or empty when meaning is unclear>
 - решение: [ ] принять  [ ] отклонить  [ ] свой вариант:
 - заметили: <who flagged it — claude-editor, then each outside critic; see Outside readers>
+- прогноз: low | high — <the signals that decided it; see Shadow prediction>
 ```
 
 Quotes must be exact substrings of the target — check each one before writing the file, and drop or
@@ -127,6 +128,33 @@ the sentence it flags.
 
 Tell the user where the file is and how many items it holds, in one line. **Do not print the items
 into the conversation** unless asked: the file is where they decide.
+
+## Shadow prediction
+
+Every item in the review file carries a `прогноз:` line (`../../CONVENTIONS.md` §9, *Shadow
+prediction*). It predicts whether the user will decide anything other than `стало` as written.
+Auto-applied repairs get one too: for them, a revert counts as a change. The prediction never
+changes which items are shown or applied. Write it after adjudicating the critics, from these
+signals:
+
+- **`high` if any of these holds:**
+  - the sentence carries a joke, the narrator's comic move, or the chapter's last lines;
+  - the fix repairs reasoning: a claim the next line undoes, a count that does not add up, a
+    character knowing what they could not know, "first" or "earlier" against the chapter's own
+    order of events;
+  - the fix changes more than three words, or rewrites the head or tail of the sentence;
+  - `стало` is empty;
+  - only one reader flagged it;
+  - plan mode: the fix replaces an abstraction with an image.
+- **`low`** only when no `high` signal holds and at least one of these does:
+  - the fix is a repair class (broken collocation, agreement or government error, a proverb restored
+    to its canonical form);
+  - two or more readers flagged the same sentence;
+  - a row in `## Naturalness examples` settled the same kind of case the same way.
+- Neither list matches → `high`.
+
+Name the signal, not a feeling: `прогноз: low — согласование, флаг у двух читателей`. A bare
+`low` cannot be checked later when the prediction misses.
 
 ## Outside readers (prose mode)
 
@@ -202,11 +230,16 @@ When the user says the review is done ("apply naturalness for ch05", "приме
    examples` (below). These are the user's explicit verdicts, ratified in the review file itself, so
    they go in directly — the three-instance rule of `refine-harness` is for inferred patterns, not
    stated ones. Bump the harness revision and log it.
-4. Log to `wiki/log.md`:
+4. Score the predictions. A `принять` of `стало` as written, or an auto-repair left in place, is
+   unchanged. Everything else is changed: `отклонить`, `свой вариант`, a reverted repair, a fix the
+   user supplies where `стало` was empty.
+5. Log to `wiki/log.md`:
    ```
    ## [YYYY-MM-DD] naturalize | <target> — <n> flagged, <n> accepted, <n> own, <n> rejected, <n> auto
-      critics=<name>:<accepted>/<shown>,…
+      critics=<name>:<accepted>/<shown>,… shadow=low:<changed>/<n> high:<changed>/<n>
+      miss: «<quote>» — <the signal it lacked>
    ```
+   Write one `miss:` line per `low` item that changed, and none when nothing missed.
 
 ### `## Naturalness examples` in `plan/HARNESS.md`
 

@@ -499,6 +499,22 @@ file. Per-critic counts go to the log, so a noisy critic can be dropped on evide
 edits alone would have picked the wrong model; the blind read is the measure. n=3 chapters, one
 reader.
 
+## Shadow prediction at review gates (v0.17.3)
+
+The user asked which per-chapter stops could go away. The log showed two kinds. The `naturalize`
+review had shrunk to one to three items per chapter, all accepted, while auto-repairs grew. Every
+`reconcile` rejection fell in one class: the narrator's own guess, routed to `continuity.md` instead
+of fanon. The beat gate still caught real problems in most chapters, and publishing stays a
+per-chapter yes.
+
+Instead of guessing which items are safe to skip, both skills now predict, for every item, whether
+the user will change the default (`low` / `high`, from named signals rather than a stated
+percentage). Each skill logs `shadow=low:<changed>/<n> high:<changed>/<n>` plus one `miss:` line per
+`low` item the user changed. Nothing is hidden or pre-applied on a prediction. The rule is in
+`CONVENTIONS.md` §9. The bar for a later lighter gate: at least five chapters and twenty `low` items,
+at most one changed, and the user switches it on. Reconcile stays shown at any prediction, because a
+wrong fanon entry is read by every later chapter.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated

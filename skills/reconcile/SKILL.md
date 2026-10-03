@@ -57,11 +57,33 @@ which stage should have caught it.
 Present as a table, in batches the user can actually work through:
 
 ```markdown
-| # | Claim | Class | About | Where | Recommend |
-|---|---|---|---|---|---|
+| # | Claim | Class | About | Where | Recommend | Pred |
+|---|---|---|---|---|---|---|
 ```
 
-For each, recommend accept / edit / reject with one line of reasoning. The user's decisions:
+For each, recommend accept / edit / reject with one line of reasoning. The `Pred` column is a
+shadow prediction (`../../CONVENTIONS.md` §9): `low` or `high`, the chance that the user does not
+take the recommendation, followed by the signal that decided it. Write it before showing the table.
+It never changes what is shown: every row still waits for a decision. Signals:
+
+- **`high` if any of these holds:**
+  - a `new` or `extends` claim that later chapters will lean on, such as a world rule, a price, a
+    schedule, or who holds which post;
+  - any `conflicts-fanon` or `conflicts-canon` claim;
+  - the claim changes or narrows an entry that is already `fanon-established`;
+  - the recommendation goes against `## Reconcile bias`, or bias is silent on a kind of claim the
+    user has decided both ways before (check `wiki/log.md`);
+  - the claim is about a character's motive or feelings, not a fact anyone could observe.
+- **`low`** only when no `high` signal holds and at least one of these does:
+  - `duplicate`;
+  - the claim is something the narrator guesses, estimates or concludes, recommended for
+    `drafts/continuity.md` instead of fanon (an invented example: «the coach must take three days,
+    since the horses are old»);
+  - incidental colour, recommended reject;
+  - `## Reconcile bias` records the user deciding this kind of claim the same way.
+- Neither list matches → `high`.
+
+The user's decisions:
 
 - **Accept** → write to `wiki/fanon/`, `tier: fanon-established`, with `## Ratified` recording the
   date and the chapter that created it
@@ -96,8 +118,15 @@ chapter established anything that changes the plan for later chapters.
 Append to `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] reconcile | b<NN>/ch<NN> — <n> accepted, <n> rejected, <n> canon conflicts
-   metrics: proposed=<n> accepted=<n> rejected=<n> reject_rate=<x>
+   metrics: proposed=<n> accepted=<n> rejected=<n> reject_rate=<x> shadow=low:<changed>/<n> high:<changed>/<n>
+   miss: #<n> <claim, short> — <the signal it lacked>
 ```
+
+A row is *changed* when the decision differs from `Recommend`. An `edit` the user makes to an
+accept-recommended row counts as changed. A `defer` counts too, unless you recommended defer.
+Write one `miss:` line per `low` row that changed, and none when nothing missed. When the same
+kind of claim keeps being decided the same way, propose it for `## Reconcile bias` through
+`refine-harness`: the bias section is where a reliable `low` gets its evidence written down.
 
 If several chapters are now done, suggest running `refine-harness` — the edits and rejections
 accumulated so far are the signal it learns from.
