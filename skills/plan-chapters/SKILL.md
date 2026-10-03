@@ -95,8 +95,9 @@ agreement before expanding it** — corrections are cheap at one paragraph and e
 complication or reversal.
 
 **Layer 3 — Chapter list.** One row per chapter: number, working title, POV, what happens, what
-changes, which threads it touches, and its **cut** where it has one — the moment inside a scene
-where the chapter breaks off (see *Chapter endings* below). **Numbering restarts at 1 in every book** — book 2 chapter 1 is
+changes, which threads it touches, its **cut** where it has one — the moment inside a scene
+where the chapter breaks off (see *Chapter endings* below) — and its **picture** where it has one
+(see *Chapter pictures* below). **Numbering restarts at 1 in every book** — book 2 chapter 1 is
 `b02/ch01`, not `ch09`. Continuing the count across books makes the chapter number a global
 identifier that no file name carries, and the first cross-book reference then points at the wrong
 chapter.
@@ -151,6 +152,38 @@ A cut per chapter is a quota, and a quota fills with weak moments: in a real run
 chapter put a cut on a glance nobody cared about, and the user rejected it. Mark cuts in the Layer 3
 rows where a moment passes the test and nowhere else. The row after a cut opens with its continuation.
 
+### Chapter pictures
+
+Only when `illustration_required` is `planned` for this book (`illustrate` → Settings; per-book,
+`../../CONVENTIONS.md` §8). With `true`, every chapter gets a picture and the column is not needed;
+with `false`, there are no pictures.
+
+A picture costs rounds of generation and review — on a real run, most of the time spent on a chapter.
+Readers of serials treat chapter art as a bonus, not an expectation, and a professionally illustrated
+novel carries roughly one insert per five thousand words. So the outline decides **once per book**
+which chapters get one, instead of every chapter asking.
+
+**Pick by the moment, not by a quota.** A row gets a `picture` only when one of these holds:
+
+- **an important character's first appearance** — their sheet is built now and every later picture
+  reuses it;
+- **a key moment** — an arc's climax, a fight, a reveal, or a cut that passes the stakes test
+  (*Chapter endings*);
+- **something the reader wants to see** — a place, a creature or an object the text cannot fully show.
+
+Write the cell as the moment in one line, who is in it, and why it passes:
+`рыцарь у ворот, один + конь — первое появление` (invented). **Prefer at most two characters.** A
+crowded frame or two figures in contact costs the most rounds; give it only to a moment worth them.
+
+**Spacing.** `picture_every_words` (`illustrate` → Settings, default 5000) is the target density:
+about one picture per that many words of the book. The source's chapter length from
+`canon/overview.md` turns it into chapters — with 1000-word chapters, about one in five. It is a
+target, not a quota: a stretch where nothing passes the test stays unillustrated, and two strong
+moments may sit in neighbouring chapters.
+
+**Switching a book that is already being drafted** to `planned`: mark only rows not yet drafted.
+Chapters already illustrated keep their pictures.
+
 ### Self-review before showing a layer
 
 Ratification is only as good as what you hand over, and a user cannot ratify vagueness — they read
@@ -186,6 +219,9 @@ usually shorthand for nothing. Audit your own layer before presenting it:
   later" is a borrowed row.
 - **Every cut passes the stakes test** (*Chapter endings*), and the row after it opens with its
   continuation. A cut on a moment that decides nothing is a `warning`.
+- **Every picture passes the test** (*Chapter pictures*), and names its moment and who is in it.
+  A gap of more than twice `picture_every_words` with no picture is a `warning` — name the strongest
+  moment in it and let the user decide. Not a rule: a quiet stretch may stay quiet.
 - **Fold test.** If the next chapter could open with one line summarising this one and lose nothing,
   merge them.
 - **Every character above the depth threshold has a profile** (`../../CONVENTIONS.md` §11). A

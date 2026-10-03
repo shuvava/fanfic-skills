@@ -514,6 +514,21 @@ percentage). Each skill logs `shadow=low:<changed>/<n> high:<changed>/<n>` plus 
 `CONVENTIONS.md` §9. The bar for a later lighter gate: at least five chapters and twenty `low` items,
 at most one changed, and the user switches it on. Reconcile stays shown at any prediction, because a
 wrong fanon entry is read by every later chapter.
+## Planned pictures (v0.18.0)
+
+With `illustration_required: true`, image work took most of each chapter's time: 5–12 rounds per
+picture and the user's eye on every new composition. A survey of serial practice found no audience
+that expects a picture per chapter. Royal Road readers call chapter art a bonus. Korean web novels
+put the money into the cover. Russian authors mostly post character art in their blogs. Light
+novels run about one insert per five thousand words. Separately, an author's account and this
+project's log agree on what costs rounds: crowded frames and figures in contact.
+
+So `illustration_required` takes a third value, `planned`. `plan-chapters` marks the chapters that
+get a picture in Layer 3, by a test rather than a quota: an important character's first appearance,
+a key moment, something the text cannot show. `picture_every_words` (default 5000) is a target
+spacing, not a quota. `write-chapter` gives the moment a `Picture:` field on its beat card and checks
+it is on the page. `illustrate` takes the moment from the outline instead of offering candidates.
+`publish` blocks only marked chapters. `true` and `false` behave as before.
 
 ## Known gaps / possible next work
 
