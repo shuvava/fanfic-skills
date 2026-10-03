@@ -109,6 +109,8 @@ then one card per scene for the drafter:
 - **Event:** what happens on the page that changes the situation — not only what the POV thinks about it
 - **Cut:** last scene only, when the outline marks one — the exact line or action the chapter stops
   on, and why the reader cares how it turns out. Omit the field for a closed ending
+- **Picture:** the scene that holds the outline row's `picture`, if it has one — the moment, who is
+  in it, and what must be visible on the page for it to be drawn. Omit it everywhere else
 ```
 
 **The two top sections are for the reviewer, and they are written last.** A card is 1000+ words of
@@ -266,6 +268,7 @@ Run explicitly and report:
 | Would-never-do | Does any character act outside their recorded code? |
 | World limits | Are costs honored? |
 | Timeline | Any conflict with `timeline.md`? |
+| Picture | The outline's picture moment is on the page as an action with visible detail — who, where, what they hold — not only summarised or thought about |
 | Ending | A cut stops on its moment with nothing after it; a closed ending carries no bolted-on omen; a previous chapter's cut is settled in the opening |
 | Beats | Does each scene deliver its card's goal, conflict, and outcome? |
 | Point | Can a reader reach each card's point from the page alone, its *because* included? Quote the lines that carry it. A point no line carries is missing from the scene, however well the outcome lands |
@@ -346,7 +349,9 @@ Drop `b<NN>/` and `book=` in a flat project.
 Then suggest running `reconcile`.
 
 **If `illustration_required` is true for this chapter's book (`CANON.md`, per-book setting —
-`../../CONVENTIONS.md` §8), the chapter is not finished without its picture.**
+`../../CONVENTIONS.md` §8), or it is `planned` and the outline row has a `picture`, the chapter is
+not finished without its picture.** Under `planned` with no `picture` in the row, the chapter is
+finished after `reconcile` — do not offer `illustrate`.
 After `reconcile`, go straight on to `illustrate` Phase 3 and offer its candidate moments in the same
 reply as the reconcile report. Do not wait to be asked: on a real run the user had to point out that a
 chapter handed off as done had no picture, when every chapter before it had one.

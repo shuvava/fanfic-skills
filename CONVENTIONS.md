@@ -284,6 +284,7 @@ last chapter of book 1 while book 2 is current must use book 1's value.
 ```yaml
 illustration_required: true                 # every book
 illustration_required: {1: true, 2: false}  # per book; an unlisted book → default (false)
+illustration_required: {1: true, 2: planned} # book 2: only chapters the outline marks
 ```
 
 Keys that accept this form say so where they are defined.

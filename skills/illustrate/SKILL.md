@@ -49,13 +49,18 @@ expression, pose, place, light — goes into the scene section.
 ```yaml
 image_prompt_language: en      # language of prompt blocks; default en — see models.md
 image_autorun: false           # true — Claude runs single generations itself (see "Running generation")
-illustration_required: false   # true — every chapter gets an approved picture before it is published; per book: {1: true, 2: false}
+illustration_required: false   # true — every chapter; planned — chapters the outline marks; per book: {1: true, 2: planned}
+picture_every_words: 5000      # with planned: target density for plan-chapters, one picture per this many words; per book
 ```
 
 `illustration_required` is the user's rule that a chapter without a picture is not finished: `write-chapter`
 hands off to Phase 3 after `reconcile`, and `publish` blocks a chapter that has none. Set it when the user
 says every chapter needs a picture. It is a per-book setting (`../../CONVENTIONS.md` §8): a map by fic
 book number when books differ — one book illustrated, the next text only.
+
+`planned` puts the choice in the outline: `plan-chapters` marks the chapters that get a picture
+(*Chapter pictures*), and only those are required. Under `planned` a picture outside the marks is
+fine when the user asks for one, and is never required.
 
 `image_autorun` is the user's standing permission to spend on image rounds. Default `false`; set it to
 `true` only when the user asks for it, and say what it does and does not cover.
@@ -211,7 +216,11 @@ blocks, an optional reference image, versions by chapter range, lock on explicit
 ### Choose the moment
 
 1. Read the chapter — `drafts/…/ch<NN>-<slug>.md`, or its beat sheet if not drafted; say which.
-2. Offer **two or three candidate moments** (table in templates.md): what happens, a short verbatim
+   **The outline row has a `picture`** (`illustration_required: planned`): that is the moment — find
+   its anchor in the draft, state it in one line and go on to step 3. The user chose it when they
+   ratified the outline. Offer candidates (step 2) only when the draft no longer contains that
+   moment, or the user asks for another.
+2. Otherwise offer **two or three candidate moments** (table in templates.md): what happens, a short verbatim
    anchor quote, who is in it, the visual payoff, what it gives away. Prefer one clear action and at
    most three recognisable characters. Recommend one; **explain the chosen scene to the user before
    any generation.** The anchor is also where the image will sit in the chapter (step 14), so copy
