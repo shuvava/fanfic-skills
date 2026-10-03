@@ -69,6 +69,8 @@ Read the SCENE once per item.
   stands ("only the two teachers stand"). Reach verbs ("pokes his back from the row above", "peers
   over his shoulder") make the model stand the figure up to reach; give the reach a path ("leaning
   forward over her own desk").
+  Creatures too: a beast gripping bars or a fence is drawn standing on its hind legs like a person
+  unless the SHOT says "on all fours, body low".
 - **S2 The setting's rules.** Read the chapter for what the place forbids or requires: in an exam
   where "nobody may stand up", one standing girl is a canon error.
 - **S3 Anchor positions to the room, not the camera.** After a camera change "one row behind him"
@@ -130,6 +132,16 @@ Read the SCENE once per item.
   sheet at his side" left the hand empty and the sheet floating by his thigh, covered in
   pseudo-Latin. Name the grip ("gripping it between thumb and fingers") and which face shows ("only
   its blank back showing") unless the writing itself is the point.
+- **S19 A lunge reaches its target — keep the target out of reach.** When the moment is a creature
+  throwing itself at something across a barrier (bait on a pole, a hand, a bone held to a fence), the
+  model finishes the lunge: the snout or paw comes through the bars to the bait. "Head through the
+  bars" in AVOID did not stop it in three rounds, and thicker, sparser bars only let the head squeeze
+  between them. Separate the two in the SHOT: the target hangs "a step in front of the bars, out of
+  reach", and the creature hits the barrier with something that cannot pass ("slams its shoulder into
+  the bars, its whole body inside the cage"). Invented example: Mark holds a bone out to a guard dog
+  behind a fence — write the dog colliding with the planks and the bone a pace short of its jaws. In
+  an image that already has the snout through, an edit stating what is in front of what ("the bars
+  pass in front of its snout and jaws") works where a negative does not.
 
 ## E — Edits and repairs (after an image comes back)
 
@@ -176,3 +188,9 @@ Read the SCENE once per item.
 - **E12 Expression and eye shape fight.** An edit asking for "wide honest eyes" undid the previous
   edit's narrow eyes. When the scene's expression needs a shape the sheet forbids, say so before the
   chain and let the user choose which one wins.
+- **E13 After three or four edits, regenerate instead.** A chain is cheaper per round only while it
+  holds. On a real run six chained edits raised mean saturation 64 %, coarsened the line and drifted
+  both faces off their sheets — each new edit repaired one thing and degraded the rest. By then the
+  chain has taught you the composition: write it into the SHOT (pose, what is in front of what, what is
+  out of reach) and generate a fresh round, then allow one or two edits at most. Measure (E6) and crop
+  the faces after every edit, not only at the end, so the turn point is seen when it happens.

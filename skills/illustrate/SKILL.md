@@ -239,7 +239,7 @@ blocks, an optional reference image, versions by chapter range, lock on explicit
    | style block | STYLE.md locked block | Verbatim, a section of its own |
    | `AVOID:` | Watermark, signature, faceless people, duplicate faces, the era guard, failures seen before | The API has no negative-prompt field (models.md) |
 
-7. **Run pitfalls S1–S18** against the draft, item by item.
+7. **Run pitfalls S1–S19** against the draft, item by item.
 8. **Fit the budget of the chapter's model** — `target_model` from `STYLE.md`, or the model the user
    names for this chapter (record it in the file's `model:`). **Fit it without paraphrasing.** Over the soft limit → cut in this order: scene
    adjectives → background detail → least important character to `locked-short` → style to
