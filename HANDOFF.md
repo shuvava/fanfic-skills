@@ -530,6 +530,18 @@ spacing, not a quota. `write-chapter` gives the moment a `Picture:` field on its
 it is on the page. `illustrate` takes the moment from the outline instead of offering candidates.
 `publish` blocks only marked chapters. `true` and `false` behave as before.
 
+## Who knows what (v0.18.1)
+
+Chapters about how the world works drew the heaviest edits: on the test project the edit rate jumped
+from near zero on episode chapters to 0.33–0.47 on those three, and the fixes were facts and logic,
+not style. One chapter's beats and prose alone took seven corrections of one kind: the world knowing
+what only the hero had found out, a rule read off a wiki summary that the source does not state, a
+narrator's guess with its hedge stripped turned into a figure, the hero feeling what he had only
+watched, the narrator's word in a local's mouth. `write-chapter` now checks this at the beat gate:
+every mechanic quotes `raw/` with the author's hedges, checks what the world already has in that
+field, and names who in the world knows it. The hero's discoveries stay his unless canon says
+otherwise. The canon-check table has a `Who knows` row.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated

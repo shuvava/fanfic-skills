@@ -99,7 +99,8 @@ then one card per scene for the drafter:
 - **Reaction / dilemma / decision:** the emotional beat that follows
 - **Point:** what the reader must understand when the scene ends — the realisation, subtext or irony
   the scene exists for, stated plainly and with its *because*. Not the outcome restated
-- **Canon deps:** [src: ...] entries this scene relies on
+- **Canon deps:** [src: ...] entries this scene relies on. For every rule of how the world works, the
+  line from `raw/` itself, with the author's hedges, and who in the world knows it (see *Who knows what*)
 - **Fanon deps:** [fanon: ...]
 - **Voice notes:** which cards to re-read before each character's first line
 - **Constraints:** anything from forbidden.md or load-bearing canon that applies
@@ -157,6 +158,31 @@ the conversation, and point to the file for the cards. The user decides from the
 opens the cards when something needs a closer look. An answer to To decide goes into the cards, and
 In short is rewritten if the answer changed the chapter.
 
+**Who knows what — check every mechanic against `raw/` before the beat gate.** A card that leans on
+how the world works (how healing reaches a wound, what a material does, what a guild teaches) is where
+invented canon enters unseen, and the user then has to catch it line by line. For each such rule:
+
+- **Quote `raw/`, not the wiki.** A wiki page is a summary and drops the author's hedges: «примерно
+  девять из десяти, если не врать» becomes «90%» on the page, and the draft then states as a measured
+  fact what the narrator only guessed — about something else. Carry the hedge with the quote.
+- **Check what the world already has** in that field — artefacts, guild practice, known techniques —
+  before inventing one. A new mechanic drafted without them contradicts the canon it skipped.
+- **Name who knows it.** The world knows what canon shows people knowing. The protagonist knows what
+  happened on the page, and only the way he met it: he *watched* the far end of the pole, so he did not
+  *feel* it. A side character says only what they could have learned. **The protagonist's own
+  discoveries are unknown to the world** unless canon says otherwise; a mechanic in which «village
+  healers have always done» what the hero found out alone in chapter 9 is `blocking`. The reverse holds
+  too: the hero does not outknow an institution that simply has not taught him yet.
+- **Use the locals' words.** The narrator's vocabulary — modern slang, his name for a phenomenon — does
+  not go into the mouths or the records of people who never had it. If the narrator calls it «the
+  green glow» and the locals say «the gift», a healer's journal says «the gift».
+
+Measured on a real run: in one chapter's beats and prose the user caught seven such slips — the world
+knowing the hero's discovery, a rule read off a wiki summary that the source does not state, a
+narrator's guess turned into a figure, the hero feeling what he had only watched, the narrator's word
+in a lecturer's mouth. Every one was a fact or logic fix, and every one was in the plan before any
+prose existed.
+
 **Profile gate.** Every character in the chapter above the depth threshold
 (`../../CONVENTIONS.md` §11) needs a profile in `wiki/fanon/proposed/characters/` — read it before
 beating their scenes, especially `Want`, `Stakes` and `Off-page life`, so the character pursues
@@ -190,6 +216,9 @@ A `blocking` conflict stops drafting.
 - **Use the source's orthographic conventions** — dialogue punctuation (guillemets, em-dashes,
   quotation marks), paragraph habits, how thoughts and letters are set.
 - **Respect world limits.** If a rule has a recorded cost, pay it in the prose.
+- **Nobody knows more than they could.** Before a character, the narrator or «everyone» knows
+  something, the card says where it came from (*Who knows what* above). Locals speak in their own words,
+  not the narrator's.
 - **Canon dependencies are constraints, not ingredients.** What a card lists under `Canon deps` is
   what the prose must not contradict — it is not a parts list to assemble the scene from. An
   observation, joke or description the narrator already made in canon (the same odd detail of a room, the same bored official) may return only as an acknowledged callback — "like last time" — never re-performed as a fresh discovery. A chapter built from
@@ -267,6 +296,7 @@ Run explicitly and report:
 | Forbidden | Does anything violate `forbidden.md`? |
 | Would-never-do | Does any character act outside their recorded code? |
 | World limits | Are costs honored? |
+| Who knows | Every rule of the world on the page traces to a `raw/` line; nobody knows what they could not have learned; the hero's discoveries stay his; locals use their own words |
 | Timeline | Any conflict with `timeline.md`? |
 | Picture | The outline's picture moment is on the page as an action with visible detail — who, where, what they hold — not only summarised or thought about |
 | Ending | A cut stops on its moment with nothing after it; a closed ending carries no bolted-on omen; a previous chapter's cut is settled in the opening |
