@@ -227,6 +227,12 @@ A `blocking` conflict stops drafting.
 - **Write sentences a person would write.** Read `## Naturalness examples` and `## Overused patterns`
   in `plan/HARNESS.md` before drafting, if present — they are this user's verdicts on what reads as
   machine prose. Preventing a clumsy sentence is cheaper than reviewing it later.
+- **Write for the reader who has forgotten canon.** At its first use in this book, gloss every world
+  word — abbreviation, term, rank, mark — in half a sentence, even when canon explained it volumes
+  ago. A clipped order says who does what («Ты держишь дверь, я лезу в окно», not «Ты — дверь, я —
+  окно»). A price says what it pays for, who pays, and in what unit. If saying it plainly needs a
+  world fact the wiki does not settle, put it under the card's decisions rather than inventing it in
+  the prose (`naturalize` → *Two readings*).
 - **Deploy verbal tics sparingly** — three per character is the cap, and not all three every scene.
 - **Carry the comic register, delivery included.** Read `## Comic register` in `canon/overview.md`
   before drafting and hit its counts. A first draft reliably keeps the *device* — the source's

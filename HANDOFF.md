@@ -542,6 +542,16 @@ every mechanic quotes `raw/` with the author's hedges, checks what the world alr
 field, and names who in the world knows it. The hero's discoveries stay his unless canon says
 otherwise. The canon-check table has a `Who knows` row.
 
+## The reader who forgot canon (v0.18.2)
+
+On the test project a user's pass over a finished chapter flagged three lines that were neither
+clumsy nor wrong, only opaque to anyone not holding canon in their head: a three-letter mark on a
+student card last explained two volumes earlier, a character's role assignment in bare verbs, and a
+fee that did not say what it paid for. Spelling the fee out then exposed a world error — the draft
+had sent a guild's share where canon did not allow. `naturalize` prose mode now flags these gaps
+(never auto-safe; a gloss needing an unsettled world fact is flagged without a rewrite), and
+`write-chapter` drafts against them.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated

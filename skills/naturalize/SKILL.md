@@ -58,6 +58,25 @@ user cannot ship.
 - a **garbled proverb or idiom — restore the canonical form, never paraphrase it.** «Семь раз проверь, один раз отрежь» "fixed" into «проверяй всё тщательно» is a different thought; it is a broken «семь раз отмерь, один раз отрежь». A paraphrase changes the meaning; the
   proverb carries it.
 
+**Also flag what a reader who has forgotten canon cannot follow.** Not an error but a gap: the
+sentence is fine for someone who remembers two volumes back and opaque to everyone else. Three kinds:
+
+- **A world word with no gloss at its first use in this book** — an abbreviation, term, rank or mark.
+  Canon having explained it volumes ago does not count; a repeat far from the first use needs the
+  gloss again. «У неё на рукаве "СК"» → «нашивка "СК" — "стража ключей"».
+- **A clipped line that assumes the listener knows his part** — a character speaking in a list of
+  bare verbs or roles. «Ты — дверь, я — окно» → «Ты держишь дверь, я лезу в окно». Keep the
+  character's terseness; add only who does what.
+- **A price or payment without what it is for and who pays** — and the unit named: «три серых» →
+  «три серых камня». «Платит тот, кто проиграл» on a page about a duel and a doctor is ambiguous
+  between the two.
+
+Gloss once, in half a sentence, in the narrator's or speaker's own manner; do not re-explain what the
+reader met a page ago. Such a fix adds words, so it is never an auto-safe repair. **If spelling the
+thing out requires a fact canon and fanon do not settle** — who receives the money, which body
+answers to which — flag it without a rewrite and ask: on a real run, making a fee explicit exposed
+that the draft had quietly sent a guild's share somewhere canon did not allow.
+
 **Do not flag the author's comic register.** Deliberately pompous, bureaucratic or ceremonious phrasing
 about trivial things is the narrator's irony, not officialese — on a real run the reader judged two such sentences *funnier* than their plain rewrites — the kind that hand over a spoon «с торжественностью, достойной коронации». Read `## Comic register` in `canon/overview.md` first; anything it records as a
 device is not a defect. Nor are the source's non-standard orthography, slang or coinages.
