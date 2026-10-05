@@ -407,6 +407,7 @@ python3 scripts/export_chapter.py export drafts/book-01/ch05-<slug>.md --platfor
   --out publish/exports/author-today/b01-ch05.html                          # + round-trip check
 python3 scripts/publication.py record drafts/book-01/ch05-<slug>.md --platform author-today --url <url>
 python3 scripts/publication.py errata-check drafts/book-01/ch05-<slug>.md --platform author-today
+python3 scripts/publication.py next-slot --platform author-today --weekdays mon-fri   # or --every-days 2
 ```
 
 - **Gate:** canon check passed, `reconcile` done (every public fact ratified), naturalness reviewed,
@@ -417,6 +418,8 @@ python3 scripts/publication.py errata-check drafts/book-01/ch05-<slug>.md --plat
 - **Locks elsewhere:** `write-chapter` won't redraft a published chapter, `plan-chapters` treats
   contradicting one as `blocking`, `naturalize` is review-only on it, `place_illustration.py`
   refuses it.
+- **Schedule:** every N days or on set weekdays, through the platform's delayed publication;
+  `reschedule` moves a queued timer's records when the cadence changes.
 - **You publish.** The skill prepares, uploads as a hidden draft and verifies the text read back
   from the site; it asks before every publication, and a scheduled run stops there.
 

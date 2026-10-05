@@ -55,6 +55,11 @@ Every fact is marked **known** (observed on a live run) or **to map**.
    by re-fetching the edit page (`autoPublishTime`). Record with `record --date <publication date>`;
    the draft must not change before the timer fires.
 
+**Moving a timer** (to map, first run): open the chapter's edit page while it still shows
+«не опубликовано», set the new time on the same model as above, press «Запланировать публикацию»,
+and re-fetch `autoPublishTime`. Record the exact controls in the table above once observed. Only
+then `publication.py reschedule`.
+
 **Annotation** (to map, first run): open the work's edit page, fill the annotation field from the
 book's `SYNOPSIS.md` → `## Annotation` (**STOP: user** approves the text first), save, and reload
 the page to read the field back. Record the limit and field behaviour above once observed.

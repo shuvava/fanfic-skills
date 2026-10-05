@@ -552,6 +552,17 @@ had sent a guild's share where canon did not allow. `naturalize` prose mode now 
 (never auto-safe; a gloss needing an unsettled world fact is flagged without a rewrite), and
 `write-chapter` drafts against them.
 
+## Weekday schedule (v0.19.0)
+
+On the test project the user moved from one chapter every two days to Monday–Friday, starting from a
+chapter already on a timer, with ten later timers to move. The fixed interval could not express a
+weekday cadence, and nothing could move a queued timer's records: the ledger and the frontmatter
+kept the old date, and `next-slot` would have counted from it. `publishing.schedule.weekdays` now
+sets the cadence, `next-slot --after --count` lists the new dates for a queue, and `reschedule`
+moves one queued chapter's date in both records, refusing a timer that has fired. `status` also
+counted chapters on timers as published and reported a zero buffer with four weeks queued; it now
+counts them as buffer.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated

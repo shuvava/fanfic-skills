@@ -3,9 +3,11 @@
 
 Standard library only. Run from the project root.
 
-    python3 publication.py status  --platform author-today [--per-week 2 | --every-days 2]
+    python3 publication.py status  --platform author-today [--per-week 2 | --every-days 2 | --weekdays mon-fri]
     python3 publication.py record  <draft.md> --platform author-today --url <chapter url> [--date YYYY-MM-DD]
     python3 publication.py next-slot --platform author-today --every-days 2 --time 19:00 --tz Europe/Moscow
+    python3 publication.py next-slot --platform author-today --weekdays mon-fri --after 2026-10-12 --count 10
+    python3 publication.py reschedule <draft.md> --platform author-today --date YYYY-MM-DD
     python3 publication.py cleanup-rounds <draft.md> [--dry-run]
     python3 publication.py errata-check <draft.md> --platform author-today
     python3 publication.py lint
@@ -24,8 +26,10 @@ this script keeps them in step:
 chapter to publish with the drafted buffer in weeks. `record` writes all three records after a
 publication and refuses to skip a chapter. `errata-check` diffs the draft's reader-visible text
 against the last published version and passes only typo-sized changes. `lint` cross-checks the
-three records. `next-slot` gives the next date on a fixed publishing interval, counted from the
-last publication in the ledger. `cleanup-rounds` deletes a chapter's intermediate illustration
+three records. `next-slot` gives the next date on a fixed schedule — every N days or on set
+weekdays — counted from the last publication in the ledger (or from `--after`, with `--count` for
+a run of slots). `reschedule` moves a delayed publication whose timer has not fired to a new date
+in the frontmatter and the ledger, after the user changed the timer on the site. `cleanup-rounds` deletes a chapter's intermediate illustration
 rounds once its approved image is placed.
 
 Exit: 0 ok, 1 violations / drift / lint findings, 2 refused (order, nothing to record),
@@ -152,13 +156,15 @@ def gate_marks(cid: tuple[int, int], draft: Path) -> str:
 
 
 def cmd_status(args) -> int:
-    rows, nxt, unpublished, issues = [], None, 0, 0
+    rows, nxt, unpublished, queued, issues = [], None, 0, 0, 0
+    today = dt.date.today().isoformat()
     for d in drafts():
         cid, last = chapter_id(d), latest(d, args.platform)
         drift = drifted(d, args.platform)
         if last:
             state = f"v{last['version']} {last.get('date', '')}" + (" DRIFTED" if drift else "")
             issues += bool(drift)
+            queued += last["version"] == "1" and last.get("date", "") > today   # timer not fired yet
         else:
             state = "—"
             unpublished += 1
@@ -167,17 +173,19 @@ def cmd_status(args) -> int:
     print(f"| chapter | draft | {args.platform} | log |\n|---|---|---|---|")
     for r in rows:
         print("| " + " | ".join(r) + " |")
-    per_week = 7 / args.every_days if args.every_days else args.per_week
-    cadence = f"one every {args.every_days:g} days" if args.every_days else f"{per_week:g}/week"
+    if args.weekdays:
+        per_week, cadence = len(args.weekdays), f"{len(args.weekdays)}/week on {format_days(args.weekdays)}"
+    elif args.every_days:
+        per_week, cadence = 7 / args.every_days, f"one every {args.every_days:g} days"
+    else:
+        per_week, cadence = args.per_week, f"{args.per_week:g}/week"
     last = last_date(args.platform)
     if last and last > dt.date.today():
         print(f"\nscheduled ahead: last publication on the ledger is {last} (timer not fired yet)")
-    if nxt:
-        print(f"\nnext: {label(chapter_id(nxt))} {nxt}")
-        print(f"buffer: {unpublished} drafted, unpublished = {unpublished / per_week:.1f} weeks "
-              f"at {cadence}" + ("  ← under one week" if unpublished < per_week else ""))
-    else:
-        print("\nnext: nothing drafted is unpublished — buffer 0 weeks")
+    print(f"\nnext: {label(chapter_id(nxt))} {nxt}" if nxt else "\nnext: nothing drafted is unpublished")
+    ahead = unpublished + queued
+    print(f"buffer: {queued} on timers + {unpublished} drafted = {ahead / per_week:.1f} weeks at {cadence}"
+          + ("  ← under one week" if ahead < per_week else ""))
     if issues:
         print(f"\n{issues} published chapter(s) drifted from their published text: "
               "errata-check them, or restore the draft", file=sys.stderr)
@@ -230,22 +238,97 @@ def last_date(platform: str) -> dt.date | None:
     return max(dates) if dates else None
 
 
+DAYS = ("mon", "tue", "wed", "thu", "fri", "sat", "sun")
+
+
+def parse_weekdays(text: str) -> list[int]:
+    """`mon-fri`, `mon,wed,fri` or `mon-wed,sat` → sorted weekday numbers (Monday = 0)."""
+    out = set()
+    for part in text.lower().split(","):
+        a, _, b = part.strip().partition("-")
+        if a not in DAYS or (b and b not in DAYS):
+            raise argparse.ArgumentTypeError(f"weekdays: want mon..sun, got {part!r}")
+        i, j = DAYS.index(a), DAYS.index(b or a)
+        out.update(range(i, j + 1) if i <= j else [*range(i, 7), *range(0, j + 1)])
+    return sorted(out)
+
+
+def format_days(days: list[int]) -> str:
+    return ",".join(DAYS[d] for d in days)
+
+
+def following(day: dt.date, args) -> dt.date:
+    """The schedule's next publishing day after `day`."""
+    if not args.weekdays:
+        return day + dt.timedelta(days=args.every_days)
+    day += dt.timedelta(days=1)
+    while day.weekday() not in args.weekdays:
+        day += dt.timedelta(days=1)
+    return day
+
+
 def cmd_next_slot(args) -> int:
-    """Next moment on a fixed interval: last publication + every_days, never in the past."""
+    """Next moments on the schedule after the last publication (or --after), never in the past."""
     tz = ZoneInfo(args.tz)
     hh, mm = (int(x) for x in args.time.split(":"))
     now = dt.datetime.now(tz)
-    last = last_date(args.platform)
-    day = last + dt.timedelta(days=args.every_days) if last else now.date()
-    slot = dt.datetime.combine(day, dt.time(hh, mm), tzinfo=tz)
+    last = dt.date.fromisoformat(args.after) if args.after else last_date(args.platform)
+    day = following(last, args) if last else now.date()
     min_ahead = dt.timedelta(minutes=args.min_ahead)
-    while slot < now + min_ahead:                         # a gap in publishing: first free slot from today
-        slot += dt.timedelta(days=1)
-    utc = slot.astimezone(dt.timezone.utc)
-    print(f"last on ledger: {last or '—'}")
-    print(f"next slot: {slot.date().isoformat()} {slot:%H:%M} {args.tz}  =  {utc:%Y-%m-%dT%H:%M:%SZ}")
-    print(f"date={slot.date().isoformat()}")
-    print(f"utc={utc:%Y-%m-%dT%H:%M:%SZ}")
+    while (dt.datetime.combine(day, dt.time(hh, mm), tzinfo=tz) < now + min_ahead
+           or (args.weekdays and day.weekday() not in args.weekdays)):
+        day += dt.timedelta(days=1)                       # a gap in publishing: first free slot from today
+    print(f"{'counting after' if args.after else 'last on ledger'}: {last or '—'}")
+    for n in range(args.count):
+        slot = dt.datetime.combine(day, dt.time(hh, mm), tzinfo=tz)
+        utc = slot.astimezone(dt.timezone.utc)
+        if args.count == 1:
+            print(f"next slot: {day.isoformat()} {DAYS[day.weekday()]} {slot:%H:%M} {args.tz}  =  "
+                  f"{utc:%Y-%m-%dT%H:%M:%SZ}")
+            print(f"date={day.isoformat()}")
+            print(f"utc={utc:%Y-%m-%dT%H:%M:%SZ}")
+        else:
+            print(f"slot {n + 1}: {day.isoformat()} {DAYS[day.weekday()]} {slot:%H:%M} {args.tz}  =  "
+                  f"{utc:%Y-%m-%dT%H:%M:%SZ}")
+        day = following(day, args)
+    return 0
+
+
+def cmd_reschedule(args) -> int:
+    """Move a delayed publication to a new date in the frontmatter entry and its ledger row."""
+    d, new = args.draft, dt.date.fromisoformat(args.date)
+    last = latest(d, args.platform)
+    if not last:
+        print(f"{d} is not published on {args.platform}", file=sys.stderr)
+        return 3
+    old = dt.date.fromisoformat(last["date"])
+    if old <= dt.date.today() or new <= dt.date.today():
+        print(f"refused: {label(chapter_id(d))} v{last['version']} date {old} → {new} — only a timer "
+              "that has not fired moves, and only to a day still ahead", file=sys.stderr)
+        return 2
+    text = d.read_text(encoding="utf-8")
+    m = FRONTMATTER_RE.match(text)
+    entry = re.compile(rf"^(\s+-\s*\{{platform:\s*{re.escape(args.platform)},\s*version:\s*"
+                       rf"{last['version']},\s*date:\s*){old.isoformat()}", re.M)
+    front, hits = entry.subn(rf"\g<1>{new.isoformat()}", m.group(1))
+    if hits != 1:
+        print(f"refused: frontmatter entry for v{last['version']} not found once in {d}", file=sys.stderr)
+        return 2
+    rows = LEDGER.read_text(encoding="utf-8").splitlines(keepends=True)
+    want = [args.platform, last["version"], old.isoformat(), str(d)]
+
+    def key(ln: str) -> list[str]:
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
+        return cells[2:5] + cells[6:7] if len(cells) == 7 else []
+
+    idx = [i for i, ln in enumerate(rows) if key(ln) == want]
+    if len(idx) != 1:
+        print(f"refused: ledger row for {d} v{last['version']} {old} not found once", file=sys.stderr)
+        return 2
+    d.write_text("---\n" + front + "\n---\n" + text[m.end():], encoding="utf-8")
+    rows[idx[0]] = rows[idx[0]].replace(f"| {old.isoformat()} |", f"| {new.isoformat()} |", 1)
+    LEDGER.write_text("".join(rows), encoding="utf-8")
+    print(f"rescheduled {label(chapter_id(d))} {args.platform} v{last['version']}: {old} → {new}")
     return 0
 
 
@@ -361,9 +444,14 @@ def main() -> int:
     s.add_argument("--platform", required=True)
     s.add_argument("--per-week", type=float, default=2)
     s.add_argument("--every-days", type=float, help="fixed interval; overrides --per-week")
+    s.add_argument("--weekdays", type=parse_weekdays, help="publishing days, e.g. mon-fri; overrides --per-week")
     n = sub.add_parser("next-slot")
     n.add_argument("--platform", required=True)
-    n.add_argument("--every-days", type=int, required=True)
+    g = n.add_mutually_exclusive_group(required=True)
+    g.add_argument("--every-days", type=int)
+    g.add_argument("--weekdays", type=parse_weekdays, help="publishing days, e.g. mon-fri or mon,wed,fri")
+    n.add_argument("--after", help="count from this date (YYYY-MM-DD) instead of the ledger's last")
+    n.add_argument("--count", type=int, default=1, help="how many consecutive slots to list")
     n.add_argument("--time", default="19:00", help="readers' local time, HH:MM")
     n.add_argument("--tz", default="UTC", help="readers' time zone, e.g. Europe/Moscow")
     n.add_argument("--min-ahead", type=int, default=60, help="minutes a slot must be ahead of now")
@@ -375,6 +463,10 @@ def main() -> int:
     r.add_argument("--platform", required=True)
     r.add_argument("--url", required=True)
     r.add_argument("--date")
+    rs = sub.add_parser("reschedule")
+    rs.add_argument("draft", type=Path)
+    rs.add_argument("--platform", required=True)
+    rs.add_argument("--date", required=True, help="new publication date, YYYY-MM-DD")
     e = sub.add_parser("errata-check")
     e.add_argument("draft", type=Path)
     e.add_argument("--platform", required=True)
@@ -384,7 +476,7 @@ def main() -> int:
         print(f"not a file: {args.draft}", file=sys.stderr)
         return 3
     return {"status": cmd_status, "record": cmd_record, "errata-check": cmd_errata,
-            "lint": cmd_lint, "next-slot": cmd_next_slot,
+            "lint": cmd_lint, "next-slot": cmd_next_slot, "reschedule": cmd_reschedule,
             "cleanup-rounds": cmd_cleanup_rounds}[args.cmd](args)
 
 
