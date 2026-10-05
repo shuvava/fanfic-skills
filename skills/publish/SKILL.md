@@ -31,8 +31,9 @@ publishing:
   platforms: [author-today]
   per_week: 2                       # cadence; sets the buffer warning
   chapter_title: "{heading} {title}"  # draft heading + frontmatter title: "Глава 3. <title>"
-  schedule:                         # optional: delayed publication on a fixed interval
+  schedule:                         # optional: delayed publication on a fixed schedule
     every_days: 2                   # one chapter every N days, counted from the last on the ledger
+    # weekdays: mon-fri             # or: on these days only (mon-fri, mon,wed,fri); replaces every_days
     time: "19:00"                   # readers' local time
     tz: Europe/Moscow               # readers' time zone — not the browser's
   after_record:                     # optional: what closing a run does without asking
@@ -43,7 +44,8 @@ publishing:
     work_edit_url: https://author.today/work/<workId>/edit/content
 ```
 
-`schedule` replaces `per_week` for the buffer (`7 / every_days` chapters a week). `after_record` is
+`schedule` replaces `per_week` for the buffer (`7 / every_days` chapters a week, or the number of
+`weekdays`). Pass the schedule's key to the script as `--every-days N` or `--weekdays <days>`. `after_record` is
 the user's standing permission for those three steps; without it each is offered, not done.
 
 **The plugin knows platforms; the project knows its book.** The adapter holds what is true of the
@@ -71,11 +73,13 @@ Resolve `<scripts>` per §7. All commands run from the project root.
 ```bash
 python3 <scripts>/publication.py status --platform author-today --per-week 2
 python3 <scripts>/publication.py status --platform author-today --every-days 2   # with `schedule`
+python3 <scripts>/publication.py status --platform author-today --weekdays mon-fri
 ```
 
 It lists chapters in order with the published version, **DRIFTED** where the draft changed after
 publication, the stages `wiki/log.md` records for each (`write✓ reconcile✗ naturalize✓`), the next
-chapter, and the buffer — drafted, unpublished chapters in weeks at the cadence. Report the table.
+chapter, and the buffer — chapters on timers that have not fired plus drafted, unpublished ones, in
+weeks at the cadence. Report the table.
 Under one week of buffer, say so plainly: the schedule is about to overtake the writing.
 Also compare the annotation on the site with the book's `SYNOPSIS.md` (Book page, below), and say
 if they differ.
@@ -169,15 +173,40 @@ the next slot, not a question:
 
 ```bash
 python3 <scripts>/publication.py next-slot --platform author-today --every-days 2 --time 19:00 \
-  --tz Europe/Moscow
+  --tz Europe/Moscow                                    # or --weekdays mon-fri
 ```
 
 It counts from the latest date on the ledger — a delayed chapter whose timer has not fired counts —
-adds the interval, and moves to the first slot still ahead if publishing stalled. It prints the
+takes the schedule's next day, and moves to the first slot still ahead if publishing stalled. It prints the
 readers' local time and the UTC moment the platform's timer takes. The user's request to publish
 the next chapter, with the standing schedule, is the yes for that slot; say the date in the report.
 A date the user names outranks the slot. A time the user did not give is `schedule.time`, and the
 report says it was the default.
+
+### Changing the schedule
+
+A new cadence is the user's decision; they name it and the chapter it starts from. Chapters already
+on timers keep their dates unless the user asks to move them too. Then:
+
+1. Update `publishing.schedule` (and `per_week`) in `CANON.md`.
+2. List the new dates for the queued chapters, counting from the date of the last chapter that keeps
+   its timer:
+   ```bash
+   python3 <scripts>/publication.py next-slot --platform author-today --weekdays mon-fri \
+     --after <last kept date> --count <queued chapters> --time 19:00 --tz Europe/Moscow
+   ```
+   Show the table (chapter, old date, new date) — that table, approved, is the yes for every move in it.
+3. Move each timer on the site (the adapter's **Moving a timer**), confirm the saved time, then:
+   ```bash
+   python3 <scripts>/publication.py reschedule drafts/book-01/ch14-<slug>.md --platform author-today \
+     --date <new date>
+   ```
+   It rewrites the date in the draft's `published:` entry and its ledger row, and refuses a timer that
+   has already fired. Move one chapter at a time, site first, so a failure leaves records and site in
+   step. Earlier dates first when moving forward; later first when moving back — the order on the
+   site never inverts.
+4. Update the outline's published note, log `## [date] publish | schedule → <cadence> from b<NN>/ch<NN>`
+   with the moves, and commit.
 
 ### 5. Record
 
