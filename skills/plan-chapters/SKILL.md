@@ -169,9 +169,12 @@ the pacing control: a sentence keeps speed, a chapter buys belief.
 - **A chapter of aftermath** is for a climax with a high cost. It shows a consequence happening on the
   page — not only thoughts about one — lets at least two characters feel the cost differently, and
   ends on the decision the `After` line names.
-- **At most one chapter** stands between the climax chapter and the chapter that raises the next
-  part's question. A longer pause after a peak is the advice serial authors give against, and it is
-  where an aftermath turns into filler.
+- **At most one pause chapter** follows a climax: a chapter where the protagonist only reacts and
+  nothing new happens on the page. A longer pause after a peak is the advice serial authors give
+  against, and it is where an aftermath turns into filler. Chapters after the climax that carry
+  their own event — a consequence arriving, another thread moving — are not a pause and do not
+  count: on a real run the first version of this check counted every chapter after a climax and
+  fired on three parts whose aftermath chapters each had an event.
 - **The reflection ends in a decision.** One that ends in a mood leaves the next part without a goal.
 
 **Threads.** Every thread the part touches is marked `closed here` or `carried on`. Authorities
@@ -307,8 +310,8 @@ usually shorthand for nothing. Audit your own layer before presenting it:
      second is a repeat; the reader has already had that payoff.
   6. *No thread drops silently.* Every thread the part's chapters touch is on the card, `closed here`
      or `carried on`.
-  7. *The reflection is short and ends in a decision.* At most one chapter between the climax chapter
-     and the chapter that raises the next question (*Parts* → Where the reflection goes).
+  7. *The reflection is short and ends in a decision.* At most one pause chapter — reaction with no
+     new event on the page — after the climax (*Parts* → Where the reflection goes).
 - **Every character above the depth threshold has a profile** (`../../CONVENTIONS.md` §11). A
   character who has a line, appears in two scenes, or acts on a scene's goal without a profile in
   `wiki/fanon/proposed/characters/` is a `warning` — offer `develop-character`. Then look at the scene
