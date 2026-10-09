@@ -29,7 +29,16 @@ Then, in this order:
 2. `plan/HARNESS.md` if it exists — project-local drafting rules learned from your past edits.
    Precedence: `CANON.md` > `HARNESS.md` > plugin defaults.
 3. `<book>/STORY_INTENT.md` — constraints and load-bearing canon
-4. `<book>/outline.md` — this chapter's row and its scenes
+4. `<book>/outline.md` — this chapter's row and its scenes, and its part (`plan-chapters` → *Parts*):
+   - the part's Layer 2 paragraph and card, and where this chapter sits in it — opening, middle,
+     climax or aftermath;
+   - the rows of the next two or three chapters, so the chapter can plant what they will use;
+   - for a part's first chapter, the previous part's `After` line — the decision this part starts from;
+   - for a climax or aftermath chapter, the rows of the part's inciting and complication chapters, so
+     the climax answers what was planted.
+
+   Rows and cards only, never their chapters' prose. An outline with parts but no cards is a gap to
+   name in §2 and send back to `plan-chapters`, not to fill in here.
 5. `canon/overview.md` — POV, tense, distance, structure, orthographic conventions
 6. `canon/forbidden.md` — read before beating, not after
 7. `canon/characters/<name>.md` for everyone in the chapter — especially `## Would never do`
@@ -68,6 +77,10 @@ Read this chapter's row and its scenes and ask:
   `blocking`. Readers have it; a changed chapter goes out only as typo-only errata through `publish`.
 - **Did the previous chapter end on a cut?** Then this chapter opens in the same minute and settles
   it — first scene, first lines. A cut the next chapter forgets was a cheat.
+- **What does it do for its part?** Does the row match its place on the part card — an opening that
+  raises the question, a middle that makes the trouble harder from a new side, a climax the
+  protagonist decides, an aftermath that ends in the card's decision? Does a later row in the part
+  need something planted here that the scenes do not plant?
 - **Is anything missing that you would have to invent?** Name it now. Inventing it mid-draft buries a
   fanon assertion inside three thousand words where `reconcile` has to dig it out.
 
@@ -85,6 +98,7 @@ then one card per scene for the drafter:
 ```markdown
 ## <"In short", in wiki_language>
 4–6 sentences: what happens, why, and what the reader should understand or feel when the chapter ends.
+One of them says what the chapter does for its part, in everyday words.
 
 ## <"To decide", in wiki_language>
 1. <question> — <recommended answer, one line of why>
@@ -96,7 +110,10 @@ then one card per scene for the drafter:
 - **Goal:** what the POV character wants entering the scene
 - **Conflict:** what opposes it
 - **Outcome:** how it ends — usually worse than it started
-- **Reaction / dilemma / decision:** the emotional beat that follows
+- **Reaction / dilemma / decision:** the emotional beat that follows. Its length follows the chapter's
+  place in the part: a phrase or a paragraph in the middle, to keep pace; before the climax, the
+  dilemma written out as the card's two options; after the climax, the longest reaction in the part —
+  and that one too ends in a decision
 - **Point:** what the reader must understand when the scene ends — the realisation, subtext or irony
   the scene exists for, stated plainly and with its *because*. Not the outcome restated
 - **Canon deps:** [src: ...] entries this scene relies on. For every rule of how the world works, the
@@ -310,6 +327,7 @@ Run explicitly and report:
 | Point | Can a reader reach each card's point from the page alone, its *because* included? Quote the lines that carry it. A point no line carries is missing from the scene, however well the outcome lands |
 | Precedent | Does any scene repeat a canon scene's shape — same staging, same moves, same observations? List every narrator observation re-performed from canon; each is cut or turned into an acknowledged callback |
 | Event | Does the chapter contain the external event its card named, on the page? |
+| Part | A climax chapter: the protagonist's deciding act and its cost are on the page. An aftermath chapter: a consequence happens on the page and the decision is spoken or done. Any chapter: what the next rows need planted is planted |
 | New assertions | What does this chapter establish that no tier records? |
 | Naturalness | Run `naturalize` in prose mode once the rows above pass (skip if `naturalness: off`), outside readers included (`critics:` in `CANON.md`). Report its counts — flagged, auto-repaired, left for review, and per critic — and the review file's path |
 

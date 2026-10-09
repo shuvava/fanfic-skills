@@ -219,6 +219,15 @@ while it costs one question. The filled form becomes `SYNOPSIS.md`: a full synop
 a spoiler-free annotation that `publish` puts on the book's page. It is derived from the outline and
 never drafted from.
 
+Each paragraph of the second layer is a **part** — a stretch of chapters that is a small story of
+its own — and gets a seven-line card: the part's question, the protagonist before and after, the
+inciting event, the climax with the two options chosen between, its cost, what comes after, and
+which threads close. Seven checks warn, never block: the climax answers the question, the
+protagonist decides it on the page, the cost is not «nothing», trouble grows from different sides,
+the part is not the previous one bigger, no thread drops silently, and the reflection after a climax
+is at most one chapter and ends in a decision. `write-chapter` loads the chapter's part card and the
+next few rows, so a chapter can plant what its part's climax will use.
+
 ## A series is planned one book at a time
 
 The wiki is shared across every book; the plan and the drafts are per book. So book 2 lives in
