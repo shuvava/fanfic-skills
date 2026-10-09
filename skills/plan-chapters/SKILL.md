@@ -92,9 +92,12 @@ agreement before expanding it** — corrections are cheap at one paragraph and e
 **Layer 1 — One paragraph.** Setup, two or three complications, ending. Five sentences.
 
 **Layer 2 — Arc synopsis.** One page. Each sentence of Layer 1 becomes a paragraph, each ending in a
-complication or reversal.
+complication or reversal. **Each paragraph is a part of the book** — `§N` with a title — and each part
+is an arc with its own card (see *Parts* below).
 
-**Layer 3 — Chapter list.** One row per chapter: number, working title, POV, what happens, what
+**Layer 3 — Chapter list.** Grouped by part: one block per Layer 2 paragraph, headed with the same
+number, title and its chapter range, so the retelling of a part and its chapters are visibly the same
+stretch of story. One row per chapter: number, working title, POV, what happens, what
 changes, which threads it touches, its **cut** where it has one — the moment inside a scene
 where the chapter breaks off (see *Chapter endings* below) — and its **picture** where it has one
 (see *Chapter pictures* below). **Numbering restarts at 1 in every book** — book 2 chapter 1 is
@@ -115,6 +118,69 @@ same waste an order of magnitude larger, and it gets discarded when book 2 chang
 
 **Match the source's structural conventions** from `canon/overview.md`: chapter length, scene count,
 how chapters open and close. A continuation that reads right structurally matters as much as voice.
+
+### Parts
+
+A part is a stretch of chapters that works as a small story of its own: it raises a question, the
+protagonist answers it in person, in a climax on the page, and the answer costs something. Novelists
+call it a sequence, screenwriters a sequence or a mini-movie, web-serial authors an arc. All three
+describe the same unit and the same failure without it: a long middle where chapters happen and
+nothing is decided. A serial reader feels that first — the payoff for chapter 2's setup cannot wait
+until chapter 30 with nothing answered in between.
+
+**A part ends when it has answered its question,** not at a length. No source gives a standard length
+in chapters, and none has reader-retention data to set one; a part of five chapters and one of fifteen
+are both fine. **A book with one part** — one question, one climax, typical of a short book — gets no
+card: the synopsis check below already holds its inciting event, climax and resolution. Write
+`one part — the book` under Layer 2 and move on.
+
+**The part card.** Write it under the part's Layer 2 paragraph, when that paragraph is ratified —
+before the part is broken into chapters, while moving its borders costs a sentence. Seven lines, plain
+words, each a picture, not a concept: not «she gains confidence» but «she speaks first at the council».
+
+```markdown
+- **Question:** what the reader waits to find out in this part — one question
+- **Before → after:** the protagonist in the part's first chapter and in its last, two pictures
+- **Inciting event:** chapter and event that open the part
+- **Climax:** chapter; what the protagonist does in person, and the two options chosen between
+- **Cost:** what the protagonist loses or pays
+- **After:** where the reaction is, and the decision that hands the story to the next part
+- **Threads:** each thread the part touches — `closed here` or `carried on`
+```
+
+Invented example, «Хроники Севера»:
+
+```markdown
+- **Question:** Найдёт ли Анна в совете голоса, о которых не узнает Марк?
+- **Before → after:** Анна сидит в совете, а голосует за неё Марк → Анна голосует сама, но платить за место нечем
+- **Inciting event:** гл. 3 — Марк её голосом проваливает закон её дома
+- **Climax:** гл. 9 — на закрытом заседании Анна при всех рвёт доверенность; выбор между местом без голоса и голосом без денег
+- **Cost:** род Марка забирает взнос за её место
+- **After:** гл. 10 — Анна закладывает материнские серьги, чтобы внести взнос до пятницы, и решает просить денег у купцов
+- **Threads:** доверенность — closed here; купеческая гильдия — carried on
+```
+
+**Where the reflection goes.** After a climax the protagonist reacts, weighs what is left and decides
+— Swain's sequel: reaction, dilemma, decision. It is a job, not a kind of chapter, and its length is
+the pacing control: a sentence keeps speed, a chapter buys belief.
+
+- **By default it opens the next chapter**, as with a cut (*Chapter endings*): the climax chapter
+  stops on the act or its immediate result, and the next chapter's first scene carries the reaction.
+- **A chapter of aftermath** is for a climax with a high cost. It shows a consequence happening on the
+  page — not only thoughts about one — lets at least two characters feel the cost differently, and
+  ends on the decision the `After` line names.
+- **At most one chapter** stands between the climax chapter and the chapter that raises the next
+  part's question. A longer pause after a peak is the advice serial authors give against, and it is
+  where an aftermath turns into filler.
+- **The reflection ends in a decision.** One that ends in a mood leaves the next part without a goal.
+
+**Threads.** Every thread the part touches is marked `closed here` or `carried on`. Authorities
+disagree on whether subplots close before or after the main climax, so the mark records a choice
+instead of enforcing a rule — what it catches is a thread that simply stops.
+
+**A book already being published.** Write cards for every part, the published ones included. For a
+published part the card is a reference: its checks report, and nothing in published chapters changes
+(`../../CONVENTIONS.md` §13). For an unwritten part a finding is a plan fix, made now.
 
 ### Chapter endings
 
@@ -202,8 +268,9 @@ usually shorthand for nothing. Audit your own layer before presenting it:
 - **Every scene has a point, and it is not the outcome.** A row whose `point` is empty or restates
   `outcome` ("the heroes win") has not decided what the scene is *for*. Meaning that is not written
   here is lost downstream: every later stage — beat card, draft — can only keep or lose it, never add it.
-- **Every row traces upward.** Each Layer 3 chapter implements a sentence of Layer 2; each Layer 4
-  scene sits inside a Layer 3 chapter. An orphan is either a missing beat upstream or scope creep.
+- **Every row traces upward.** Each Layer 3 chapter implements a sentence of Layer 2 and sits in its
+  part's block; each Layer 4 scene sits inside a Layer 3 chapter. An orphan is either a missing beat
+  upstream or scope creep.
 - **Every intent element lands.** Walk `STORY_INTENT.md`'s premise, themes, central conflict and cast
   — each should be findable in the outline. Anything unlanded is a gap to name now, not at chapter 9.
 - **Names and numbers are consistent** across layers: one spelling per character, chapter numbers
@@ -224,6 +291,24 @@ usually shorthand for nothing. Audit your own layer before presenting it:
   moment in it and let the user decide. Not a rule: a quiet stretch may stay quiet.
 - **Fold test.** If the next chapter could open with one line summarising this one and lose nothing,
   merge them.
+- **Every part passes the part checks.** Each is a `warning` that names the part and the chapter and
+  asks — never a quota, and never a block. On a published part they report only.
+  1. *The climax answers the question.* A part that asks «will she find allies» and climaxes in a won
+     duel has the wrong question or the wrong climax.
+  2. *The protagonist decides it, on the page.* The climax is a scene where the protagonist chooses
+     between the card's two options and acts — not a result reported afterwards, not a rescue by
+     someone else.
+  3. *The cost is not «nothing»* — unless the part is declared a return to where it began, as a
+     comic or slice-of-life part may be. Record that as a choice on the card.
+  4. *The trouble grows and comes from different sides.* Each complication is harder than the one
+     before and has a different source, and the opposition presses again in the middle of the part.
+     Three obstacles from one source in a row is one obstacle repeated.
+  5. *The part is not the last one, bigger.* If both climaxes are «wins a fight, a harder one», the
+     second is a repeat; the reader has already had that payoff.
+  6. *No thread drops silently.* Every thread the part's chapters touch is on the card, `closed here`
+     or `carried on`.
+  7. *The reflection is short and ends in a decision.* At most one chapter between the climax chapter
+     and the chapter that raises the next question (*Parts* → Where the reflection goes).
 - **Every character above the depth threshold has a profile** (`../../CONVENTIONS.md` §11). A
   character who has a line, appears in two scenes, or acts on a scene's goal without a profile in
   `wiki/fanon/proposed/characters/` is a `warning` — offer `develop-character`. Then look at the scene
@@ -436,7 +521,8 @@ already on a platform (`publish` → Book page). `wiki-lint` reports a synopsis 
 
 ## Artifacts
 
-`<book>/outline.md` — all four layers, `tier: fanon-proposed`, with every canon dependency cited. In
+`<book>/outline.md` — all four layers, `tier: fanon-proposed`, with every canon dependency cited,
+each Layer 2 part followed by its card and Layer 3 grouped by part. In
 a series its frontmatter carries `book: <NN>` and `rung: <NN>`, and it opens with the start state it
 was planned against, so the next book can check itself against something written down.
 
@@ -464,7 +550,7 @@ they return next brainstorm and get re-argued from scratch.
 Append to `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] plan-chapters | b<NN> — <n> chapters, <n> conflicts (<n> blocking)
-   metrics: book=<NN> chapters=<n> scenes=<n> blocking=<n> warnings=<n> notices=<n> seeds_planted=<n> seeds_paid=<n>
+   metrics: book=<NN> chapters=<n> scenes=<n> parts=<n> part_chapters=<n,n,...> blocking=<n> warnings=<n> notices=<n> seeds_planted=<n> seeds_paid=<n>
 ## [YYYY-MM-DD] plan-chapters | b<NN> synopsis — from outline <last_updated>
 ```
 The synopsis line is logged whenever `SYNOPSIS.md` is written, alone on a synopsis-only run. Drop
@@ -485,3 +571,6 @@ The synopsis line is logged whenever `SYNOPSIS.md` is written, alone on a synops
   change that starts there goes into the outline first.
 - Keep it proportional: a one-shot needs Layers 1 and 4 only. Do not build a four-layer hierarchy for
   two thousand words. Run its synopsis check over Layer 1, and write `SYNOPSIS.md` only on request.
+  A one-shot has no parts and no cards.
+- **Part checks warn, they never block.** Strict control of a plan makes generated stories less
+  interesting, and a part that breaks a check on purpose is a choice to record, not a defect.

@@ -563,6 +563,22 @@ moves one queued chapter's date in both records, refusing a timer that has fired
 counted chapters on timers as published and reported a zero buffer with four weeks queued; it now
 counts them as buffer.
 
+## Parts (v0.20.0)
+
+The user asked whether the planner splits a story into setup, development, climax and aftermath the
+way some authors do. It did at book level (the synopsis check) and at scene level (Swain's
+goal/conflict/outcome and reaction/dilemma/decision), but not in between, where a serial spends
+weeks. Research across novel craft (Story Grid, McKee, Swain, Weiland), screenwriting (Gulino's
+sequences, Save the Cat, TV rooms) and web serials agreed on the middle unit — a sequence that is a
+small story with its own question, a climax the protagonist decides, a cost, and a partial close
+that hands tension on — and found no standard length and no retention data for aftermath chapters.
+So each Layer 2 paragraph is now a part with a seven-line card, seven checks that only warn, and a
+default that puts the reflection at the start of the next chapter, with one aftermath chapter at
+most. `write-chapter` loads the part card and the next rows, which it previously could not see.
+Decided with the user: parts in every book (a one-part book uses the synopsis table), no weekday
+column, no climax-type field, cards also for published parts as reference. No `off` switch: the
+change is one commit so it can be reverted whole.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated
