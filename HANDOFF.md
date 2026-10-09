@@ -579,6 +579,13 @@ Decided with the user: parts in every book (a one-part book uses the synopsis ta
 column, no climax-type field, cards also for published parts as reference. No `off` switch: the
 change is one commit so it can be reverted whole.
 
+## Pause count (v0.20.1)
+
+The first run of the part checks on the test project fired check 7 on three parts whose climax was
+followed by chapters with events of their own — pills sold, letters, a new party member, an
+assessment. The research warned against pauses after a peak, not against consequences. The check
+now counts only chapters where the protagonist only reacts.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated
