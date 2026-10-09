@@ -375,6 +375,11 @@ attaching reference images in order and printing API errors instead of saving em
 `CANON.md` (OpenRouter models, same key) and prepares the prompt for Claude's own fresh-context
 critic. They only point at sentences; `naturalize` decides which flags reach you.
 
+`scripts/logic_reader.py` prepares the task for a fresh-context reader who checks the beats and
+the draft against `raw/` and the wiki for canon slips, broken logic, impossible knowledge and
+invented specifics, and verifies every quote it returns. `write-chapter` runs it at the beat gate and
+before `naturalize`; `eval` scores it against a file of your past objections.
+
 Once you approve a chapter's image, `scripts/place_illustration.py` puts it into the draft right
 after the paragraph holding the moment's anchor quote — one `![…](…)` line, relative to the draft,
 and an `illustration:` frontmatter key. An anchor that is missing or occurs twice writes nothing and

@@ -586,6 +586,30 @@ followed by chapters with events of their own — pills sold, letters, a new par
 assessment. The research warned against pauses after a peak, not against consequences. The check
 now counts only chapters where the protagonist only reacts.
 
+### Logic and canon reader (v0.21.0)
+
+The edit rate on one book rose from 0.07 to 0.24 between two runs of six chapters. The model and the
+skill had not changed much. Two thirds of the user's remarks on beats and first drafts were about
+facts and logic: «проверь канон», «зачем, если можно…», «откуда он знает». Few were about language.
+In the same stretch, the number of new world facts per chapter (`reconcile` `proposed=`) doubled,
+because the plot had moved into a stretch the source barely covers. `naturalize` and its outside
+readers judge sentences. They are not given the source, so they cannot tell a canon slip from a
+true fact. The drafter's own check is graded by the same context that wrote the draft.
+
+`scripts/logic_reader.py` sends the beats, and then the draft, to a fresh-context subagent with
+`raw/` and the wiki at hand. It flags six kinds of trouble: canon, logic, knows, motive, invented
+and unneeded. The script keeps only exact quotes and checks each evidence quote against the file it
+cites. **The eval came first.** 28 user objections from five chapters, each tied to an anchor
+quote, were run against book snapshots at the commit the user saw. The reader caught 11 by
+meaning: 7 at the beat gate, where a fix costs a line, and one a full chapter before the user
+raised it. The existing `naturalize` pipeline caught 4, and the two together caught 15. Misses
+cluster in three places: physical common sense in small actions (what a leather belt or a bleeding
+man can do), objects and words fixed in earlier chapters, and the premise of a joke. It flags about
+11 items per stage, and the user has not yet judged how many of them are real. So the skill makes
+the drafter sort the flags: it fixes what verified evidence settles, drops what the wiki answers,
+and only asks the rest. The eval cases stay in the book project; the script's `eval` command scores
+any later prompt change against them.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated

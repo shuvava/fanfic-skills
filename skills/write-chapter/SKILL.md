@@ -194,11 +194,27 @@ invented canon enters unseen, and the user then has to catch it line by line. Fo
   not go into the mouths or the records of people who never had it. If the narrator calls it «the
   green glow» and the locals say «the gift», a healer's journal says «the gift».
 
-Measured on a real run: in one chapter's beats and prose the user caught seven such slips — the world
-knowing the hero's discovery, a rule read off a wiki summary that the source does not state, a
-narrator's guess turned into a figure, the hero feeling what he had only watched, the narrator's word
-in a lecturer's mouth. Every one was a fact or logic fix, and every one was in the plan before any
-prose existed.
+**Logic and canon reader — before the beat gate.** You check the beats against what you believe;
+a reader with fresh context and `raw/` at hand does not share your beliefs. Unless `CANON.md` sets
+`logic_reader: off`:
+
+```bash
+D=<book>/logic/ch<NN>-beats
+python3 <scripts>/logic_reader.py prompt <book>/beats/ch<NN>.md --stage beats --dir $D
+```
+
+Give the subagent only this, nothing of the conversation: «Working directory: <project root>. Read
+`$D/prompt.md` — it is your whole task. Write the JSON array to `$D/reply.json`.» Then
+`python3 <scripts>/logic_reader.py add <book>/beats/ch<NN>.md --dir $D --reply $D/reply.json`
+and sort `$D/report.md`:
+
+- **Fix yourself** what verified evidence settles: a wrong citation, a hedge turned into a fact, a
+  fact `raw/` contradicts. These are your slips, not the user's decisions.
+- **Drop** what the wiki, an earlier chapter or a recorded user decision already answers.
+- **Ask** the rest in To decide, in the reader's words, each with your recommendation. A question
+  marked "evidence not found" is a lead to check, not a fact.
+
+Delete `$D` once the answers are in the cards, as with critic replies.
 
 **Profile gate.** Every character in the chapter above the depth threshold
 (`../../CONVENTIONS.md` §11) needs a profile in `wiki/fanon/proposed/characters/` — read it before
@@ -329,6 +345,7 @@ Run explicitly and report:
 | Event | Does the chapter contain the external event its card named, on the page? |
 | Part | A climax chapter: the protagonist's deciding act and its cost are on the page. An aftermath chapter: a consequence happens on the page and the decision is spoken or done. Any chapter: what the next rows need planted is planted |
 | New assertions | What does this chapter establish that no tier records? |
+| Logic reader | The same reader over the draft: `logic_reader.py prompt <draft> --stage draft --beats <book>/beats/ch<NN>.md --dir <book>/logic/ch<NN>-draft`, same subagent hand-off and sorting as at the beat gate. Fix what evidence settles before hand-off (your edit: update the v0 snapshot); questions for the user go at the top of the hand-off, before the naturalness review. Report flagged / fixed / asked |
 | Naturalness | Run `naturalize` in prose mode once the rows above pass (skip if `naturalness: off`), outside readers included (`critics:` in `CANON.md`). Report its counts — flagged, auto-repaired, left for review, and per critic — and the review file's path |
 
 Measure the style row rather than judging it:
@@ -397,7 +414,7 @@ assertions from the chapter are handed to `reconcile`, which routes them through
 Append to `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] write | b<NN>/ch<NN> <title>
-   metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n> natural=<flagged>/<auto> critics=<name>:<kept>/<flagged>,…
+   metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n> natural=<flagged>/<auto> critics=<name>:<kept>/<flagged>,… logic=<flagged>/<fixed>/<asked>
 ```
 Drop `b<NN>/` and `book=` in a flat project.
 Then suggest running `reconcile`.
