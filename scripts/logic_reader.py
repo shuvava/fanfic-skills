@@ -5,10 +5,11 @@ Standard library only. Run from the project root, in `write-chapter` at the beat
 the beat file) and in §5 before `naturalize` (target = the draft).
 
     python3 logic_reader.py prompt <target> --stage beats|draft --dir <out> [--beats <beat file>]
+                                   [--check facts|people]
     python3 logic_reader.py add    <target> --dir <out> --reply <out>/reply.json
     python3 logic_reader.py eval   <cases.json> --runs <dir> [--baseline <dir>]
 
-`<out>` is `<book>/logic/<chapter stem>-<stage>/`.
+`<out>` is `<book>/logic/<chapter stem>-<stage>/` (`…-<stage>-people/` for `--check people`).
 
 Why a separate reader
 ---------------------
@@ -18,6 +19,18 @@ of another kind: a fact `raw/` does not support, a detail with no origin, a char
 what he could not, a plan with a shorter road the character would obviously take. The drafter
 checks these against its own beliefs; a reader with fresh context and `raw/` at hand does not
 share them.
+
+Two checks
+----------
+`--check facts` (the default) asks whether claims hold: canon, cause and effect, who knows what,
+invented specifics. `--check people` asks whether people act like themselves. The reader goes
+scene by scene and, for every character who acts, writes down what they want, believe and have
+at hand, and what their best move would be, before comparing it with what the text makes them do.
+The facts reader is told to ask what a character wants as well, yet on a book's real objections
+of this kind (people acting against what they just said they fear, a skilled character written as
+a supplicant, consent given off the page) it caught none: a reader hunting for false claims reads
+past a choice that contradicts no fact. Both checks return the same JSON; people
+flags have kind `agency`.
 
 What the reader gets
 --------------------
@@ -52,7 +65,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from export_chapter import FRONTMATTER_RE, IMAGE_RE  # noqa: E402
 
-KINDS = ("canon", "logic", "knows", "motive", "invented", "unneeded")
+KINDS = ("canon", "logic", "knows", "motive", "invented", "unneeded", "agency")
 
 TASK = """You are a reader who knows the source canon well — you can look anything up — reading \
 {what} of a fan continuation of that source. You are not an editor of style. You ask the questions \
@@ -103,6 +116,68 @@ Answer with a JSON array only, nothing before or after:
 `evidence` may be empty for logic, motive and unneeded. The quote must match the target \
 character for character."""
 
+PEOPLE = """You are a reader who takes every character seriously — you can look anything up — reading \
+{what} of a fan continuation of a source. You are not an editor of style and not a canon checker; \
+another reader checks facts. You check one thing: does every person in the story act like a \
+person with their own head, wants and fears, or do they do what the plot needs?
+
+How to work, scene by scene:
+1. List everyone who acts, speaks, decides or refuses in the scene — the narrator too, and \
+nameless groups ("two guards", "the crowd") as one actor each.
+2. For each actor, before you judge what they do, fill in a card (it goes into your answer):
+   - wants: what they want right now, in this scene, and what they want from the story at large;
+   - believes and fears: what they think is true here — including what they themselves said a \
+line earlier;
+   - is: who they are — role, rank, skill, experience, temper. Look them up: their profile and \
+voice card under `wiki/`, `drafts/continuity.md`, the fic's earlier chapters under `{drafts}`, \
+the source under `{raw}`;
+   - has at hand: people, papers, objects, rules and favours they could use.
+3. Write their best move: what a person like that, wanting that, believing that, with that at \
+hand, would most likely do. A hot-headed or foolish character's best move is still their own \
+move — foolish in their way, for their reasons.
+4. Compare with what the text makes them do. Flag where the two part ways:
+   - against their own belief: they act as if they did not believe what they just said or showed \
+(people who fear catching a fever from a man take him by the collar);
+   - below their skill: someone experienced or clever acts naive, passive, servile or clumsy \
+(a veteran quartermaster asks every passer-by what he should buy; a merchant pays the first price);
+   - unused means: the obvious tool, helper, paper or right at hand is ignored for no reason;
+   - wrong decider: someone else makes a decision that is this person's to make, or the person \
+whose call it is just goes along (the captain lets the cabin boy choose the crew);
+   - off the page: a decision that matters to the story — consent, a refusal, a change of mind — \
+happens unseen, or is only reported, so the reader never sees the person choose;
+   - no reason: an attack, a gift, a refusal, a silence or a lie whose reason is neither on the \
+page nor plain from earlier chapters;
+   - stale reasoning: the narrator weighs a choice with an argument from an earlier situation \
+that the present stakes have changed;
+   - plot puppets: opponents or bystanders who act to make the scene happen, not in their own \
+interest — who attacks whom, and why that one?
+5. Not a flag: a choice the beat file or the character's profile records as their flaw or plan \
+and the text shows; a joke whose premise holds for the people in it. A joke whose premise needs \
+someone to act against their own belief IS a flag — readers stop laughing and start asking.
+{extra}
+Keep only what you would put to the author as a question. Eight precise flags beat twenty \
+doubtful ones; at most 15. Put the quote on the sentence where the person acts, not on the \
+narrator's comment about it. Write `question` in the target's language, the way a reader asks it \
+aloud: «зачем она…, если сама…?», «почему он не…, раз у него под рукой…?», «а где они решили…?». \
+Say in it what the person's best move would have been.
+
+Every scene gets its cards, the first scene as much as the last, and every card needs \
+`is` looked up, not guessed: open the profile or the earlier chapter that shows who they are. A \
+card whose `best` and `does` differ either becomes a flag or says in `why_ok` why it is fine.
+
+Answer with one JSON object only, nothing before or after:
+{{"cards": [{{"scene": "<scene number or first words>", "who": "<actor>",
+   "wants": "...", "believes": "...", "is": "... (<file you looked it up in>)", "has": "...",
+   "best": "<their best move>", "does": "<what the text makes them do>", "why_ok": "<or empty>"}}],
+ "flags": [{{"quote": "<exact quote from the target, 3-25 words>",
+   "kind": "agency",
+   "question": "<the question, one to three lines>",
+   "evidence": [{{"file": "<path>", "quote": "<exact words from that file>"}}],
+   "certainty": "high|medium"}}]}}
+`evidence` holds what fixes who the person is or what they believe (a profile line, an earlier \
+chapter); it may be empty when the scene itself shows it. The quote must match the target \
+character for character."""
+
 EXTRA = {
     "beats": "The target is a beat file: a short retelling, questions for the author with \
 recommended answers, and one card per scene with its canon and fanon dependencies. Recommended \
@@ -139,7 +214,7 @@ def cmd_prompt(a) -> int:
     drafts = f"{parent}/" if a.stage == "draft" else "drafts/"
     beats = f" (`{a.beats}`)" if a.beats else ""
     what = "a beat card for one chapter" if a.stage == "beats" else "one drafted chapter"
-    task = TASK.format(what=what, raw=raw_dir(), drafts=drafts,
+    task = (PEOPLE if a.check == "people" else TASK).format(what=what, raw=raw_dir(), drafts=drafts,
                        extra=EXTRA[a.stage].format(beats=beats))
     a.dir.mkdir(parents=True, exist_ok=True)
     p = a.dir / "prompt.md"
@@ -150,6 +225,13 @@ def cmd_prompt(a) -> int:
 
 
 def parse(reply: str) -> list[dict]:
+    m = re.search(r"\{.*\}", reply, re.S)
+    if m and reply.lstrip().startswith("{"):
+        # people check: {"cards": [...], "flags": [...]}; the cards are the reader's working
+        try:
+            reply = json.dumps(json.loads(m.group(0)).get("flags", []))
+        except json.JSONDecodeError:
+            pass
     m = re.search(r"\[.*\]", reply, re.S)
     if not m:
         raise ValueError("no JSON array in the reply")
@@ -269,7 +351,7 @@ def cmd_eval(a) -> int:
     n_total, n_found, n_base = sum(total.values()), sum(found.values()), sum(base_found.values())
     print(f"recall {n_found}/{n_total}" + (f" (baseline {n_base}/{n_total})" if a.baseline else "")
           + f"; flags {flags_all}, unmatched {unmatched_all} (judge by hand)")
-    for k in KINDS:
+    for k in list(KINDS) + sorted(set(total) - set(KINDS)):
         if k in total:
             b = f", baseline {base_found.get(k, 0)}" if a.baseline else ""
             print(f"  {k:9} {found.get(k, 0)}/{total[k]}{b}")
@@ -285,6 +367,8 @@ def main() -> int:
     p.add_argument("--stage", choices=("beats", "draft"), required=True)
     p.add_argument("--dir", type=Path, required=True, help="<book>/logic/<stem>-<stage>/")
     p.add_argument("--beats", type=Path, help="draft stage: the chapter's beat file")
+    p.add_argument("--check", choices=("facts", "people"), default="facts",
+                   help="facts: canon and logic (default); people: does everyone act like themselves")
     p = sub.add_parser("add")
     p.add_argument("target", type=Path)
     p.add_argument("--dir", type=Path, required=True)
