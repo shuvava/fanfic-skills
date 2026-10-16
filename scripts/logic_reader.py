@@ -209,10 +209,12 @@ that the new situation has undone);
 change of mind reported in a line — so the reader never sees the person decide.
 5. Flag the event when its cause is missing, when it contradicts something, or when it happens \
 off the page. A contradiction stays a flag when the narrator notices it or makes a joke of it: \
-readers stop laughing and ask why the person did it. Not a flag: a flaw the profile or the beat \
-file records and the text shows.
+readers stop laughing and ask why the person did it. Not a flag: a flaw the character's profile \
+records and the text shows. A choice marked as the author's decision is not a flag either, but a \
+missing cause for it still is.
 {extra}
-Keep only what you would put to the author as a question. At most 15 flags. Put the quote on the \
+Keep only what you would put to the author as a question. At most 15 flags, and never fewer \
+than 5: if fewer breaks are clear, add the events whose cause is weakest, certainty medium. Put the quote on the \
 sentence where the event happens. Write `question` in the target's language, the way a reader \
 asks it aloud: «почему он…?», «но ведь она сама только что…», «а когда они это решили?» — and name \
 what is missing or what it contradicts.
@@ -269,6 +271,9 @@ def cmd_prompt(a) -> int:
     what = "a beat card for one chapter" if a.stage == "beats" else "one drafted chapter"
     task = {"facts": TASK, "people": PEOPLE, "breaks": BREAKS}[a.check].format(what=what, raw=raw_dir(), drafts=drafts,
                        extra=EXTRA[a.stage].format(beats=beats))
+    if a.examples:
+        task += ("\n\nThe author's own questions on earlier chapters — the kind of break this author "
+                 "catches. Ask questions like these:\n\n" + a.examples.read_text(encoding="utf-8").strip())
     a.dir.mkdir(parents=True, exist_ok=True)
     p = a.dir / "prompt.md"
     p.write_text(f"{task}\n\n---\n\n# TARGET: {a.target}\n\n{body(a.target)}\n", encoding="utf-8")
@@ -383,18 +388,20 @@ def cmd_eval(a) -> int:
         for it in c["items"]:
             k = it["kind"]
             total[k] = total.get(k, 0) + 1
-            if not locate(flat, it["anchor"]):
+            # a beat file states one problem in several places (summary, card): any of them counts
+            anchors = it["anchor"] if isinstance(it["anchor"], list) else [it["anchor"]]
+            if not any(locate(flat, x) for x in anchors):
                 lines.append(f"  ! {it['id']}: anchor not in target")
                 continue
-            h = hits(flat, it["anchor"], quotes)
-            bh = hits(flat, it["anchor"], base_quotes)
+            h = sorted({n for x in anchors for n in hits(flat, x, quotes)})
+            bh = [n for x in anchors for n in hits(flat, x, base_quotes)]
             matched.update(h)
             if h:
                 found[k] = found.get(k, 0) + 1
             if bh:
                 base_found[k] = base_found.get(k, 0) + 1
             mark = "HIT " if h else "miss"
-            lines.append(f"  {mark} {it['id']} [{k}] «{it['anchor']}»" + ("  (baseline hit)" if bh else ""))
+            lines.append(f"  {mark} {it['id']} [{k}] «{anchors[0]}»" + ("  (baseline hit)" if bh else ""))
             for n in h:
                 lines.append(f"       ↳ [{flags[n]['kind']}] {flags[n].get('question', '')}")
         rest = [f for n, f in enumerate(flags) if n not in matched]
@@ -420,6 +427,7 @@ def main() -> int:
     p.add_argument("--stage", choices=("beats", "draft"), required=True)
     p.add_argument("--dir", type=Path, required=True, help="<book>/logic/<stem>-<stage>/")
     p.add_argument("--beats", type=Path, help="draft stage: the chapter's beat file")
+    p.add_argument("--examples", type=Path, help="a file of the author's past logic questions, appended")
     p.add_argument("--check", choices=("facts", "people", "breaks"), default="facts",
                    help="facts: canon and logic (default); people: does everyone act like themselves; "
                         "breaks: events without a cause or against what the story showed")
