@@ -5,7 +5,7 @@ Standard library only. Run from the project root, in `write-chapter` at the beat
 the beat file) and in §5 before `naturalize` (target = the draft).
 
     python3 logic_reader.py prompt <target> --stage beats|draft --dir <out> [--beats <beat file>]
-                                   [--check facts|people]
+                                   [--check facts|people|breaks]
     python3 logic_reader.py add    <target> --dir <out> --reply <out>/reply.json
     python3 logic_reader.py eval   <cases.json> --runs <dir> [--baseline <dir>]
 
@@ -178,6 +178,59 @@ Answer with one JSON object only, nothing before or after:
 chapter); it may be empty when the scene itself shows it. The quote must match the target \
 character for character."""
 
+BREAKS = """You are a reader who keeps asking "why?" — you can look anything up — reading {what} of a \
+fan continuation of a source. You are not an editor of style, and you do not judge whether the \
+characters chose well. You look for places where the story's logic breaks: something happens \
+without a cause, or contradicts what the story already showed.
+
+How to work:
+0. People first. For every named character who acts in the target, open their profile and voice \
+card under `wiki/` (search by name) and copy, word for word, the lines that say how they act: \
+manner, methods, rules they keep, what they never do. These go into your answer as `traits`; \
+every event of theirs is checked against them.
+1. Go through the target from the first line to the last and list every event: each action, \
+decision, refusal, agreement, silence kept, attack, offer, and each conclusion the narrator \
+draws — and each thing someone conspicuously does NOT do or say. One event per entry, in order, \
+the opening scene as carefully as the last.
+2. For each event, find its cause: why does this person do this, here, now? The cause must be on \
+the page, or plain from an earlier chapter under `{drafts}`, the character's profile and voice \
+card under `wiki/`, `drafts/continuity.md`, or the source under `{raw}`. Look it up; do not \
+supply a cause the text does not give. "The plot needs it" is not a cause. When the cause is a goal \
+("he does it because he wants X"), ask once more: why does he want X — is that on the page too?
+3. For each event, look for what it contradicts:
+   - what the same person said, feared or showed earlier in the scene or the chapter (a man who \
+won't drink from a cup a sick man touched shakes the sick man's hand);
+   - who the person is: their profile, their voice card, how the source and earlier chapters show \
+them behaving (a proud duelist who never asks for help begs a stranger for it);
+   - a reason the narrator gave before, or the stakes as they stand now (he gives an old reason \
+that the new situation has undone);
+   - what is at hand: the obvious means the scene itself put in front of them, ignored.
+4. Mark an event that matters to the story but happens off the page — a consent, a refusal, a \
+change of mind reported in a line — so the reader never sees the person decide.
+5. Flag the event when its cause is missing, when it contradicts something, or when it happens \
+off the page. A contradiction stays a flag when the narrator notices it or makes a joke of it: \
+readers stop laughing and ask why the person did it. Not a flag: a flaw the profile or the beat \
+file records and the text shows.
+{extra}
+Keep only what you would put to the author as a question. At most 15 flags. Put the quote on the \
+sentence where the event happens. Write `question` in the target's language, the way a reader \
+asks it aloud: «почему он…?», «но ведь она сама только что…», «а когда они это решили?» — and name \
+what is missing or what it contradicts.
+
+Answer with one JSON object only, nothing before or after:
+{{"traits": [{{"who": "<character>", "file": "<profile path>", "lines": ["<copied line>", "..."]}}],
+ "events": [{{"n": 1, "scene": "<scene>", "who": "<actor>", "event": "<what happens>",
+   "cause": "<the cause, or 'none'>", "cause_from": "<page | file path | none>",
+   "contradicts": "<what it contradicts, or empty>"}}],
+ "flags": [{{"quote": "<exact quote from the target, 3-25 words>",
+   "kind": "agency",
+   "question": "<the question, one to three lines>",
+   "evidence": [{{"file": "<path>", "quote": "<exact words from that file>"}}],
+   "certainty": "high|medium"}}]}}
+`evidence` holds what the event contradicts or where a cause should have been (a profile line, an \
+earlier chapter); it may be empty when the scene itself shows it. The quote must match the target \
+character for character."""
+
 EXTRA = {
     "beats": "The target is a beat file: a short retelling, questions for the author with \
 recommended answers, and one card per scene with its canon and fanon dependencies. Recommended \
@@ -214,7 +267,7 @@ def cmd_prompt(a) -> int:
     drafts = f"{parent}/" if a.stage == "draft" else "drafts/"
     beats = f" (`{a.beats}`)" if a.beats else ""
     what = "a beat card for one chapter" if a.stage == "beats" else "one drafted chapter"
-    task = (PEOPLE if a.check == "people" else TASK).format(what=what, raw=raw_dir(), drafts=drafts,
+    task = {"facts": TASK, "people": PEOPLE, "breaks": BREAKS}[a.check].format(what=what, raw=raw_dir(), drafts=drafts,
                        extra=EXTRA[a.stage].format(beats=beats))
     a.dir.mkdir(parents=True, exist_ok=True)
     p = a.dir / "prompt.md"
@@ -367,8 +420,9 @@ def main() -> int:
     p.add_argument("--stage", choices=("beats", "draft"), required=True)
     p.add_argument("--dir", type=Path, required=True, help="<book>/logic/<stem>-<stage>/")
     p.add_argument("--beats", type=Path, help="draft stage: the chapter's beat file")
-    p.add_argument("--check", choices=("facts", "people"), default="facts",
-                   help="facts: canon and logic (default); people: does everyone act like themselves")
+    p.add_argument("--check", choices=("facts", "people", "breaks"), default="facts",
+                   help="facts: canon and logic (default); people: does everyone act like themselves; "
+                        "breaks: events without a cause or against what the story showed")
     p = sub.add_parser("add")
     p.add_argument("target", type=Path)
     p.add_argument("--dir", type=Path, required=True)
