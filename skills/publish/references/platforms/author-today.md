@@ -28,6 +28,10 @@ Every fact is marked **known** (observed on a live run) or **to map**.
 | Work's Текст tab shows «до следующего обновления: N зн.» — an update threshold of **15 000 characters** since the last update. What crossing it does for readers (feed, notifications) | known threshold; effect **to map** — may favour publishing in ~15k-character batches |
 | «Опубликовать автоматически» — a checkbox that opens a date-and-time picker (knockout `autoPublish` / `autoPublishTime`, a moment in the **browser's time zone**; hidden field `AutoPublishTime` in UTC). With it checked, «Опубликовать» becomes **«Запланировать публикацию»**; toast «…будет опубликована автоматически по таймеру»; the chapter list shows the date instead of «не опубликовано». **«Сохранить черновик» does not save the schedule** | known |
 | Work's annotation: a field on the work's edit page, separate from the chapters; its length limit, whether it takes formatting, whether saving it notifies readers | to map |
+| **Several forms on the chapter's edit page** (the first is the site search): the chapter form is the one that contains `#Text`, never `document.forms[0]` | known |
+| `html.set` fills the editor, not the form: the form can post the old text. Before saving, `#Text.value = froalaEditor('html.get')`; `new FormData(<chapter form>).get('Text')` then holds the new text | known |
+| Form buttons: a click by the browser tool's reference or coordinates sometimes sends nothing; `button.click()` from page JS on the button found by its label saves on the first press | known |
+| Edit page of a chapter on a timer: buttons «Запланировать публикацию» and «Сохранить черновик». Saving with «Запланировать публикацию» keeps the timer and replaces the text — re-fetching the page shows the new text and the same `autoPublishTime` | known |
 | Editing a published chapter: notifies readers? | to map |
 | Where comments live (per chapter / per work), pagination | to map (feedback) |
 
@@ -52,8 +56,27 @@ Every fact is marked **known** (observed on a live run) or **to map**.
    **Delayed publication:** the user's yes names a date **and a time zone for readers** — the picker
    runs in the browser's zone, which may not be the readers'. Tick «Опубликовать автоматически», set
    the time on the page's own model, press «Запланировать публикацию», then confirm the saved UTC time
-   by re-fetching the edit page (`autoPublishTime`). Record with `record --date <publication date>`;
-   the draft must not change before the timer fires.
+   by re-fetching the edit page (`autoPublishTime`). Record with `record --date <publication date>`.
+   Until the timer fires the chapter is queued: it changes only at the user's request, by
+   **Re-uploading a queued chapter** below.
+
+**Re-uploading a queued chapter** (`SKILL.md` → Editing a queued chapter):
+
+1. Open the chapter's edit page `/work/edit/chapter/<chapterId>` (chapter id from the project's
+   notes or the ledger URL). Note the timer: re-fetch the page and read `autoPublishTime` — this is
+   the value to keep.
+2. Find the chapter form as the form containing `#Text` (not `document.forms[0]`).
+3. Images first, as in step 3 of the flow, if the export's pictures changed; unchanged pictures
+   keep their `content` URLs from the current text.
+4. `jQuery('#Text').froalaEditor('html.set', <export html>)`, then
+   `#Text.value = jQuery('#Text').froalaEditor('html.get')` so the form posts the new text. Check
+   `new FormData(<chapter form>).get('Text')` holds it before pressing anything.
+5. Press «Запланировать публикацию» from page JS (`button.click()` on the button with that label)
+   — never «Сохранить черновик», which does not save the schedule.
+6. Re-fetch the edit page: `autoPublishTime` equals step 1's value, and the chapter list still shows
+   the date, not «не опубликовано». Different → **STOP**, restore the time (Moving a timer), report.
+7. Read back (below) and compare a hash of the normalised text with the export's — equal, or the
+   differing paragraphs.
 
 **Moving a timer** (to map, first run): open the chapter's edit page while it still shows
 «не опубликовано», set the new time on the same model as above, press «Запланировать публикацию»,

@@ -110,6 +110,12 @@ Also update:
 - `wiki/fanon/` thread status for fic-internal threads
 - `wiki/index.md`
 
+**A rewritten queued chapter** (`published:` in its frontmatter, timer not fired, rewritten at the
+user's request — `../../CONVENTIONS.md` §13) is reconciled again like a new draft: replace its
+continuity rows, and check that the chapters after it still start where it now ends. Readers have
+not seen it, so its old version binds nothing. A **live** chapter is never re-reconciled into new
+facts: its text is what readers have.
+
 ## 5. Report
 
 Tell the user: what was accepted, what was rejected, any canon conflicts found, and whether the

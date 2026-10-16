@@ -12,8 +12,10 @@ description: >
 
 # Publish
 
-Readers remember what they read. A published chapter outranks the draft and the outline, and its
-text changes only by errata — typos, never rewrites.
+Readers remember what they read. A chapter that has gone out (**live**) outranks the draft and the
+outline, and its text changes only by errata — typos, never rewrites. A chapter on a timer that has
+not fired (**queued**) has no readers yet: at the user's request it is rewritten and re-uploaded
+under the same timer (Editing a queued chapter, below).
 
 Follow `../../CONVENTIONS.md`, especially §8 (book scope), §10 (completion claims) and §13
 (publication). Platform specifics live in one adapter per platform:
@@ -76,8 +78,8 @@ python3 <scripts>/publication.py status --platform author-today --every-days 2  
 python3 <scripts>/publication.py status --platform author-today --weekdays mon-fri
 ```
 
-It lists chapters in order with the published version, **DRIFTED** where the draft changed after
-publication, the stages `wiki/log.md` records for each (`write✓ reconcile✗ naturalize✓`), the next
+It lists chapters in order with the published version, **live** or **queued** (timer not fired),
+**DRIFTED** where the draft changed after the last upload, the stages `wiki/log.md` records for each (`write✓ reconcile✗ naturalize✓`), the next
 chapter, and the buffer — chapters on timers that have not fired plus drafted, unpublished ones, in
 weeks at the cadence. Report the table.
 Under one week of buffer, say so plainly: the schedule is about to overtake the writing.
@@ -219,7 +221,8 @@ python3 <scripts>/publication.py record drafts/book-01/ch05-<slug>.md --platform
 
 It freezes the draft into `snapshots/ch05-published-author-today-v1.md`, adds the `published:`
 entry to the draft's frontmatter, and appends a ledger row. For a delayed publication pass
-`--date <timer date>`. Then append to `wiki/log.md`:
+`--date <timer date>`. A queued chapter re-recorded after a re-upload keeps its timer date on its
+own; a different `--date` is refused — move the timer with `reschedule`. Then append to `wiki/log.md`:
 
 ```
 ## [YYYY-MM-DD] publish | b<NN>/ch<NN> <title> → author-today v1
@@ -249,9 +252,41 @@ line.
    `Publish b<NN>/ch<NN> «<title>» on <platform>` plus the timer date if delayed. Never push unless
    the user asks.
 
+## Editing a queued chapter
+
+A queued chapter has no readers yet, so it is not fixed (`CONVENTIONS.md` §13). **Only on the
+user's request** — a rewrite nobody asked for is a finding, not an edit.
+
+1. **Rewrite** the draft by the stage that owns the change (`write-chapter`, `naturalize`, a
+   hand edit). Then `reconcile` the chapter again: the gate reads the **latest** log entries.
+2. **Check:**
+   ```bash
+   python3 <scripts>/publication.py errata-check drafts/book-01/ch05-<slug>.md --platform author-today
+   ```
+   On a queued chapter it says `queued for <date>` and lists the changed paragraphs, exit 0. Show
+   them. Run the gate (Publish → 1) — it applies to a re-upload as to a first upload.
+3. **Export** and round-trip (Publish → 2).
+4. **Re-upload under the same timer** by the adapter's **Re-uploading a queued chapter**: open the
+   chapter's edit page, put the new text through the editor's API, sync it into the form field,
+   save with the scheduling button (never the draft button — it drops the timer), re-fetch the edit
+   page and confirm the saved timer equals the one before. A changed timer stops the run: say so
+   and restore it before anything else.
+5. **Read back** and `verify` (Publish → 3) — the hash or text of what the site saved equals the
+   export.
+6. **Record** — `record` writes `v<N+1>` with the timer's date and a new snapshot. Log
+   `publish | b<NN>/ch<NN> re-upload → author-today v<N+1> (queued <date>)` with
+   `changed_paragraphs=<n>`, and commit.
+
+The user's request to rewrite a queued chapter covers its re-upload under the existing timer — the
+timer was approved already. A new date is a separate yes.
+
+**Example.** Chapter 12 is on a timer for Tuesday 19:00, uploaded as `v1`. The user asks for its
+second scene shorter. Redraft, reconcile, `errata-check` (queued, 3 paragraphs changed), export,
+re-upload, the edit page still shows Tuesday 19:00, verify identical, `record` → `v2`, Tuesday.
+
 ## Errata — typos only
 
-The user edits the published chapter's draft, then:
+Errata are for **live** chapters. The user edits the chapter's draft, then:
 
 ```bash
 python3 <scripts>/publication.py errata-check drafts/book-01/ch05-<slug>.md --platform author-today
@@ -288,7 +323,8 @@ changed since. `wiki-lint` runs it too.
   A standing `schedule` sets the date, never the decision to publish.
 - **Never sign in or handle credentials.** The user's Chrome session is theirs.
 - **In order, no skips.** The script enforces it; do not work around it with a hand-edited ledger.
-- **Published text changes only through errata**, and errata are typo-only.
+- **Live text changes only through errata**, and errata are typo-only. A queued chapter changes
+  only when the user asks, and goes back under the same timer.
 - **No completion claim without the script's output** — `round-trip: identical`, `verify`'s result,
   `record`'s lines — pasted in the report (§10).
 - **Plugin files stay book-agnostic.** A lesson from a run goes into the adapter as a platform fact

@@ -478,8 +478,22 @@ user's, and anything read lands in the transcript.
 
 ## 13. Publication
 
-A chapter published while the book is still being written is a fixed point: readers have it, and
-their memory cannot be edited. `publish` owns it; every other stage respects it.
+A chapter that has gone out while the book is still being written is a fixed point: readers have
+it, and their memory cannot be edited. `publish` owns it; every other stage respects it.
+
+**Live or queued.** A chapter with `published:` in its frontmatter is one of two things:
+
+- **live** — the date of its first version is today or earlier. Readers have it (the day a timer
+  fires counts as live, whatever the hour). Everything below applies.
+- **queued** — uploaded under the platform's delayed publication, and the timer has not fired: the
+  date is still ahead. No reader has seen any version of it, so it is not fixed yet. **At the
+  user's request** it may be rewritten like any draft — then reconciled again, re-uploaded through
+  `publish` under the **same timer**, verified, and recorded as `v<N+1>` with the same date. A
+  stage never rewrites a queued chapter on its own initiative: the user asked, or it is a finding
+  for them. Moving the timer is a separate step (`publication.py reschedule`).
+
+`publication.py status` and `lint` say which is which. "Published" below means live unless the row
+says otherwise.
 
 **Authority, highest first:** `canon` > **published text** > drafted text > plan. Published text is
 not a tier — its facts still sit in `fanon-established` once `reconcile` has ratified them (and
@@ -489,18 +503,24 @@ not a tier — its facts still sit in `fanon-established` once `reconcile` has r
 platform version — and a frozen copy at `<drafts>/snapshots/ch<NN>-published-<platform>-v<N>.md`.
 `publish/LEDGER.md` is the project-wide list. `publication.py status` shows all three.
 
-| Stage | On a published chapter |
-|---|---|
-| `write-chapter` | Redrafting it is `blocking`. Summaries of it are read from the published snapshot |
-| `plan-chapters`, beat conflict check | A scene contradicting it is `blocking`, as against canon |
-| `naturalize` | Review only, never auto-safe; accepted fixes go out through errata, so only typo-sized ones |
-| `illustrate` / `place_illustration.py` | Refused (exit 4) — a picture added later is a `publish` change |
-| `refine-harness` | `v0` → `published-v1` is the user's final edit; later diffs are errata, a different signal |
-| `wiki-lint` | Runs `publication.py lint`: records agree, no published draft drifted |
+| Stage | On a live chapter | On a queued chapter |
+|---|---|---|
+| `write-chapter` | Redrafting it is `blocking`. Summaries of it are read from the published snapshot | Redraft when the user asks; otherwise treat it as live. Summaries from the latest snapshot |
+| `plan-chapters`, beat conflict check | A scene contradicting it is `blocking`, as against canon | `warning`: the fix may be the queued chapter — the user decides |
+| `naturalize` | Review only, never auto-safe; accepted fixes go out through errata, so only typo-sized ones | Review only; accepted fixes of any size go out as a re-upload |
+| `illustrate` / `place_illustration.py` | Refused (exit 4) — a picture added later is a `publish` change | Refused too; the user may place it by hand and re-upload |
+| `refine-harness` | `v0` → `published-v1` is the user's final edit; later diffs are errata, a different signal | A queued `v<N+1>` is another user edit before readers — the same signal as `v1` |
+| `wiki-lint` | Runs `publication.py lint`: records agree, no published draft drifted | Drift is a finding too: re-upload and record, or restore |
 
-**Changes after publication are errata, and errata are typo-only** — one misspelt word, a
+**Changes to a live chapter are errata, and errata are typo-only** — one misspelt word, a
 punctuation mark, a split or merged word. `publication.py errata-check` enforces the size; the
-author's recorded non-standard orthography is never "corrected" by an erratum.
+author's recorded non-standard orthography is never "corrected" by an erratum. On a queued chapter
+it lists the changed paragraphs and passes (`--strict` holds it to typo-only too).
+
+**Example.** Chapter 9 went out yesterday; chapter 12 sits on a timer for next Tuesday. The user
+asks to rewrite a scene in each. Chapter 9: only the typos ship, the rewrite waits for a later
+edition. Chapter 12: redraft, reconcile, re-upload under Tuesday's timer, `record` → `v2`, dated
+Tuesday.
 
 **Making a chapter public is the user's action.** A skill may prepare, upload as an unpublished
 draft and verify; it asks in chat before each publication, and a scheduled run stops before it.
