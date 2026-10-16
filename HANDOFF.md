@@ -610,6 +610,20 @@ the drafter sort the flags: it fixes what verified evidence settles, drops what 
 and only asks the rest. The eval cases stay in the book project; the script's `eval` command scores
 any later prompt change against them.
 
+## Live and queued chapters (v0.22.0)
+
+§13 treated every chapter with `published:` in its frontmatter as fixed. On a weekday schedule
+with weeks of timers ahead, most such chapters had no readers yet, and every rewrite the user asked
+for before a timer fired went through as a hand-made exception to typo-only errata, four times in
+ten days. The rule now separates a **live** chapter (first version dated today or earlier) from a
+**queued** one (timer still ahead). Live is unchanged. Queued is rewritten at the user's request,
+reconciled again, re-uploaded under the same timer and recorded as `v<N+1>` with the same date.
+`publication.py` says which is which in `status` and `lint`; `errata-check` lists changes on a
+queued chapter and passes (`--strict` keeps typo-only); `record` keeps the timer date on a
+re-upload and refuses another; `reschedule` moves every version of a queued chapter together. The
+adapter gained the re-upload steps the exceptions had worked out on the site. The day a timer fires
+counts as live, whatever the hour — a same-day edit before the evening timer stays a manual call.
+
 ## Known gaps / possible next work
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated

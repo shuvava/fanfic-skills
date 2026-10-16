@@ -185,9 +185,11 @@ Per `../../CONVENTIONS.md` §11. For the current book's `outline.md`:
 
 ### Publication
 - Only if `publish/LEDGER.md` exists. Run `python3 <scripts>/publication.py lint` and report each
-  finding: a published chapter whose draft changed since (`critical` — readers and the draft now
-  disagree; errata-check or restore), a frontmatter entry the ledger lacks or the reverse, a missing
-  published snapshot (`warning`).
+  finding: a live chapter whose draft changed since (`critical` — readers and the draft now
+  disagree; errata-check or restore), a queued chapter whose draft changed since upload (`warning` —
+  the timer would release the old text; re-upload and record, or restore), a frontmatter entry the
+  ledger lacks or the reverse, a missing published snapshot (`warning`). Report its live and queued
+  counts.
 
 ### Structure
 - **Orphans** — pages with no inbound links from anywhere including `index.md`.

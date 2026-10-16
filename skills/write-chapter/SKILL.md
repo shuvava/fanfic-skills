@@ -71,10 +71,13 @@ Read this chapter's row and its scenes and ask:
 - **Is it executable as written?** A scene whose `conflict` column is empty, or whose `outcome`
   restates its `goal`, cannot be drafted into anything — it will come out as connective tissue.
 - **Does the previous chapter's draft leave the characters where this one starts?** Drafted text
-  outranks the plan, and **published text outranks both** (`../../CONVENTIONS.md` §13): where they
-  disagree, the published chapter is right, then the draft, and the outline is stale.
-- **Is this chapter already published?** `published:` in its frontmatter → redrafting it is
-  `blocking`. Readers have it; a changed chapter goes out only as typo-only errata through `publish`.
+  outranks the plan, and **text that has gone out outranks both** (`../../CONVENTIONS.md` §13):
+  where they disagree, the chapter readers have is right, then the draft, and the outline is stale.
+- **Has this chapter gone out?** `published:` in its frontmatter — `publication.py status` says
+  **live** or **queued**. Live → redrafting it is `blocking`: readers have it, and a change goes out
+  only as typo-only errata through `publish`. Queued (on a timer that has not fired) → redraft it
+  only when the user asks; then `reconcile`, and `publish` → Editing a queued chapter re-uploads it
+  under the same timer. Unasked, a needed change to a queued chapter is a finding for the user.
 - **Did the previous chapter end on a cut?** Then this chapter opens in the same minute and settles
   it — first scene, first lines. A cut the next chapter forgets was a cheat.
 - **What does it do for its part?** Does the row match its place on the part card — an opening that

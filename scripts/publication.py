@@ -9,27 +9,33 @@ Standard library only. Run from the project root.
     python3 publication.py next-slot --platform author-today --weekdays mon-fri --after 2026-10-12 --count 10
     python3 publication.py reschedule <draft.md> --platform author-today --date YYYY-MM-DD
     python3 publication.py cleanup-rounds <draft.md> [--dry-run]
-    python3 publication.py errata-check <draft.md> --platform author-today
+    python3 publication.py errata-check <draft.md> --platform author-today [--strict]
     python3 publication.py lint
 
 Why this exists
 ---------------
-A published chapter is what readers remember. It outranks the draft and the outline, and it
-may only change by errata — typos, not rewrites. Three records say what was published, and
-this script keeps them in step:
+A chapter that has gone out is what readers remember. It outranks the draft and the outline,
+and it may only change by errata — typos, not rewrites. A chapter uploaded under a delayed
+publication whose timer has not fired is *queued*: readers cannot see it yet, so the user may
+have it rewritten and re-uploaded under the same timer. A chapter is *live* once the date of its
+first version is today or earlier — the day it fires counts as live, whatever the hour. Three
+records say what was published, and this script keeps them in step:
 
 - the draft's frontmatter `published:` list — one entry per platform version;
 - `snapshots/ch<NN>-published-<platform>-v<N>.md` — the draft exactly as it went out;
 - `publish/LEDGER.md` — one row per publication, the project-wide view.
 
-`status` lists chapters in order with what is published, what drifted since, and the next
-chapter to publish with the drafted buffer in weeks. `record` writes all three records after a
-publication and refuses to skip a chapter. `errata-check` diffs the draft's reader-visible text
-against the last published version and passes only typo-sized changes. `lint` cross-checks the
-three records. `next-slot` gives the next date on a fixed schedule — every N days or on set
+`status` lists chapters in order with what is published, whether it is live or queued, what
+drifted since, and the next chapter to publish with the drafted buffer in weeks. `record` writes
+all three records after a publication and refuses to skip a chapter; on a queued chapter it
+writes `v<N+1>` under the same timer date. `errata-check` diffs the draft's reader-visible text
+against the last published version and, on a live chapter, passes only typo-sized changes; on a
+queued one it lists the changes and passes (`--strict` holds it to typo-only too). `lint`
+cross-checks the three records and counts live and queued chapters. `next-slot` gives the next date on a fixed schedule — every N days or on set
 weekdays — counted from the last publication in the ledger (or from `--after`, with `--count` for
 a run of slots). `reschedule` moves a delayed publication whose timer has not fired to a new date
-in the frontmatter and the ledger, after the user changed the timer on the site. `cleanup-rounds` deletes a chapter's intermediate illustration
+in the frontmatter and the ledger — every queued version of it — after the user changed the
+timer on the site. `cleanup-rounds` deletes a chapter's intermediate illustration
 rounds once its approved image is placed.
 
 Exit: 0 ok, 1 violations / drift / lint findings, 2 refused (order, nothing to record),
@@ -110,6 +116,19 @@ def latest(draft: Path, platform: str) -> dict | None:
     return max(versions, key=lambda e: int(e["version"])) if versions else None
 
 
+def release_date(draft: Path, platform: str) -> dt.date | None:
+    """When readers get the chapter: the date of its first version on the platform."""
+    dates = [dt.date.fromisoformat(e["date"]) for e in published(draft)
+             if e.get("platform") == platform and e.get("date")]
+    return min(dates) if dates else None
+
+
+def queued(draft: Path, platform: str) -> bool:
+    """Uploaded under a timer that has not fired: no reader has seen any version of it."""
+    rel = release_date(draft, platform)
+    return bool(rel and rel > dt.date.today())
+
+
 def snapshot_path(draft: Path, platform: str, version: int) -> Path:
     num = re.match(r"(ch\d+)", draft.name).group(1)
     return draft.parent / "snapshots" / f"{num}-published-{platform}-v{version}.md"
@@ -156,15 +175,19 @@ def gate_marks(cid: tuple[int, int], draft: Path) -> str:
 
 
 def cmd_status(args) -> int:
-    rows, nxt, unpublished, queued, issues = [], None, 0, 0, 0
-    today = dt.date.today().isoformat()
+    rows, nxt, unpublished, on_timer, issues, requeue = [], None, 0, 0, 0, 0
     for d in drafts():
         cid, last = chapter_id(d), latest(d, args.platform)
         drift = drifted(d, args.platform)
         if last:
-            state = f"v{last['version']} {last.get('date', '')}" + (" DRIFTED" if drift else "")
-            issues += bool(drift)
-            queued += last["version"] == "1" and last.get("date", "") > today   # timer not fired yet
+            waiting = queued(d, args.platform)
+            state = (f"v{last['version']} {last.get('date', '')} {'queued' if waiting else 'live'}"
+                     + (" DRIFTED" if drift else ""))
+            on_timer += waiting
+            if drift and waiting:
+                requeue += 1                              # rewrite allowed; re-upload, then record
+            else:
+                issues += bool(drift)
         else:
             state = "—"
             unpublished += 1
@@ -183,13 +206,16 @@ def cmd_status(args) -> int:
     if last and last > dt.date.today():
         print(f"\nscheduled ahead: last publication on the ledger is {last} (timer not fired yet)")
     print(f"\nnext: {label(chapter_id(nxt))} {nxt}" if nxt else "\nnext: nothing drafted is unpublished")
-    ahead = unpublished + queued
-    print(f"buffer: {queued} on timers + {unpublished} drafted = {ahead / per_week:.1f} weeks at {cadence}"
+    ahead = unpublished + on_timer
+    print(f"buffer: {on_timer} on timers + {unpublished} drafted = {ahead / per_week:.1f} weeks at {cadence}"
           + ("  ← under one week" if ahead < per_week else ""))
+    if requeue:
+        print(f"\n{requeue} queued chapter(s) changed since upload: re-upload under the same timer, "
+              "then record v<N+1>", file=sys.stderr)
     if issues:
-        print(f"\n{issues} published chapter(s) drifted from their published text: "
+        print(f"\n{issues} live chapter(s) drifted from their published text: "
               "errata-check them, or restore the draft", file=sys.stderr)
-    return 1 if issues else 0
+    return 1 if issues or requeue else 0
 
 
 def cmd_record(args) -> int:
@@ -206,7 +232,15 @@ def cmd_record(args) -> int:
               file=sys.stderr)
         return 2
     version = int(last["version"]) + 1 if last else 1
-    date = args.date or dt.date.today().isoformat()
+    if last and queued(d, args.platform):
+        timer = last["date"]                              # a re-upload keeps its timer
+        if args.date and args.date != timer:
+            print(f"refused: {label(cid)} is queued for {timer}; a re-upload keeps that date — "
+                  "move the timer with reschedule first", file=sys.stderr)
+            return 2
+        date = timer
+    else:
+        date = args.date or dt.date.today().isoformat()
 
     snap = snapshot_path(d, args.platform, version)
     snap.parent.mkdir(parents=True, exist_ok=True)
@@ -217,7 +251,8 @@ def cmd_record(args) -> int:
         LEDGER.write_text(LEDGER_HEAD, encoding="utf-8")
     with LEDGER.open("a", encoding="utf-8") as fh:
         fh.write(f"| {cid[0]:02d} | {cid[1]:02d} | {args.platform} | {version} | {date} | {args.url} | {d} |\n")
-    print(f"recorded {label(cid)} {args.platform} v{version} {date}\n  snapshot: {snap}\n  ledger: {LEDGER}")
+    kind = " (queued re-upload)" if last and queued(d, args.platform) else ""
+    print(f"recorded {label(cid)} {args.platform} v{version} {date}{kind}\n  snapshot: {snap}\n  ledger: {LEDGER}")
     return 0
 
 
@@ -306,29 +341,35 @@ def cmd_reschedule(args) -> int:
         print(f"refused: {label(chapter_id(d))} v{last['version']} date {old} → {new} — only a timer "
               "that has not fired moves, and only to a day still ahead", file=sys.stderr)
         return 2
+    # Every version of a queued chapter waits for the same timer: move them together.
+    versions = [e["version"] for e in published(d)
+                if e.get("platform") == args.platform and e.get("date") == old.isoformat()]
     text = d.read_text(encoding="utf-8")
     m = FRONTMATTER_RE.match(text)
-    entry = re.compile(rf"^(\s+-\s*\{{platform:\s*{re.escape(args.platform)},\s*version:\s*"
-                       rf"{last['version']},\s*date:\s*){old.isoformat()}", re.M)
-    front, hits = entry.subn(rf"\g<1>{new.isoformat()}", m.group(1))
-    if hits != 1:
-        print(f"refused: frontmatter entry for v{last['version']} not found once in {d}", file=sys.stderr)
-        return 2
+    front = m.group(1)
+    for v in versions:
+        entry = re.compile(rf"^(\s+-\s*\{{platform:\s*{re.escape(args.platform)},\s*version:\s*"
+                           rf"{v},\s*date:\s*){old.isoformat()}", re.M)
+        front, hits = entry.subn(rf"\g<1>{new.isoformat()}", front)
+        if hits != 1:
+            print(f"refused: frontmatter entry for v{v} not found once in {d}", file=sys.stderr)
+            return 2
     rows = LEDGER.read_text(encoding="utf-8").splitlines(keepends=True)
-    want = [args.platform, last["version"], old.isoformat(), str(d)]
 
     def key(ln: str) -> list[str]:
         cells = [c.strip() for c in ln.strip().strip("|").split("|")]
         return cells[2:5] + cells[6:7] if len(cells) == 7 else []
 
-    idx = [i for i, ln in enumerate(rows) if key(ln) == want]
-    if len(idx) != 1:
-        print(f"refused: ledger row for {d} v{last['version']} {old} not found once", file=sys.stderr)
-        return 2
+    for v in versions:
+        idx = [i for i, ln in enumerate(rows) if key(ln) == [args.platform, v, old.isoformat(), str(d)]]
+        if len(idx) != 1:
+            print(f"refused: ledger row for {d} v{v} {old} not found once", file=sys.stderr)
+            return 2
+        rows[idx[0]] = rows[idx[0]].replace(f"| {old.isoformat()} |", f"| {new.isoformat()} |", 1)
     d.write_text("---\n" + front + "\n---\n" + text[m.end():], encoding="utf-8")
-    rows[idx[0]] = rows[idx[0]].replace(f"| {old.isoformat()} |", f"| {new.isoformat()} |", 1)
     LEDGER.write_text("".join(rows), encoding="utf-8")
-    print(f"rescheduled {label(chapter_id(d))} {args.platform} v{last['version']}: {old} → {new}")
+    print(f"rescheduled {label(chapter_id(d))} {args.platform} "
+          f"{', '.join('v' + v for v in versions)}: {old} → {new}")
     return 0
 
 
@@ -377,6 +418,21 @@ def typo_sized(a: list[str], b: list[str]) -> bool:
     return False
 
 
+def queued_changes(old: list[str], new: list[str], last: dict, timer: dt.date) -> int:
+    """A queued chapter is not errata: list what changed for the user, and pass."""
+    changed = [n for n, (pa, pb) in enumerate(zip(old, new), 1) if pa != pb]
+    print(f"queued for {timer}: no reader has seen it, so a rewrite may go out — re-upload under the "
+          f"same timer and record v{int(last['version']) + 1}")
+    for n in changed:
+        print(f"changed ¶{n}")
+    if len(old) != len(new):
+        print(f"paragraphs {len(old)} → {len(new)}")
+    if not changed and len(old) == len(new):
+        print(f"no reader-visible change since v{last['version']}")
+    print(f"\n{len(changed)} changed paragraph(s) against v{last['version']}")
+    return 0
+
+
 def cmd_errata(args) -> int:
     d = args.draft
     last = latest(d, args.platform)
@@ -388,6 +444,8 @@ def cmd_errata(args) -> int:
         print(f"missing snapshot {snap} — run lint", file=sys.stderr)
         return 3
     old, new = plain_lines(parse(snap)), plain_lines(parse(d))
+    if queued(d, args.platform) and not args.strict:
+        return queued_changes(old, new, last, release_date(d, args.platform))
     if len(old) != len(new):
         print(f"REWRITE: paragraph count {len(old)} → {len(new)}; errata may not add, remove, "
               "split or merge paragraphs")
@@ -417,8 +475,10 @@ def cmd_lint(args) -> int:
     findings = []
     rows = ledger_rows()
     ledger = {(r[6], r[2], r[3]) for r in rows}
-    seen = set()
+    seen, live, waiting = set(), [], []
     for d in drafts():
+        for platform in sorted({e.get("platform") for e in published(d)}):
+            (waiting if queued(d, platform) else live).append(f"{label(chapter_id(d))}@{platform}")
         for e in published(d):
             key = (str(d), e.get("platform", ""), e.get("version", ""))
             seen.add(key)
@@ -427,12 +487,18 @@ def cmd_lint(args) -> int:
             if not snapshot_path(d, key[1], int(key[2] or 0)).is_file():
                 findings.append(f"{d}: missing snapshot for {key[1]} v{key[2]}")
         for platform in {e.get("platform") for e in published(d)}:
-            if drifted(d, platform):
+            if drifted(d, platform) and queued(d, platform):
+                findings.append(f"{d}: queued on {platform}, changed since upload — re-upload under "
+                                "the same timer and record")
+            elif drifted(d, platform):
                 findings.append(f"{d}: text changed since last {platform} publication — errata-check it")
     for key in ledger - seen:
         findings.append(f"ledger row {key[1]} v{key[2]} for {key[0]}: no matching frontmatter entry")
     for f in findings:
         print(f)
+    print(f"live: {len(live)}")
+    print(f"queued: {len(waiting)}" + (f" ({waiting[0]} … {waiting[-1]})" if len(waiting) > 1 else
+                                       f" ({waiting[0]})" if waiting else ""))
     print(f"{len(findings)} finding(s)")
     return 1 if findings else 0
 
@@ -470,6 +536,7 @@ def main() -> int:
     e = sub.add_parser("errata-check")
     e.add_argument("draft", type=Path)
     e.add_argument("--platform", required=True)
+    e.add_argument("--strict", action="store_true", help="typo-only even for a queued chapter")
     sub.add_parser("lint")
     args = ap.parse_args()
     if getattr(args, "draft", None) and not args.draft.is_file():

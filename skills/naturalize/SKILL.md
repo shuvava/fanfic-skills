@@ -44,9 +44,10 @@ Read `naturalness:` from `CANON.md` (default `review` when absent):
 Plans are never auto-applied in any mode: a plan edit changes what the book is about.
 
 **A published chapter** (`published:` in its frontmatter, `../../CONVENTIONS.md` §13) is always
-`review`, whatever the mode, and an accepted fix reaches readers only through `publish` errata — so
-only typo-sized fixes can. Say so in the review file's header rather than proposing rewrites the
-user cannot ship.
+`review`, whatever the mode. On a **live** one an accepted fix reaches readers only through
+`publish` errata — so only typo-sized fixes can. Say so in the review file's header rather than
+proposing rewrites the user cannot ship. On a **queued** one (timer not fired) any accepted fix can
+ship as a re-upload under the same timer; say that instead.
 
 ## Two readings
 
