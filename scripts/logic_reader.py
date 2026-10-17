@@ -320,9 +320,9 @@ def cmd_add(a) -> int:
 
 
 def sentence_span(flat: str, i: int, j: int) -> tuple[int, int]:
-    """Widen [i, j) to the sentence (or markdown line) around it."""
-    s = max(flat.rfind(c, 0, i) for c in ".!?…\n") + 1
-    ends = [k for k in (flat.find(c, j) for c in ".!?…\n") if k >= 0]
+    """Widen [i, j) to the sentence (or table cell) around it; `norm` has already joined the lines."""
+    s = max(flat.rfind(c, 0, i) for c in ".!?…|") + 1
+    ends = [k for k in (flat.find(c, j) for c in ".!?…|") if k >= 0]
     return s, (min(ends) + 1 if ends else len(flat))
 
 
