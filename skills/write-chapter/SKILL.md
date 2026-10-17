@@ -127,7 +127,8 @@ One of them says what the chapter does for its part, in everyday words.
 - **Precedent:** a canon scene of the same kind — an exam, a lecture, a sparring match — [src: ...], or `none`
 - **What is new:** what this scene has that the precedent does not — stakes, obstacle, outcome,
   information. At least two; a different room does not count
-- **Event:** what happens on the page that changes the situation — not only what the POV thinks about it
+- **Event:** what happens on the page that changes the situation — not only what the POV thinks
+  about it — and, for every act in it, its *because* (see *Give every act its cause*)
 - **Cut:** last scene only, when the outline marks one — the exact line or action the chapter stops
   on, and why the reader cares how it turns out. Omit the field for a closed ending
 - **Picture:** the scene that holds the outline row's `picture`, if it has one — the moment, who is
@@ -163,6 +164,16 @@ real run: scenes drafted from cards without it were plausible and on-brief, and 
 read every one as a different scene — the meaning was gone before a word of prose existed, and no
 drafter can restore a point the card never carried. If you cannot state the point, the scene does not
 have one yet: ask, don't draft.
+
+**Give every act its cause.** Every action, decision, refusal, silence and agreement in a card
+says why this person does it here and now: a reason on the page, in an earlier chapter, or in their
+profile. When the reason is a goal, say why they want it. A choice made off the page — a consent, a
+change of mind — is a choice the reader never sees: put it in a scene or ask. On a real run most of
+what the user rewrote in two drafted chapters was already in their beats, written as bare sequence
+("one pushes him; she hits back") with the reason only in the drafter's head. Where the reason is
+written, the user can judge it in a line; where it is not, a reader cannot tell intent from a hole,
+and neither can the drafter three scenes later. A character who acts against their own logic on
+purpose — for the scene's emotion — still gets the card line *why*, and the user decides.
 
 **Run the swap test on every card with a precedent.** Paste the canon scene in place of this one: if
 nothing downstream would notice, the scene is a re-staging, not a scene — rebeat it before drafting.
@@ -218,6 +229,39 @@ and sort `$D/report.md`:
   marked "evidence not found" is a lead to check, not a fact.
 
 Delete `$D` once the answers are in the cards, as with critic replies.
+
+**Breaks reader — two runs, before the beat gate.** The reader above checks claims; it reads past a
+choice that contradicts no fact. This one lists every event in the beats, finds each one's cause and
+what it contradicts — what the person said or feared a line earlier, their profile, an earlier
+chapter — and flags an event with no cause, against what the story showed, or decided off the page.
+On one book it caught about half of the user's objections of this kind at the beat stage, where the
+facts reader caught none, and the user judged 27 of its 30 flags worth asking. Unless `CANON.md`
+sets `logic_reader: off`:
+
+```bash
+D=<book>/logic/ch<NN>-beats-breaks
+python3 <scripts>/logic_reader.py prompt <book>/beats/ch<NN>.md --stage beats --check breaks --dir $D
+```
+
+The prompt carries the user's past questions from `## Logic examples` in `plan/HARNESS.md` — keep
+that section filled: after each chapter, add a question the user asked about logic that no reader
+raised (what was written, what the user asked, the kind of break in one line). Give `$D/prompt.md`
+to **two** fresh-context subagents in parallel, each told to write `$D/reply1.json` or
+`$D/reply2.json`: the runs share only about half their flags, and the flags one run found are as
+often right as the ones both found. Then
+`python3 <scripts>/logic_reader.py add <book>/beats/ch<NN>.md --dir $D --reply $D/reply1.json --reply $D/reply2.json`
+merges them by sentence. Sort `$D/report.md`:
+
+- **Fix yourself** a cause that is in your head but not in the card: write it into the card. A flag
+  of this kind — the intent was right, the card did not say it — is common, and not a false alarm.
+- **Drop** a flag the card already answers in so many words, or one the user decided for this
+  exact break before, recorded in the beat file.
+- **Ask** everything else in To decide, in the reader's words, each with your recommendation —
+  including a break you made on purpose: say it is deliberate and why, and let the user keep or
+  fix it. When the break is against an earlier chapter, say which side looks wrong; the earlier
+  chapter may be the one to fix (a queued one can still change: `CONVENTIONS.md` §13, `publish` → Editing a queued chapter).
+
+Delete `$D` once the answers are in the cards.
 
 **Profile gate.** Every character in the chapter above the depth threshold
 (`../../CONVENTIONS.md` §11) needs a profile in `wiki/fanon/proposed/characters/` — read it before
@@ -417,7 +461,7 @@ assertions from the chapter are handed to `reconcile`, which routes them through
 Append to `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] write | b<NN>/ch<NN> <title>
-   metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n> natural=<flagged>/<auto> critics=<name>:<kept>/<flagged>,… logic=<flagged>/<fixed>/<asked>
+   metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n> natural=<flagged>/<auto> critics=<name>:<kept>/<flagged>,… logic=<flagged>/<fixed>/<asked> breaks=<flagged>/<fixed>/<asked>
 ```
 Drop `b<NN>/` and `book=` in a flat project.
 Then suggest running `reconcile`.

@@ -624,7 +624,39 @@ re-upload and refuses another; `reschedule` moves every version of a queued chap
 adapter gained the re-upload steps the exceptions had worked out on the site. The day a timer fires
 counts as live, whatever the hour — a same-day edit before the evening timer stays a manual call.
 
+## Breaks reader on the beats (v0.23.0)
+
+After v0.21.0 the user still rewrote characters' behaviour in every chapter: people acting against
+what they had just said they feared, a skilled recruiter written as a supplicant, a fight with no
+reason, a consent given off the page. Eight such objections on two chapters became eval cases. The
+facts reader caught **0/8** in two runs: it hunts false claims and reads past a choice that
+contradicts no fact. Three other readers were tried on the drafts. One imagined each character's
+best move and compared it with the text, with and without written actor cards. It caught **1/8**,
+and its cards showed why: it took the best move from the text it had just read. A first "breaks"
+reader listed every event with its cause and contradictions and caught **0/8**. It had seen the
+contradiction but let it pass because the narrator made a joke of it. A second version caught
+**2/8**: jokes no longer exempt, profile lines copied before judging, "why does he want that?"
+asked of every goal.
+
+The beat files of the same two chapters already held almost every problem: the draft only repeated
+them, and the draft reader was told that beat decisions are not flags. With the user's past
+questions on earlier chapters as examples, at least five flags required, and no blanket exemption
+for the author's choices, the breaks reader over the **beats** caught 4/7 by sentence and about half
+by meaning. The user judged its 30 merged flags from two runs: **27 worth asking, 3 false**. Flags
+found by one run were as often right as flags both runs found, so `write-chapter` runs it twice and
+`add` merges the runs by sentence. Two of the three false flags were right intents with the cause
+missing from the card ("she hits back" with no word of *whom for*). Hence the second half of this
+version: every act in a card carries its *because*. The user's rules from the marking are in the
+prompt and the skill. A break made on purpose is still asked, and the user decides. A
+contradiction with an earlier chapter says which side looks wrong. The actor-card reader
+(`--check people`) is removed. The draft stage keeps the facts reader only. Breaks on drafts (2/8,
+precision unmarked) is not wired in.
+
 ## Known gaps / possible next work
+
+- **Logic in the outline and the synopsis.** One of the eight objections — a consent deferred to a
+  later chapter — was already in the chapter plan, where no beat check reaches. `plan-chapters` and
+  `plan-story` have no breaks check; measure it first on the user's past outline objections.
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated
   chapters score at or below what a *random wrong chapter of the same novel* scores against the

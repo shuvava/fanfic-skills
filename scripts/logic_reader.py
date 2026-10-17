@@ -5,11 +5,11 @@ Standard library only. Run from the project root, in `write-chapter` at the beat
 the beat file) and in §5 before `naturalize` (target = the draft).
 
     python3 logic_reader.py prompt <target> --stage beats|draft --dir <out> [--beats <beat file>]
-                                   [--check facts|people|breaks]
-    python3 logic_reader.py add    <target> --dir <out> --reply <out>/reply.json
+                                   [--check facts|breaks] [--examples <file>]
+    python3 logic_reader.py add    <target> --dir <out> --reply <reply.json> [--reply <reply.json> ...]
     python3 logic_reader.py eval   <cases.json> --runs <dir> [--baseline <dir>]
 
-`<out>` is `<book>/logic/<chapter stem>-<stage>/` (`…-<stage>-people/` for `--check people`).
+`<out>` is `<book>/logic/<chapter stem>-<stage>/`, and `…-<stage>-breaks/` for `--check breaks`.
 
 Why a separate reader
 ---------------------
@@ -23,28 +23,36 @@ share them.
 Two checks
 ----------
 `--check facts` (the default) asks whether claims hold: canon, cause and effect, who knows what,
-invented specifics. `--check people` asks whether people act like themselves. The reader goes
-scene by scene and, for every character who acts, writes down what they want, believe and have
-at hand, and what their best move would be, before comparing it with what the text makes them do.
-The facts reader is told to ask what a character wants as well, yet on a book's real objections
-of this kind (people acting against what they just said they fear, a skilled character written as
-a supplicant, consent given off the page) it caught none: a reader hunting for false claims reads
-past a choice that contradicts no fact. Both checks return the same JSON; people
-flags have kind `agency`.
+invented specifics. `--check breaks` asks where the story's own logic breaks: it lists every event,
+finds each one's cause (on the page, in an earlier chapter, in the character's profile) and what it
+contradicts, and flags an event without a cause, against what the story showed, or decided off the
+page. On one book the facts reader caught none of the user's eight objections of this kind (people
+acting against what they just said they fear, a skilled character written as a supplicant, consent
+given off the page): a reader hunting for false claims reads past a choice that contradicts no fact.
+The breaks reader on the same chapters' beat files caught about half, and the user judged 27 of its
+30 flags worth asking. A reader asked instead to imagine each character's best move caught one in
+eight: it read the best move off the text it had just read.
+
+The breaks reader gets the author's own past questions, if the project keeps them: `## Logic
+examples` in `plan/HARNESS.md` (or `--examples <file>`). Run it twice: two runs share half their
+flags, and the flags found once are as often right as the ones found twice.
 
 What the reader gets
 --------------------
 `prompt.md`: the task, the target text, and where to look — `raw/`, `wiki/`, `drafts/continuity.md`,
 the fic's earlier chapters. The reader is a subagent with file tools; it is given `prompt.md` as its
 whole task and nothing of the drafting conversation. It returns a JSON array of
-{quote, kind, question, evidence: [{file, quote}], certainty}.
+{quote, kind, question, evidence: [{file, quote}], certainty}; the breaks reader wraps it in an
+object with its working (`traits`, `events`) beside `flags`.
 
 What comes back
 ---------------
 `add` keeps a flag only if its quote is an exact substring of the target, and marks each piece of
 evidence verified or not by searching the cited file for the quoted words. A `canon` flag whose
 evidence does not verify is kept but marked — the reader may have misremembered, exactly as the
-drafter did. Writes `<out>/flags.json` and `<out>/report.md`.
+drafter did. With several `--reply` files (runs of the same reader), flags that fall in the same
+sentence are merged into one entry with every run's question. Writes `<out>/flags.json` and
+`<out>/report.md`.
 
 `eval` scores runs against a case file of real user objections (anchor quotes in the same
 targets): a flag hits an objection when its quote falls in the same sentence as the anchor.
@@ -116,68 +124,6 @@ Answer with a JSON array only, nothing before or after:
 `evidence` may be empty for logic, motive and unneeded. The quote must match the target \
 character for character."""
 
-PEOPLE = """You are a reader who takes every character seriously — you can look anything up — reading \
-{what} of a fan continuation of a source. You are not an editor of style and not a canon checker; \
-another reader checks facts. You check one thing: does every person in the story act like a \
-person with their own head, wants and fears, or do they do what the plot needs?
-
-How to work, scene by scene:
-1. List everyone who acts, speaks, decides or refuses in the scene — the narrator too, and \
-nameless groups ("two guards", "the crowd") as one actor each.
-2. For each actor, before you judge what they do, fill in a card (it goes into your answer):
-   - wants: what they want right now, in this scene, and what they want from the story at large;
-   - believes and fears: what they think is true here — including what they themselves said a \
-line earlier;
-   - is: who they are — role, rank, skill, experience, temper. Look them up: their profile and \
-voice card under `wiki/`, `drafts/continuity.md`, the fic's earlier chapters under `{drafts}`, \
-the source under `{raw}`;
-   - has at hand: people, papers, objects, rules and favours they could use.
-3. Write their best move: what a person like that, wanting that, believing that, with that at \
-hand, would most likely do. A hot-headed or foolish character's best move is still their own \
-move — foolish in their way, for their reasons.
-4. Compare with what the text makes them do. Flag where the two part ways:
-   - against their own belief: they act as if they did not believe what they just said or showed \
-(people who fear catching a fever from a man take him by the collar);
-   - below their skill: someone experienced or clever acts naive, passive, servile or clumsy \
-(a veteran quartermaster asks every passer-by what he should buy; a merchant pays the first price);
-   - unused means: the obvious tool, helper, paper or right at hand is ignored for no reason;
-   - wrong decider: someone else makes a decision that is this person's to make, or the person \
-whose call it is just goes along (the captain lets the cabin boy choose the crew);
-   - off the page: a decision that matters to the story — consent, a refusal, a change of mind — \
-happens unseen, or is only reported, so the reader never sees the person choose;
-   - no reason: an attack, a gift, a refusal, a silence or a lie whose reason is neither on the \
-page nor plain from earlier chapters;
-   - stale reasoning: the narrator weighs a choice with an argument from an earlier situation \
-that the present stakes have changed;
-   - plot puppets: opponents or bystanders who act to make the scene happen, not in their own \
-interest — who attacks whom, and why that one?
-5. Not a flag: a choice the beat file or the character's profile records as their flaw or plan \
-and the text shows; a joke whose premise holds for the people in it. A joke whose premise needs \
-someone to act against their own belief IS a flag — readers stop laughing and start asking.
-{extra}
-Keep only what you would put to the author as a question. Eight precise flags beat twenty \
-doubtful ones; at most 15. Put the quote on the sentence where the person acts, not on the \
-narrator's comment about it. Write `question` in the target's language, the way a reader asks it \
-aloud: «зачем она…, если сама…?», «почему он не…, раз у него под рукой…?», «а где они решили…?». \
-Say in it what the person's best move would have been.
-
-Every scene gets its cards, the first scene as much as the last, and every card needs \
-`is` looked up, not guessed: open the profile or the earlier chapter that shows who they are. A \
-card whose `best` and `does` differ either becomes a flag or says in `why_ok` why it is fine.
-
-Answer with one JSON object only, nothing before or after:
-{{"cards": [{{"scene": "<scene number or first words>", "who": "<actor>",
-   "wants": "...", "believes": "...", "is": "... (<file you looked it up in>)", "has": "...",
-   "best": "<their best move>", "does": "<what the text makes them do>", "why_ok": "<or empty>"}}],
- "flags": [{{"quote": "<exact quote from the target, 3-25 words>",
-   "kind": "agency",
-   "question": "<the question, one to three lines>",
-   "evidence": [{{"file": "<path>", "quote": "<exact words from that file>"}}],
-   "certainty": "high|medium"}}]}}
-`evidence` holds what fixes who the person is or what they believe (a profile line, an earlier \
-chapter); it may be empty when the scene itself shows it. The quote must match the target \
-character for character."""
-
 BREAKS = """You are a reader who keeps asking "why?" — you can look anything up — reading {what} of a \
 fan continuation of a source. You are not an editor of style, and you do not judge whether the \
 characters chose well. You look for places where the story's logic breaks: something happens \
@@ -209,9 +155,10 @@ that the new situation has undone);
 change of mind reported in a line — so the reader never sees the person decide.
 5. Flag the event when its cause is missing, when it contradicts something, or when it happens \
 off the page. A contradiction stays a flag when the narrator notices it or makes a joke of it: \
-readers stop laughing and ask why the person did it. Not a flag: a flaw the character's profile \
-records and the text shows. A choice marked as the author's decision is not a flag either, but a \
-missing cause for it still is.
+readers stop laughing and ask why the person did it. Flag a break even when the author chose it on \
+purpose — say so in the question; the author decides whether to keep it. Not a flag: a flaw the \
+character's profile records and the text shows. When an event contradicts an earlier chapter, say \
+which side looks wrong: the earlier chapter may be the one to fix.
 {extra}
 Keep only what you would put to the author as a question. At most 15 flags, and never fewer \
 than 5: if fewer breaks are clear, add the events whose cause is weakest, certainty medium. Put the quote on the \
@@ -264,16 +211,26 @@ def raw_dir() -> str:
     return "raw/" if Path("raw").is_dir() else "<source directory>"
 
 
+def harness_examples() -> str:
+    """`## Logic examples` from plan/HARNESS.md, without its heading; empty if absent."""
+    h = Path("plan/HARNESS.md")
+    if not h.is_file():
+        return ""
+    m = re.search(r"^## Logic examples[^\n]*\n(.*?)(?=^## |\Z)", h.read_text(encoding="utf-8"), re.M | re.S)
+    return m.group(1) if m else ""
+
+
 def cmd_prompt(a) -> int:
     parent = a.target.parent.parent if a.target.parent.name == "snapshots" else a.target.parent
     drafts = f"{parent}/" if a.stage == "draft" else "drafts/"
     beats = f" (`{a.beats}`)" if a.beats else ""
     what = "a beat card for one chapter" if a.stage == "beats" else "one drafted chapter"
-    task = {"facts": TASK, "people": PEOPLE, "breaks": BREAKS}[a.check].format(what=what, raw=raw_dir(), drafts=drafts,
+    task = {"facts": TASK, "breaks": BREAKS}[a.check].format(what=what, raw=raw_dir(), drafts=drafts,
                        extra=EXTRA[a.stage].format(beats=beats))
-    if a.examples:
+    examples = a.examples.read_text(encoding="utf-8") if a.examples else harness_examples()
+    if a.check == "breaks" and examples.strip():
         task += ("\n\nThe author's own questions on earlier chapters — the kind of break this author "
-                 "catches. Ask questions like these:\n\n" + a.examples.read_text(encoding="utf-8").strip())
+                 "catches. Ask questions like these:\n\n" + examples.strip())
     a.dir.mkdir(parents=True, exist_ok=True)
     p = a.dir / "prompt.md"
     p.write_text(f"{task}\n\n---\n\n# TARGET: {a.target}\n\n{body(a.target)}\n", encoding="utf-8")
@@ -285,7 +242,7 @@ def cmd_prompt(a) -> int:
 def parse(reply: str) -> list[dict]:
     m = re.search(r"\{.*\}", reply, re.S)
     if m and reply.lstrip().startswith("{"):
-        # people check: {"cards": [...], "flags": [...]}; the cards are the reader's working
+        # breaks check: {"traits": [...], "events": [...], "flags": [...]}; the rest is the reader's working
         try:
             reply = json.dumps(json.loads(m.group(0)).get("flags", []))
         except json.JSONDecodeError:
@@ -304,35 +261,51 @@ def verify(ev: dict) -> bool:
 
 
 def cmd_add(a) -> int:
-    try:
-        flags = parse(a.reply.read_text(encoding="utf-8"))
-    except (ValueError, json.JSONDecodeError) as e:
-        print(f"unreadable reply ({e})", file=sys.stderr)
-        return 1
     flat = norm(body(a.target))
-    kept = []
-    for f in flags:
-        if not norm(f["quote"]) or norm(f["quote"]) not in flat:
-            continue
-        f["kind"] = f.get("kind") if f.get("kind") in KINDS else "logic"
-        f["evidence"] = [dict(e, verified=verify(e)) for e in f.get("evidence") or [] if isinstance(e, dict)]
-        f["unverified"] = f["kind"] == "canon" and not any(e["verified"] for e in f["evidence"])
-        kept.append(f)
-    rec = {"target": str(a.target), "returned": len(flags), "dropped_inexact": len(flags) - len(kept),
-           "flags": kept}
+    kept, by_sentence, returned = [], {}, 0
+    for run, reply in enumerate(a.reply, 1):
+        try:
+            flags = parse(reply.read_text(encoding="utf-8"))
+        except (ValueError, json.JSONDecodeError) as e:
+            print(f"unreadable reply {reply} ({e})", file=sys.stderr)
+            return 1
+        returned += len(flags)
+        for f in flags:
+            at = locate(flat, f["quote"])
+            if not at:
+                continue
+            key = sentence_span(flat, *at)
+            if key in by_sentence:  # another run flagged the same sentence: one entry, both questions
+                first = by_sentence[key]
+                first["runs"] = sorted(set(first["runs"]) | {run})
+                if f.get("question") and f["question"] != first.get("question"):
+                    first.setdefault("also", []).append(f["question"])
+                continue
+            f["kind"] = f.get("kind") if f.get("kind") in KINDS else "logic"
+            f["evidence"] = [dict(e, verified=verify(e)) for e in f.get("evidence") or [] if isinstance(e, dict)]
+            f["unverified"] = f["kind"] == "canon" and not any(e["verified"] for e in f["evidence"])
+            f["runs"] = [run]
+            by_sentence[key] = f
+            kept.append(f)
+    inexact = returned - len(kept) - sum(len(f["runs"]) - 1 for f in kept)
+    rec = {"target": str(a.target), "runs": len(a.reply), "returned": returned,
+           "dropped_inexact": inexact, "flags": kept}
     (a.dir / "flags.json").write_text(json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
-    out = [f"# Logic and canon reader — {a.target}\n\n{len(kept)} flag(s), "
-           f"{len(flags) - len(kept)} dropped as inexact quotes.\n"]
+    out = [f"# Logic reader — {a.target}\n\n{len(kept)} flag(s) from {len(a.reply)} run(s), "
+           f"{inexact} dropped as inexact quotes.\n"]
     for k, f in enumerate(kept, 1):
         mark = " — evidence not found in the cited file" if f["unverified"] else ""
-        out.append(f"\n## {k}. [{f['kind']}] «{f['quote']}»{mark}\n\n{f.get('question', '')}\n")
+        both = f" (runs {', '.join(map(str, f['runs']))})" if len(a.reply) > 1 else ""
+        out.append(f"\n## {k}. [{f['kind']}] «{f['quote']}»{mark}{both}\n\n{f.get('question', '')}\n")
+        for q in f.get("also", []):
+            out.append(f"\n{q}\n")
         for e in f["evidence"]:
             out.append(f"\n- {'✓' if e['verified'] else '✗'} `{e.get('file')}`: «{e.get('quote')}»")
         out.append("\n")
     (a.dir / "report.md").write_text("".join(out), encoding="utf-8")
     unver = sum(f["unverified"] for f in kept)
-    print(f"wrote {a.dir / 'report.md'}: {len(kept)} flag(s), {len(flags) - len(kept)} inexact dropped, "
-          f"{unver} canon flag(s) with unverified evidence")
+    print(f"wrote {a.dir / 'report.md'}: {len(kept)} flag(s) from {len(a.reply)} run(s), {inexact} inexact "
+          f"dropped, {unver} canon flag(s) with unverified evidence")
     return 0
 
 
@@ -427,14 +400,16 @@ def main() -> int:
     p.add_argument("--stage", choices=("beats", "draft"), required=True)
     p.add_argument("--dir", type=Path, required=True, help="<book>/logic/<stem>-<stage>/")
     p.add_argument("--beats", type=Path, help="draft stage: the chapter's beat file")
-    p.add_argument("--examples", type=Path, help="a file of the author's past logic questions, appended")
-    p.add_argument("--check", choices=("facts", "people", "breaks"), default="facts",
-                   help="facts: canon and logic (default); people: does everyone act like themselves; "
-                        "breaks: events without a cause or against what the story showed")
+    p.add_argument("--examples", type=Path,
+                   help="breaks: the author's past logic questions (default: ## Logic examples in plan/HARNESS.md)")
+    p.add_argument("--check", choices=("facts", "breaks"), default="facts",
+                   help="facts: canon and logic (default); breaks: events without a cause, against what "
+                        "the story showed, or decided off the page")
     p = sub.add_parser("add")
     p.add_argument("target", type=Path)
     p.add_argument("--dir", type=Path, required=True)
-    p.add_argument("--reply", type=Path, required=True, help="the subagent's JSON reply")
+    p.add_argument("--reply", type=Path, required=True, action="append",
+                   help="the subagent's JSON reply; repeat for several runs, merged by sentence")
     p = sub.add_parser("eval")
     p.add_argument("cases", type=Path)
     p.add_argument("--runs", type=Path, required=True, help="one dir per case id: target.md, flags.json")
