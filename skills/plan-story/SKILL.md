@@ -60,6 +60,24 @@ specifics.
 When the decisions are resolved, summarize everything back and ask the user to confirm. **Do not
 write the artifact or proceed to outlining until they confirm.**
 
+**Breaks reader on the summary — two runs, before you show it.** A recommendation carries its own
+*because*, and that is where a plan breaks: the hero acts against his own goal or manner («he goes
+to the club head for protection», when he always fights his own battles), a rival's lever that does
+not work («report his sales to the father» — they sold too), a reason that does not hold. On one book
+a fresh-context reader caught 8 of 19 such objections to a planner's proposals in full and 6 more in
+part. Unless `CANON.md` sets `logic_reader: off`, write the summary to `$D/summary.md` and:
+
+```bash
+D=<book>/logic/intent-breaks
+python3 <scripts>/logic_reader.py prompt $D/summary.md --stage outline --check breaks --dir $D
+```
+
+Two fresh-context subagents, `add` with both replies, and sort exactly as `plan-chapters` → *Breaks
+reader* does: write a missing cause into the summary, drop what it already answers, put the rest to
+the user one at a time, like the interview — through `naturalize` in plan mode first, so they read
+plainly. Delete `$D`
+once the intent is written.
+
 ## The decision tree
 
 Walk roughly in this order, skipping anything the user already specified and pruning branches their

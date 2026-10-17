@@ -2,9 +2,11 @@
 """Logic and canon reader: a fresh-context Claude asks the questions an attentive fan would ask.
 
 Standard library only. Run from the project root, in `write-chapter` at the beat gate (target =
-the beat file) and in §5 before `naturalize` (target = the draft).
+the beat file) and in §5 before `naturalize` (target = the draft); with `--stage outline --check
+breaks` in `plan-chapters` (target = one part of the outline) and `plan-story` (target = the intent
+summary).
 
-    python3 logic_reader.py prompt <target> --stage beats|draft --dir <out> [--beats <beat file>]
+    python3 logic_reader.py prompt <target> --stage beats|draft|outline --dir <out> [--beats <beat file>]
                                    [--check facts|breaks] [--examples <file>]
     python3 logic_reader.py add    <target> --dir <out> --reply <reply.json> [--reply <reply.json> ...]
     python3 logic_reader.py eval   <cases.json> --runs <dir> [--baseline <dir>]
@@ -30,7 +32,8 @@ page. On one book the facts reader caught none of the user's eight objections of
 acting against what they just said they fear, a skilled character written as a supplicant, consent
 given off the page): a reader hunting for false claims reads past a choice that contradicts no fact.
 The breaks reader on the same chapters' beat files caught about half, and the user judged 27 of its
-30 flags worth asking. A reader asked instead to imagine each character's best move caught one in
+30 flags worth asking. On the plan — parts of the outline and a planner's proposals — it caught 11 of
+27 such objections in full and 8 in part, and the user judged 31 of 32 flags on one part worth asking. A reader asked instead to imagine each character's best move caught one in
 eight: it read the best move off the text it had just read.
 
 The breaks reader gets the author's own past questions, if the project keeps them: `## Logic
@@ -51,7 +54,8 @@ What comes back
 evidence verified or not by searching the cited file for the quoted words. A `canon` flag whose
 evidence does not verify is kept but marked — the reader may have misremembered, exactly as the
 drafter did. With several `--reply` files (runs of the same reader), flags that fall in the same
-sentence are merged into one entry with every run's question. Writes `<out>/flags.json` and
+sentence (or the same table cell) are merged into one entry with every run's question. Quotes are
+matched without markdown emphasis: a plan is full of **bold**, and readers quote the words alone. Writes `<out>/flags.json` and
 `<out>/report.md`.
 
 `eval` scores runs against a case file of real user objections (anchor quotes in the same
@@ -164,7 +168,8 @@ Keep only what you would put to the author as a question. At most 15 flags, and 
 than 5: if fewer breaks are clear, add the events whose cause is weakest, certainty medium. Put the quote on the \
 sentence where the event happens. Write `question` in the target's language, the way a reader \
 asks it aloud: «почему он…?», «но ведь она сама только что…», «а когда они это решили?» — and name \
-what is missing or what it contradicts.
+what is missing or what it contradicts. Plain everyday words: name the person and the chapter, \
+spell out what you mean; the author reads the question without your working.
 
 Answer with one JSON object only, nothing before or after:
 {{"traits": [{{"who": "<character>", "file": "<profile path>", "lines": ["<copied line>", "..."]}}],

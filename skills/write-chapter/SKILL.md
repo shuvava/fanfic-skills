@@ -261,7 +261,9 @@ merges them by sentence. Sort `$D/report.md`:
   fix it. When the break is against an earlier chapter, say which side looks wrong; the earlier
   chapter may be the one to fix (a queued one can still change: `CONVENTIONS.md` §13, `publish` → Editing a queued chapter).
 
-Delete `$D` once the answers are in the cards.
+Put the questions you ask from either reader through `naturalize` in plan mode first (unless
+`naturalness: off`): the reader writes compressed, and the user asks what a question means instead
+of answering it. Delete `$D` once the answers are in the cards.
 
 **Profile gate.** Every character in the chapter above the depth threshold
 (`../../CONVENTIONS.md` §11) needs a profile in `wiki/fanon/proposed/characters/` — read it before
