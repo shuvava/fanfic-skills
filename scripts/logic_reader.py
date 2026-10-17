@@ -184,6 +184,13 @@ EXTRA = {
     "beats": "The target is a beat file: a short retelling, questions for the author with \
 recommended answers, and one card per scene with its canon and fanon dependencies. Recommended \
 answers and dependencies are claims to check like any other.\n",
+    "outline": "The target is a piece of the book's plan: a retelling of a part or of the whole book, \
+chapter rows (event, what changes, precedent) and scene rows (goal, conflict, outcome), or a planner's \
+proposal with its reasons. A row compresses a chapter into a line; do not flag brevity, flag what the line \
+says happens and why. Every decision, agreement, refusal, attack, request or plan in it needs a cause the \
+plan gives (here, in another row, in the character's profile) or the source shows. A row that leaves a \
+decision to a later chapter is a flag when no row shows that decision being made. Chapters already \
+written are under `{drafts}`: what they show is fact for this fic.\n",
     "draft": "The target is a drafted chapter. Its beat file{beats} records what the drafter meant \
 and what the author already decided; a decision recorded there is not a flag unless canon \
 contradicts it.\n",
@@ -196,7 +203,9 @@ def usage(msg: str) -> None:
 
 
 def norm(s: str) -> str:
-    return re.sub(r"\s+", " ", s.replace("ё", "е").replace("Ё", "Е")).strip()
+    # markdown emphasis is dropped: a plan is full of **bold**, and readers quote the words without it
+    s = re.sub(r"[*`]", "", s.replace("ё", "е").replace("Ё", "Е"))
+    return re.sub(r"\s+", " ", s).strip()
 
 
 def body(path: Path) -> str:
@@ -224,9 +233,10 @@ def cmd_prompt(a) -> int:
     parent = a.target.parent.parent if a.target.parent.name == "snapshots" else a.target.parent
     drafts = f"{parent}/" if a.stage == "draft" else "drafts/"
     beats = f" (`{a.beats}`)" if a.beats else ""
-    what = "a beat card for one chapter" if a.stage == "beats" else "one drafted chapter"
+    what = {"beats": "a beat card for one chapter", "draft": "one drafted chapter",
+            "outline": "a piece of the plan"}[a.stage]
     task = {"facts": TASK, "breaks": BREAKS}[a.check].format(what=what, raw=raw_dir(), drafts=drafts,
-                       extra=EXTRA[a.stage].format(beats=beats))
+                       extra=EXTRA[a.stage].format(beats=beats, drafts=drafts))
     examples = a.examples.read_text(encoding="utf-8") if a.examples else harness_examples()
     if a.check == "breaks" and examples.strip():
         task += ("\n\nThe author's own questions on earlier chapters — the kind of break this author "
@@ -262,7 +272,7 @@ def verify(ev: dict) -> bool:
 
 def cmd_add(a) -> int:
     flat = norm(body(a.target))
-    kept, by_sentence, returned = [], {}, 0
+    kept, by_sentence, returned, inexact = [], {}, 0, 0
     for run, reply in enumerate(a.reply, 1):
         try:
             flags = parse(reply.read_text(encoding="utf-8"))
@@ -273,9 +283,10 @@ def cmd_add(a) -> int:
         for f in flags:
             at = locate(flat, f["quote"])
             if not at:
+                inexact += 1
                 continue
             key = sentence_span(flat, *at)
-            if key in by_sentence:  # another run flagged the same sentence: one entry, both questions
+            if key in by_sentence:  # the same sentence flagged again (another run, or a long plan row): one entry
                 first = by_sentence[key]
                 first["runs"] = sorted(set(first["runs"]) | {run})
                 if f.get("question") and f["question"] != first.get("question"):
@@ -287,7 +298,6 @@ def cmd_add(a) -> int:
             f["runs"] = [run]
             by_sentence[key] = f
             kept.append(f)
-    inexact = returned - len(kept) - sum(len(f["runs"]) - 1 for f in kept)
     rec = {"target": str(a.target), "runs": len(a.reply), "returned": returned,
            "dropped_inexact": inexact, "flags": kept}
     (a.dir / "flags.json").write_text(json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -397,7 +407,7 @@ def main() -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("prompt")
     p.add_argument("target", type=Path)
-    p.add_argument("--stage", choices=("beats", "draft"), required=True)
+    p.add_argument("--stage", choices=("beats", "draft", "outline"), required=True)
     p.add_argument("--dir", type=Path, required=True, help="<book>/logic/<stem>-<stage>/")
     p.add_argument("--beats", type=Path, help="draft stage: the chapter's beat file")
     p.add_argument("--examples", type=Path,
