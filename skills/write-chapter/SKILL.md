@@ -175,6 +175,13 @@ written, the user can judge it in a line; where it is not, a reader cannot tell 
 and neither can the drafter three scenes later. A character who acts against their own logic on
 purpose — for the scene's emotion — still gets the card line *why*, and the user decides.
 
+**A cause can be offstage.** The outline marks it («за кадром: …» in a Russian plan): the author's
+logic that the POV character and the reader do not know, or only guess. Carry it onto the card with
+the same marker. Draft the act so it fits that cause; never let the narrator or anyone else state it
+unless they could know it (*Who knows what*); leave at most a trace the POV can notice — and the guess
+itself where the outline says the POV guesses. A cause that is offstage on the card is not a hole for
+the breaks reader; one that is in no field at all is.
+
 **Run the swap test on every card with a precedent.** Paste the canon scene in place of this one: if
 nothing downstream would notice, the scene is a re-staging, not a scene — rebeat it before drafting.
 The precedent is also where a card goes wrong quietly: "fill the format from the canon scene" is an instruction to re-stage it, and a real author read the result as the same scene, beat for beat.
@@ -261,7 +268,12 @@ merges them by sentence. Sort `$D/report.md`:
   fix it. When the break is against an earlier chapter, say which side looks wrong; the earlier
   chapter may be the one to fix (a queued one can still change: `CONVENTIONS.md` §13, `publish` → Editing a queued chapter).
 
-Delete `$D` once the answers are in the cards.
+Put the questions you ask from either reader through `naturalize` in plan mode first (unless
+`naturalness: off`): the reader writes compressed, and the user asks what a question means instead
+of answering it. **Ask in story order, one scene at a time:** settle every question
+about scene 1 and write the answers into its card before you ask about scene 2 — a cause fixed early
+often answers a flag further on, so re-read the remaining flags after each scene and drop the ones the
+fix settled. The report is already in story order. Delete `$D` once the answers are in the cards.
 
 **Profile gate.** Every character in the chapter above the depth threshold
 (`../../CONVENTIONS.md` §11) needs a profile in `wiki/fanon/proposed/characters/` — read it before

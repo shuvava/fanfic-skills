@@ -652,11 +652,38 @@ contradiction with an earlier chapter says which side looks wrong. The actor-car
 (`--check people`) is removed. The draft stage keeps the facts reader only. Breaks on drafts (2/8,
 precision unmarked) is not wired in.
 
+## Breaks reader on the plan (v0.24.0)
+
+Of the eight behaviour objections behind v0.23.0, one came from the chapter plan, and the user asked
+whether the check belongs there. 27 of the user's objections to plans became eval cases: 19 to a
+planner's proposals in chat (the text the user saw, saved with the cases; the book snapshot without
+the plan files that already held the user's fixes), and 8 to one part of the outline at two commits.
+The breaks reader with an `outline` stage text, two runs merged, caught **11 in full and 8 in part**.
+On outline rows it missed what it had caught on the same chapters' beat cards — one event among
+twelve chapters gets less attention than in one chapter's card. The user then marked its 32 flags on
+the two versions of the part: **27 real, 4 «the answer is in my head, not in the row», 1 false.**
+Most real flags were causes the planner meant and never wrote; the user had added them by hand in
+the beats and the prose. On the version with written chapters, six of 13 flags were the plan
+contradicting them.
+
+So `plan-chapters` runs it twice per part before showing the part, and again on a part an edit
+changed; `plan-story` runs it on the summary before confirmation. Three things came out of the
+marking. **Two kinds of cause**: on the page («потому что») and offstage (the author's logic the
+narrator and the reader do not know or only guess, with where someone guesses it); the reader counts
+an offstage cause, the drafter keeps acts consistent with it and never lets anyone state it who
+could not know it. **Questions in story order**, one scene (one chapter of a plan) at a time: a cause
+fixed early answers flags further on, so `add` sorts by position. **Plain questions**: the user asked
+to see the text behind flags and called some phrasing unclear, so the readers' questions go through
+`naturalize` in plan mode before they are asked. Merging was fixed for plans: markdown emphasis is
+ignored in quotes, a table cell is a sentence (lines are joined before matching, and an unpunctuated
+row swallowed six chapters' flags into one), and same-run flags in one sentence stay one entry
+instead of vanishing as "inexact".
+
 ## Known gaps / possible next work
 
-- **Logic in the outline and the synopsis.** One of the eight objections — a consent deferred to a
-  later chapter — was already in the chapter plan, where no beat check reaches. `plan-chapters` and
-  `plan-story` have no breaks check; measure it first on the user's past outline objections.
+- **Breaks on the planner's proposals in chat** (8 full + 6 partial of 19) has no precision marking;
+  `plan-story` runs it on the summary only. The one-part outline eval is two versions of one part of
+  one book.
 
 - **Plot fidelity is unsolved.** Style is now inside the author's band; content is not. Generated
   chapters score at or below what a *random wrong chapter of the same novel* scores against the

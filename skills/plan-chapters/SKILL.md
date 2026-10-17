@@ -110,6 +110,19 @@ characters present, canon and fanon entries it depends on. `point` is what the r
 when the scene ends — subtext and irony included, with its *because* — and `write-chapter` carries
 it onto the beat card unchanged.
 
+**Two kinds of cause.** Every act in a row or a scene says why, and says who will ever know it:
+- **On the page** — «потому что …» in the plan's language: the reader sees it or is told it. «Анна
+  просит сама: без отряда ей не сдать зачёт».
+- **Offstage** — the same marker the plan's language uses for it (Russian «за кадром: …»): the
+  author's logic that the narrator and the reader do not know, or only guess. Add when someone
+  will guess it: «за кадром: наставник сам подбросил ей это задание, хочет проверить; Марк
+  догадается в гл. 12». The drafter keeps the act consistent with it and no one says it aloud who cannot know it.
+
+On a real book a part's rows carried neither: the user marked four flags of 32 «the answer is in my
+head», and most of the rest were causes the plan meant and never wrote — some for the page, some only
+to keep the logic straight (a superior quietly pushing someone, a rule bent for one student). Writing them down is
+cheap; the next stage reads the row, not the planner's head.
+
 Stop at four layers. Beat-level decomposition belongs to `write-chapter`, one chapter at a time —
 beating out forty scenes in advance is work that gets thrown away when chapter 3 changes. **The same
 refusal applies upward: outline one book.** If the user asks to outline the whole series, outline
@@ -317,6 +330,49 @@ usually shorthand for nothing. Audit your own layer before presenting it:
   `wiki/fanon/proposed/characters/` is a `warning` — offer `develop-character`. Then look at the scene
   list the way its cardboard check does: a character whose every appearance serves the protagonist is
   an outline problem to fix now, not a prose problem to discover at chapter 30.
+
+### Breaks reader — two runs, before showing a part
+
+The self-review checks the shape of the plan; it does not ask *why* each person in a row does what
+the row says. A fresh-context reader does. It lists every event in a part, looks for each one's
+cause in the rows, the profiles, the written chapters and the source, and flags an act with no
+cause, against what the story already showed, or decided off the page. On one book it caught the
+user's own objections to a part about as often as it does on beat cards, and the user judged 31 of
+its 32 flags on two versions of one part worth asking (27 real, 4 «the answer is in my head, not in
+the row»). Most real flags were exactly that: a cause the planner meant and never wrote, which the
+user then had to add by hand in the beats and the prose. On a version whose first chapters were
+written, six of 13 flags were the plan contradicting those chapters. Unless `CANON.md` sets
+`logic_reader: off`, run it for every part you are about to show, and again for a part whose rows an
+edit changed (a promoted idea, a rebuilt part); skip a part whose chapters are all live.
+
+Copy into `$D/part.md`, word for word, the part's Layer 2 paragraph and card, its Layer 3 block and
+its Layer 4 block — the reader quotes the target and the script keeps only exact quotes. Then:
+
+```bash
+D=<book>/logic/part-<N>-breaks
+python3 <scripts>/logic_reader.py prompt $D/part.md --stage outline --check breaks --dir $D
+```
+
+Give `$D/prompt.md` to **two** fresh-context subagents in parallel, nothing of the conversation:
+«Working directory: <project root>. Read `$D/prompt.md` — it is your whole task. Write the JSON to
+`$D/reply1.json`» (`reply2.json` for the second). Then
+`python3 <scripts>/logic_reader.py add $D/part.md --dir $D --reply $D/reply1.json --reply $D/reply2.json`
+and sort `$D/report.md`:
+
+- **Fix yourself** a cause you know but the row does not say: write it into the row or the scene,
+  on the page or offstage (*Two kinds of cause*). Do not count it as a false alarm — the next stage
+  reads the row, not your head.
+- **Drop** a flag the rows already answer in so many words, or one the user decided for this exact
+  break before (log, beat file, IDEAS).
+- **Ask** the rest with the layer, each with your recommendation, including a break made on purpose.
+  When a row contradicts a written chapter, say which side looks wrong; a queued chapter can still
+  change (`CONVENTIONS.md` §13).
+
+**Put the questions through `naturalize` first** (plan mode, unless `naturalness: off`): the reader
+writes compressed, and a question the user has to ask about is a question not answered. **Ask in
+story order, one chapter at a time:** a flag on the part's paragraph or card goes with the chapter it
+is about; settle that chapter and write the answers into its rows before the next, then re-read the
+remaining flags and drop the ones the fix settled. Delete `$D` once the answers are in the rows.
 
 ### Synopsis check — Layers 1–2
 
@@ -553,7 +609,7 @@ they return next brainstorm and get re-argued from scratch.
 Append to `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] plan-chapters | b<NN> — <n> chapters, <n> conflicts (<n> blocking)
-   metrics: book=<NN> chapters=<n> scenes=<n> parts=<n> part_chapters=<n,n,...> blocking=<n> warnings=<n> notices=<n> seeds_planted=<n> seeds_paid=<n>
+   metrics: book=<NN> chapters=<n> scenes=<n> parts=<n> part_chapters=<n,n,...> blocking=<n> warnings=<n> notices=<n> seeds_planted=<n> seeds_paid=<n> breaks=<flagged>/<fixed>/<asked>
 ## [YYYY-MM-DD] plan-chapters | b<NN> synopsis — from outline <last_updated>
 ```
 The synopsis line is logged whenever `SYNOPSIS.md` is written, alone on a synopsis-only run. Drop

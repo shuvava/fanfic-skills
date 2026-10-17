@@ -2,9 +2,11 @@
 """Logic and canon reader: a fresh-context Claude asks the questions an attentive fan would ask.
 
 Standard library only. Run from the project root, in `write-chapter` at the beat gate (target =
-the beat file) and in §5 before `naturalize` (target = the draft).
+the beat file) and in §5 before `naturalize` (target = the draft); with `--stage outline --check
+breaks` in `plan-chapters` (target = one part of the outline) and `plan-story` (target = the intent
+summary).
 
-    python3 logic_reader.py prompt <target> --stage beats|draft --dir <out> [--beats <beat file>]
+    python3 logic_reader.py prompt <target> --stage beats|draft|outline --dir <out> [--beats <beat file>]
                                    [--check facts|breaks] [--examples <file>]
     python3 logic_reader.py add    <target> --dir <out> --reply <reply.json> [--reply <reply.json> ...]
     python3 logic_reader.py eval   <cases.json> --runs <dir> [--baseline <dir>]
@@ -30,7 +32,8 @@ page. On one book the facts reader caught none of the user's eight objections of
 acting against what they just said they fear, a skilled character written as a supplicant, consent
 given off the page): a reader hunting for false claims reads past a choice that contradicts no fact.
 The breaks reader on the same chapters' beat files caught about half, and the user judged 27 of its
-30 flags worth asking. A reader asked instead to imagine each character's best move caught one in
+30 flags worth asking. On the plan — parts of the outline and a planner's proposals — it caught 11 of
+27 such objections in full and 8 in part, and the user judged 31 of 32 flags on one part worth asking. A reader asked instead to imagine each character's best move caught one in
 eight: it read the best move off the text it had just read.
 
 The breaks reader gets the author's own past questions, if the project keeps them: `## Logic
@@ -51,7 +54,9 @@ What comes back
 evidence verified or not by searching the cited file for the quoted words. A `canon` flag whose
 evidence does not verify is kept but marked — the reader may have misremembered, exactly as the
 drafter did. With several `--reply` files (runs of the same reader), flags that fall in the same
-sentence are merged into one entry with every run's question. Writes `<out>/flags.json` and
+sentence (or the same table cell) are merged into one entry with every run's question, and flags are
+listed in the order of the target: a fix in the first scene often answers a flag further on. Quotes are
+matched without markdown emphasis: a plan is full of **bold**, and readers quote the words alone. Writes `<out>/flags.json` and
 `<out>/report.md`.
 
 `eval` scores runs against a case file of real user objections (anchor quotes in the same
@@ -156,7 +161,10 @@ change of mind reported in a line — so the reader never sees the person decide
 5. Flag the event when its cause is missing, when it contradicts something, or when it happens \
 off the page. A contradiction stays a flag when the narrator notices it or makes a joke of it: \
 readers stop laughing and ask why the person did it. Flag a break even when the author chose it on \
-purpose — say so in the question; the author decides whether to keep it. Not a flag: a flaw the \
+purpose — say so in the question; the author decides whether to keep it. A cause the target marks as \
+offstage («за кадром», «offstage») is a cause: the narrator and the reader are not meant to know it. \
+Do not ask why; ask only when the page leaves no trace and the act reads as a mistake to someone who \
+does not know the cause, or when someone states an offstage cause they could not know. Not a flag: a flaw the \
 character's profile records and the text shows. When an event contradicts an earlier chapter, say \
 which side looks wrong: the earlier chapter may be the one to fix.
 {extra}
@@ -164,7 +172,8 @@ Keep only what you would put to the author as a question. At most 15 flags, and 
 than 5: if fewer breaks are clear, add the events whose cause is weakest, certainty medium. Put the quote on the \
 sentence where the event happens. Write `question` in the target's language, the way a reader \
 asks it aloud: «почему он…?», «но ведь она сама только что…», «а когда они это решили?» — and name \
-what is missing or what it contradicts.
+what is missing or what it contradicts. Plain everyday words: name the person and the chapter, \
+spell out what you mean; the author reads the question without your working.
 
 Answer with one JSON object only, nothing before or after:
 {{"traits": [{{"who": "<character>", "file": "<profile path>", "lines": ["<copied line>", "..."]}}],
@@ -184,6 +193,13 @@ EXTRA = {
     "beats": "The target is a beat file: a short retelling, questions for the author with \
 recommended answers, and one card per scene with its canon and fanon dependencies. Recommended \
 answers and dependencies are claims to check like any other.\n",
+    "outline": "The target is a piece of the book's plan: a retelling of a part or of the whole book, \
+chapter rows (event, what changes, precedent) and scene rows (goal, conflict, outcome), or a planner's \
+proposal with its reasons. A row compresses a chapter into a line; do not flag brevity, flag what the line \
+says happens and why. Every decision, agreement, refusal, attack, request or plan in it needs a cause the \
+plan gives (here, in another row, in the character's profile) or the source shows. A row that leaves a \
+decision to a later chapter is a flag when no row shows that decision being made. Chapters already \
+written are under `{drafts}`: what they show is fact for this fic.\n",
     "draft": "The target is a drafted chapter. Its beat file{beats} records what the drafter meant \
 and what the author already decided; a decision recorded there is not a flag unless canon \
 contradicts it.\n",
@@ -196,7 +212,9 @@ def usage(msg: str) -> None:
 
 
 def norm(s: str) -> str:
-    return re.sub(r"\s+", " ", s.replace("ё", "е").replace("Ё", "Е")).strip()
+    # markdown emphasis is dropped: a plan is full of **bold**, and readers quote the words without it
+    s = re.sub(r"[*`]", "", s.replace("ё", "е").replace("Ё", "Е"))
+    return re.sub(r"\s+", " ", s).strip()
 
 
 def body(path: Path) -> str:
@@ -224,9 +242,10 @@ def cmd_prompt(a) -> int:
     parent = a.target.parent.parent if a.target.parent.name == "snapshots" else a.target.parent
     drafts = f"{parent}/" if a.stage == "draft" else "drafts/"
     beats = f" (`{a.beats}`)" if a.beats else ""
-    what = "a beat card for one chapter" if a.stage == "beats" else "one drafted chapter"
+    what = {"beats": "a beat card for one chapter", "draft": "one drafted chapter",
+            "outline": "a piece of the plan"}[a.stage]
     task = {"facts": TASK, "breaks": BREAKS}[a.check].format(what=what, raw=raw_dir(), drafts=drafts,
-                       extra=EXTRA[a.stage].format(beats=beats))
+                       extra=EXTRA[a.stage].format(beats=beats, drafts=drafts))
     examples = a.examples.read_text(encoding="utf-8") if a.examples else harness_examples()
     if a.check == "breaks" and examples.strip():
         task += ("\n\nThe author's own questions on earlier chapters — the kind of break this author "
@@ -262,7 +281,7 @@ def verify(ev: dict) -> bool:
 
 def cmd_add(a) -> int:
     flat = norm(body(a.target))
-    kept, by_sentence, returned = [], {}, 0
+    kept, by_sentence, returned, inexact = [], {}, 0, 0
     for run, reply in enumerate(a.reply, 1):
         try:
             flags = parse(reply.read_text(encoding="utf-8"))
@@ -273,9 +292,10 @@ def cmd_add(a) -> int:
         for f in flags:
             at = locate(flat, f["quote"])
             if not at:
+                inexact += 1
                 continue
             key = sentence_span(flat, *at)
-            if key in by_sentence:  # another run flagged the same sentence: one entry, both questions
+            if key in by_sentence:  # the same sentence flagged again (another run, or a long plan row): one entry
                 first = by_sentence[key]
                 first["runs"] = sorted(set(first["runs"]) | {run})
                 if f.get("question") and f["question"] != first.get("question"):
@@ -287,7 +307,8 @@ def cmd_add(a) -> int:
             f["runs"] = [run]
             by_sentence[key] = f
             kept.append(f)
-    inexact = returned - len(kept) - sum(len(f["runs"]) - 1 for f in kept)
+    # story order: the user fixes the first scene's logic before what follows from it
+    kept.sort(key=lambda f: locate(flat, f["quote"])[0])
     rec = {"target": str(a.target), "runs": len(a.reply), "returned": returned,
            "dropped_inexact": inexact, "flags": kept}
     (a.dir / "flags.json").write_text(json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -310,9 +331,9 @@ def cmd_add(a) -> int:
 
 
 def sentence_span(flat: str, i: int, j: int) -> tuple[int, int]:
-    """Widen [i, j) to the sentence (or markdown line) around it."""
-    s = max(flat.rfind(c, 0, i) for c in ".!?…\n") + 1
-    ends = [k for k in (flat.find(c, j) for c in ".!?…\n") if k >= 0]
+    """Widen [i, j) to the sentence (or table cell) around it; `norm` has already joined the lines."""
+    s = max(flat.rfind(c, 0, i) for c in ".!?…|") + 1
+    ends = [k for k in (flat.find(c, j) for c in ".!?…|") if k >= 0]
     return s, (min(ends) + 1 if ends else len(flat))
 
 
@@ -397,7 +418,7 @@ def main() -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("prompt")
     p.add_argument("target", type=Path)
-    p.add_argument("--stage", choices=("beats", "draft"), required=True)
+    p.add_argument("--stage", choices=("beats", "draft", "outline"), required=True)
     p.add_argument("--dir", type=Path, required=True, help="<book>/logic/<stem>-<stage>/")
     p.add_argument("--beats", type=Path, help="draft stage: the chapter's beat file")
     p.add_argument("--examples", type=Path,

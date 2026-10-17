@@ -82,7 +82,7 @@ that the draft had quietly sent a guild's share somewhere canon did not allow.
 about trivial things is the narrator's irony, not officialese — on a real run the reader judged two such sentences *funnier* than their plain rewrites — the kind that hand over a spoon «с торжественностью, достойной коронации». Read `## Comic register` in `canon/overview.md` first; anything it records as a
 device is not a defect. Nor are the source's non-standard orthography, slang or coinages.
 
-**Plan mode** — STORY_INTENT, outline rows, beat-card `Point` and `Event`. Here the defect is
+**Plan mode** — STORY_INTENT, outline rows, beat-card `Point` and `Event`, and the logic readers' questions before they reach the user. Here the defect is
 **concept-speak**: abstract nouns, planner's jargon, a summary nobody would say aloud («реализует стратегию независимости через горизонтальные связи», «ресурс доверия конвертируется в лояльность»). The fix is not a
 simpler abstraction but **concrete everyday language — an image or a sharp contrast**, the way the
 user would explain the idea to a friend. The bar is an image anyone would say aloud — «друзья, которые помогут, хотя ничего не обещали», not «связи вместо власти». On the real run the editor's first attempts were simpler abstractions and the reader still called them clumsy; the fixes they accepted were images and sharp contrasts.

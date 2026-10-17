@@ -381,7 +381,9 @@ invented specifics, and verifies every quote it returns. `write-chapter` runs it
 before `naturalize`; `eval` scores it against a file of your past objections. With `--check breaks`
 the same script asks where the story's own logic breaks — an act with no cause, against what the
 person just said or feared, or decided off the page; `write-chapter` runs it twice over the beats,
-with your past questions from `## Logic examples` in `plan/HARNESS.md`, and merges the two runs.
+with your past questions from `## Logic examples` in `plan/HARNESS.md`, and merges the two runs. With `--stage outline`
+`plan-chapters` runs it over each part of the outline before showing it, and `plan-story` over the
+intent summary. Flags come back in story order, and the skills ask them one scene at a time.
 
 Once you approve a chapter's image, `scripts/place_illustration.py` puts it into the draft right
 after the paragraph holding the moment's anchor quote — one `![…](…)` line, relative to the draft,
