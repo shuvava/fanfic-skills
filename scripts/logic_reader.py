@@ -161,7 +161,10 @@ change of mind reported in a line — so the reader never sees the person decide
 5. Flag the event when its cause is missing, when it contradicts something, or when it happens \
 off the page. A contradiction stays a flag when the narrator notices it or makes a joke of it: \
 readers stop laughing and ask why the person did it. Flag a break even when the author chose it on \
-purpose — say so in the question; the author decides whether to keep it. Not a flag: a flaw the \
+purpose — say so in the question; the author decides whether to keep it. A cause the target marks as \
+offstage («за кадром», «offstage») is a cause: the narrator and the reader are not meant to know it. \
+Do not ask why; ask only when the page leaves no trace and the act reads as a mistake to someone who \
+does not know the cause, or when someone states an offstage cause they could not know. Not a flag: a flaw the \
 character's profile records and the text shows. When an event contradicts an earlier chapter, say \
 which side looks wrong: the earlier chapter may be the one to fix.
 {extra}

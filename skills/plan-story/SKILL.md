@@ -61,9 +61,9 @@ When the decisions are resolved, summarize everything back and ask the user to c
 write the artifact or proceed to outlining until they confirm.**
 
 **Breaks reader on the summary — two runs, before you show it.** A recommendation carries its own
-*because*, and that is where a plan breaks: the hero acts against his own goal or manner («he goes
-to the club head for protection», when he always fights his own battles), a rival's lever that does
-not work («report his sales to the father» — they sold too), a reason that does not hold. On one book
+*because*, and that is where a plan breaks: the hero acts against his own goal or manner (he asks a
+patron for protection, when he always fights his own battles), a rival's lever that does not work (a
+threat to expose what the rivals did themselves), a reason that does not hold. On one book
 a fresh-context reader caught 8 of 19 such objections to a planner's proposals in full and 6 more in
 part. Unless `CANON.md` sets `logic_reader: off`, write the summary to `$D/summary.md` and:
 

@@ -175,6 +175,13 @@ written, the user can judge it in a line; where it is not, a reader cannot tell 
 and neither can the drafter three scenes later. A character who acts against their own logic on
 purpose — for the scene's emotion — still gets the card line *why*, and the user decides.
 
+**A cause can be offstage.** The outline marks it («за кадром: …» in a Russian plan): the author's
+logic that the POV character and the reader do not know, or only guess. Carry it onto the card with
+the same marker. Draft the act so it fits that cause; never let the narrator or anyone else state it
+unless they could know it (*Who knows what*); leave at most a trace the POV can notice — and the guess
+itself where the outline says the POV guesses. A cause that is offstage on the card is not a hole for
+the breaks reader; one that is in no field at all is.
+
 **Run the swap test on every card with a precedent.** Paste the canon scene in place of this one: if
 nothing downstream would notice, the scene is a re-staging, not a scene — rebeat it before drafting.
 The precedent is also where a card goes wrong quietly: "fill the format from the canon scene" is an instruction to re-stage it, and a real author read the result as the same scene, beat for beat.

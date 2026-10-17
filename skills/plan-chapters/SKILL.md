@@ -110,6 +110,19 @@ characters present, canon and fanon entries it depends on. `point` is what the r
 when the scene ends — subtext and irony included, with its *because* — and `write-chapter` carries
 it onto the beat card unchanged.
 
+**Two kinds of cause.** Every act in a row or a scene says why, and says who will ever know it:
+- **On the page** — «потому что …» in the plan's language: the reader sees it or is told it. «Анна
+  просит сама: без отряда ей не сдать зачёт».
+- **Offstage** — the same marker the plan's language uses for it (Russian «за кадром: …»): the
+  author's logic that the narrator and the reader do not know, or only guess. Add when someone
+  will guess it: «за кадром: наставник сам подбросил ей это задание, хочет проверить; Марк
+  догадается в гл. 12». The drafter keeps the act consistent with it and no one says it aloud who cannot know it.
+
+On a real book a part's rows carried neither: the user marked four flags of 32 «the answer is in my
+head», and most of the rest were causes the plan meant and never wrote — some for the page, some only
+to keep the logic straight (a superior quietly pushing someone, a rule bent for one student). Writing them down is
+cheap; the next stage reads the row, not the planner's head.
+
 Stop at four layers. Beat-level decomposition belongs to `write-chapter`, one chapter at a time —
 beating out forty scenes in advance is work that gets thrown away when chapter 3 changes. **The same
 refusal applies upward: outline one book.** If the user asks to outline the whole series, outline
@@ -346,8 +359,9 @@ Give `$D/prompt.md` to **two** fresh-context subagents in parallel, nothing of t
 `python3 <scripts>/logic_reader.py add $D/part.md --dir $D --reply $D/reply1.json --reply $D/reply2.json`
 and sort `$D/report.md`:
 
-- **Fix yourself** a cause you know but the row does not say: write it into the row or the scene. Do
-  not count it as a false alarm — the next stage reads the row, not your head.
+- **Fix yourself** a cause you know but the row does not say: write it into the row or the scene,
+  on the page or offstage (*Two kinds of cause*). Do not count it as a false alarm — the next stage
+  reads the row, not your head.
 - **Drop** a flag the rows already answer in so many words, or one the user decided for this exact
   break before (log, beat file, IDEAS).
 - **Ask** the rest with the layer, each with your recommendation, including a break made on purpose.
