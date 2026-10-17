@@ -355,8 +355,10 @@ and sort `$D/report.md`:
   change (`CONVENTIONS.md` §13).
 
 **Put the questions through `naturalize` first** (plan mode, unless `naturalness: off`): the reader
-writes compressed, and a question the user has to ask about is a question not answered. Delete `$D`
-once the answers are in the rows.
+writes compressed, and a question the user has to ask about is a question not answered. **Ask in
+story order, one chapter at a time:** a flag on the part's paragraph or card goes with the chapter it
+is about; settle that chapter and write the answers into its rows before the next, then re-read the
+remaining flags and drop the ones the fix settled. Delete `$D` once the answers are in the rows.
 
 ### Synopsis check — Layers 1–2
 

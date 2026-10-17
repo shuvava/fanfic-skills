@@ -263,7 +263,10 @@ merges them by sentence. Sort `$D/report.md`:
 
 Put the questions you ask from either reader through `naturalize` in plan mode first (unless
 `naturalness: off`): the reader writes compressed, and the user asks what a question means instead
-of answering it. Delete `$D` once the answers are in the cards.
+of answering it. **Ask in story order, one scene at a time:** settle every question
+about scene 1 and write the answers into its card before you ask about scene 2 — a cause fixed early
+often answers a flag further on, so re-read the remaining flags after each scene and drop the ones the
+fix settled. The report is already in story order. Delete `$D` once the answers are in the cards.
 
 **Profile gate.** Every character in the chapter above the depth threshold
 (`../../CONVENTIONS.md` §11) needs a profile in `wiki/fanon/proposed/characters/` — read it before

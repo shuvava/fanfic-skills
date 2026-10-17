@@ -54,7 +54,8 @@ What comes back
 evidence verified or not by searching the cited file for the quoted words. A `canon` flag whose
 evidence does not verify is kept but marked — the reader may have misremembered, exactly as the
 drafter did. With several `--reply` files (runs of the same reader), flags that fall in the same
-sentence (or the same table cell) are merged into one entry with every run's question. Quotes are
+sentence (or the same table cell) are merged into one entry with every run's question, and flags are
+listed in the order of the target: a fix in the first scene often answers a flag further on. Quotes are
 matched without markdown emphasis: a plan is full of **bold**, and readers quote the words alone. Writes `<out>/flags.json` and
 `<out>/report.md`.
 
@@ -303,6 +304,8 @@ def cmd_add(a) -> int:
             f["runs"] = [run]
             by_sentence[key] = f
             kept.append(f)
+    # story order: the user fixes the first scene's logic before what follows from it
+    kept.sort(key=lambda f: locate(flat, f["quote"])[0])
     rec = {"target": str(a.target), "runs": len(a.reply), "returned": returned,
            "dropped_inexact": inexact, "flags": kept}
     (a.dir / "flags.json").write_text(json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")

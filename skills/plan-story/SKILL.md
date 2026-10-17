@@ -74,7 +74,7 @@ python3 <scripts>/logic_reader.py prompt $D/summary.md --stage outline --check b
 
 Two fresh-context subagents, `add` with both replies, and sort exactly as `plan-chapters` → *Breaks
 reader* does: write a missing cause into the summary, drop what it already answers, put the rest to
-the user one at a time, like the interview — through `naturalize` in plan mode first, so they read
+the user one at a time and in story order, like the interview — through `naturalize` in plan mode first, so they read
 plainly. Delete `$D`
 once the intent is written.
 
