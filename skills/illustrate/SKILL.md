@@ -1,17 +1,46 @@
 ---
 name: illustrate
 description: >
-  Write image-generation prompts for chapter illustrations whose characters look the same from image
-  to image. Three phases: lock a series-wide image style, lock each character's look through
-  generate-and-revise rounds until the user approves, then compose a prompt per chapter from the
-  locked blocks plus a scene chosen from that chapter, checked against the target model's prompt
-  budget. Use when the user says "illustrate chapter N", "image prompt", "prompt for Nano Banana /
-  FLUX / OpenRouter", "character reference sheet", "иллюстрация к главе", "промпт для картинки",
-  or wants to fix how a character or the art style looks. Writes prompts; runs generation itself when
-  the project sets `image_autorun: true` and no decision is pending, otherwise hands the command over.
+  Use when ONLY when the user asks for chapter-scoped image-generation prompts whose
+  characters look the same across many images: "illustrate chapter N", "image for chapter X",
+  "make an illustration for chapter 2 of book 3", "character reference sheet", "image prompt",
+  "prompt for Nano Banana / FLUX / OpenRouter", "иллюстрация к главе", "промпт для
+  картинки", or wants to fix how a character or the art style looks. Three phases: style lock,
+  character lock, per-chapter prompt. Writes prompts; runs generation itself when the project
+  sets image_autorun and no decision is pending. Do NOT use for a single book cover with title
+  and emblem — that's cover. Requires at least one chapter outline to exist (run plan-chapters
+  first if missing).
 ---
 
 # Illustrate
+
+## Mode
+**Mixed.** Phase 1 (style lock) and Phase 2 (character lock) run **inline** — the user
+approves the style and each character's look, with iterate-and-revise rounds. Phase 3
+(per-chapter prompt generation) runs as a **subagent** — the prompt is the output, the user
+judges by the image, no follow-up loop on Phase 3 itself.
+
+## Inputs required
+- At least one chapter outline (`<book>/outline.md`) — required for Phase 3
+- `CANON.md` (language settings, character list, `illustration_required` per book)
+- `wiki/canon/characters/<each>.md` and `wiki/canon/voices/<each>.md` — what the characters look/sound like
+- `references/pitfalls.md` — the checklists (read at the named steps, every time)
+- `references/models.md` — model prompt limits and request shapes (Phase 1 model choice)
+- `references/templates.md` — file formats (before creating any file)
+- `OPENROUTER_API_KEY` per §12 — only for generation phases
+- For Phase 2: previous approved character pictures (so new characters match the locked style)
+
+## Skip-if-loaded
+For inline Phase 1+2, before reading canon pages, check whether each was already loaded this
+session and no `ingest-source` has happened since. Character sheets persist; re-reading wastes
+context during long Phase 2 sessions.
+
+## Persistent state
+- `plan/illustration/style.md` — the locked series-wide image style (Phase 1)
+- `plan/illustration/characters/<slug>.md` — locked character look per character (Phase 2)
+- `plan/illustration/book-<NN>/ch<NN>.md` — per-chapter chosen scene + prompt + generation params (Phase 3)
+- `<book>/drafts/ch<NN>-<slug>.md` `illustration:` frontmatter — set when an image is approved and placed
+- `wiki/log.md` — append the `illustrate | …` line for each phase
 
 A picture per chapter, the same faces in every picture, one style for the whole series.
 

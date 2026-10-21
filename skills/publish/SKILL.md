@@ -1,16 +1,37 @@
 ---
 name: publish
 description: >
-  Serialise the fic while it is still being written: gate the next chapter, export it in the
-  platform's format, publish it (the user confirms every publication), record what readers got,
-  and push typo-only errata. Use when the user says "publish the next chapter", "publish chapter
-  5", "what's published", "fix a typo in the published chapter", "опубликуй главу", "выложи
-  следующую главу", "что уже опубликовано", "исправь опечатку в опубликованной", "update the
-  annotation", "обнови аннотацию", or a scheduled publishing run starts. Platforms: author.today
-  now; one adapter per platform.
+  Use when ONLY when the user says "publish the next chapter", "publish chapter N",
+  "upload chapter N", "publish a typo-only errata", "what's published", "обнови аннотацию",
+  "опубликуй главу", "выложи главу", "что уже опубликовано", "исправь опечатку", or a
+  scheduled publish run starts. The user confirms every publication — the subagent prints
+  a question and waits for a clear yes before going live. Do NOT use for a book cover image —
+  that's cover. Do NOT use to audit a chapter against canon — that's reconcile.
 ---
 
 # Publish
+
+## Mode
+Subagent. Verified across 24 real publish runs in 23 sessions: 71% pure fire-and-forget,
+17% brief acknowledgement, 0% mid-run interruptions, 4% mid-run text question (handled
+internally). Each publication is gated by an explicit user yes before going live.
+
+## Inputs required
+- The chapter draft at `<book>/drafts/ch<NN>-<slug>.md` (with `published:` frontmatter)
+- `<book>/outline.md` (to update the published note)
+- `wiki/log.md` (to verify `write✓ reconcile✓ naturalize✓` stages for the gate)
+- `publish/platforms/<platform>.md` (the work's per-platform notes)
+- `references/platforms/<platform>.md` (the adapter — author.today for now)
+- For typo errata: the live chapter URL
+
+## Persistent state
+- `publish/LEDGER.md` — one row per publication, written by `publication.py record`
+- `publish/platforms/<platform>.md` — updated with posted annotation, run notes
+- `publish/exports/<platform>/b<NN>-ch<NN>.html` (+ `.json` sidecar) — what was uploaded
+- `publish/readback/<platform>/b<NN>-ch<NN>.txt` — verification result
+- `<book>/drafts/snapshots/ch<NN>-published-<platform>-v<N>.md` — frozen published snapshot
+- `<book>/drafts/ch<NN>-<slug>.md` `published:` frontmatter — entry added on record
+- `wiki/log.md` — append the `publish | …` line
 
 Readers remember what they read. A chapter that has gone out (**live**) outranks the draft and the
 outline, and its text changes only by errata — typos, never rewrites. A chapter on a timer that has

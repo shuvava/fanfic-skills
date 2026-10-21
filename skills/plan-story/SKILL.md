@@ -1,13 +1,37 @@
 ---
 name: plan-story
 description: >
-  Interview the user to establish what fic they actually want to write, before any outline or prose
-  exists. Produces plan/STORY_INTENT.md. Use when the user says "let's plan the story", "I want to write
-  a fic about X", "help me figure out what to write", "start planning", or asks to write a chapter in a
-  project that has no story intent yet. One question at a time, each with a recommended answer.
+  Use when ONLY when the user has not committed to a fic yet and wants a single one chosen:
+  "let's plan the story", "I want to write a fic about X", "help me figure out what to write",
+  "start planning", "давай придумаем фанфик", "хочу написать фанфик про…". One convergent
+  interview, one question at a time, each with a recommended answer. Ends with
+  plan/STORY_INTENT.md. Do NOT use when the user wants many divergent ideas to choose from later
+  — that's brainstorm. Do NOT use when STORY_INTENT.md already exists and the user wants
+  chapters — that's plan-chapters.
 ---
 
 # Plan Story
+
+## Mode
+Inline. The first human gate in the pipeline. The user is in the loop throughout — one question
+at a time, with a recommended answer for each. Misalignment here costs a rewrite of everything
+downstream, so the conversation IS the output.
+
+## Inputs required
+- `CANON.md` (language settings)
+- `plan/HARNESS.md` if it exists — adds project-specific questions to the interview tree
+- `plan/SERIES_ARC.md` and `plan/IDEAS.md` if they exist — candidate material from `brainstorm` (used as recommendation sources, not as answers)
+- `wiki/canon/` if it exists — for source-grounded recommendations
+- No prerequisite on a story intent — the wiki may or may not exist yet
+
+## Skip-if-loaded
+This skill is a long interview. Before reading each file in `## Inputs required`, check whether
+it was already read this session. If yes and no `wiki-init` / `ingest-source` has happened since,
+reuse the in-context content instead of re-reading.
+
+## Persistent state
+- `plan/STORY_INTENT.md` — the only persistent artefact. Everything else stays in the
+  conversation.
 
 Establish authorial intent through a relentless one-question-at-a-time interview. This is the first
 human gate in the pipeline and the highest-leverage one — misalignment here costs a rewrite of

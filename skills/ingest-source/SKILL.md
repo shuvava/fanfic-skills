@@ -1,13 +1,37 @@
 ---
 name: ingest-source
 description: >
-  Read source material (a chapter, novel, transcript, or supplementary text) and compile it into the
-  canon tier of the wiki — character pages, voice cards with verbatim dialogue, world rules, plot state,
-  and the forbidden list. Use when the user says "ingest chapter 3", "process this book", "add this
-  source to the wiki", "extract the canon", or drops new material into raw/. Writes only to wiki/canon/.
+  Use when ONLY when the user provides source material to canonise: "ingest chapter N",
+  "process this book", "add this to canon", "transcribe this transcript", "this is the
+  source", "добавь в канон", "обработай эту главу", "внеси в вики". Compiles the source
+  into character pages, voice cards, world rules, plot state, and the forbidden list in
+  wiki/canon/ only — never to wiki/fanon/. Requires the wiki to exist (run wiki-init first
+  if it doesn't). Do NOT use to re-read or audit the wiki — that's wiki-lint.
 ---
 
 # Ingest Source
+
+## Mode
+Subagent. One source chunk at a time. Each ingest typically touches 8–15 wiki pages and
+appends a `wiki/log.md` entry. Idempotency is the caller's responsibility — check
+`wiki/log.md` first to avoid re-ingesting the same source.
+
+## Inputs required
+- Source material: a file path under `raw/` or a chapter/book the user names
+- `CANON.md` — language settings (`wiki_language`, `source_language`)
+- `wiki/index.md` — what already exists, to avoid duplicates
+- `wiki/log.md` last entries — to detect re-ingest attempts
+- `references/extraction-checklist.md` — page templates and field lists (already present)
+
+## Persistent state
+- `wiki/canon/characters/<name>.md` — character pages (one per character with ≥3 canon facts)
+- `wiki/canon/voices/<name>.md` — voice cards with verbatim dialogue
+- `wiki/canon/world/<topic>.md` — world rules and limits
+- `wiki/canon/forbidden.md` — what canon forbids
+- `wiki/canon/overview.md` — POV, tense, structure, orthography (updated)
+- `wiki/canon/threads.md` — plot threads and state
+- `wiki/index.md` — updated catalog of every page
+- `wiki/log.md` — append the `ingest | …` line
 
 Compile one source chunk into the canon tier. A single ingest typically touches 8–15 pages.
 

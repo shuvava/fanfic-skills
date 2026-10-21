@@ -1,15 +1,39 @@
 ---
 name: brainstorm
 description: >
-  Generate, discuss, and cull story ideas before any intent or outline exists — series destination,
-  per-book arcs, and "what if" episode ideas — checking each against canon as it goes and recording
-  what survives. Use when the user says "brainstorm", "what should the next book be", "I have an
-  idea — what if...", "where is this series going", "let's think about future books", or asks for
-  ideas rather than a plan. Produces plan/SERIES_ARC.md and plan/IDEAS.md, which plan-story and
-  plan-chapters read as candidate input.
+  Use when ONLY when the user says "brainstorm", "what should the next book be", "what if…",
+  "where is this series going", "give me ideas", "let's think about future books",
+  "давай придумаем", "что если", "идеи для книги", or asks for many divergent ideas at
+  once before any commitment. Pressure-tests each idea against canon as it goes and records
+  what survives in plan/SERIES_ARC.md and plan/IDEAS.md. Do NOT use when the user has picked
+  one fic to write ("I want to write a fic about X") — that's plan-story. Do NOT use when
+  the user names a specific existing character to develop — that's develop-character.
 ---
 
 # Brainstorm
+
+## Mode
+Inline. The user riffs with the model as ideas land — pushes back on weak ones, combines
+two, kills a third. The conversation IS the output until an idea survives; the artefacts
+record what made it through, not the journey.
+
+## Inputs required
+- `CANON.md` (language settings)
+- `wiki/canon/` (full — to pressure-test ideas against canon)
+- `plan/SERIES_ARC.md` if it exists — already-surviving series destination
+- `plan/IDEAS.md` if it exists — already-shortlisted ideas
+- `plan/HARNESS.md` if it exists — project-specific brainstorming rules
+
+## Skip-if-loaded
+Before reading the canon wiki, check whether each file was already loaded this session and
+no `ingest-source` has happened since. Brainstorm reads the same canon pages repeatedly as
+it pressure-tests new ideas; skipping on re-read saves ~3 K tokens per pass.
+
+## Persistent state
+- `plan/SERIES_ARC.md` — series destination with the ladder (one rung per book)
+- `plan/IDEAS.md` — shortlisted "what if" episode / per-book-arc ideas
+- Neither file is ever read at drafting time; nothing here is canon, not even fanon-proposed.
+  An idea is not a fact about the world.
 
 Divergent stage. Generate ideas, pressure-test them against canon, kill most of them, and keep the
 survivors somewhere the planning stages will find them.

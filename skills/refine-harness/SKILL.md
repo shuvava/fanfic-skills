@@ -1,14 +1,38 @@
 ---
 name: refine-harness
 description: >
-  Learn from what actually happened — diff the user's edits against Claude's drafts, review rejected
-  proposals and recurring conflicts, and propose refinements to voice cards, project preferences, and
-  the drafting harness. Use when the user says "refine", "learn from my edits", "why do I keep fixing
-  the same thing", "tune the harness", or after several chapters are done. Every refinement is ratified
-  by the user; nothing is applied automatically.
+  Use when ONLY when the user asks to learn from past sessions and tune the drafting
+  harness: "refine", "learn from my edits", "tune the harness", "why do I keep fixing the
+  same thing", "обучись на моих правках", "улучши процесс". Diffs the user's edits against
+  Claude's drafts, reviews rejected proposals, and proposes changes to voice cards, project
+  preferences, and drafting rules. Every refinement is ratified by the user; nothing is
+  applied automatically. Do NOT use to audit the wiki — that's wiki-lint. Do NOT use to write
+  or reconcile — that's write-chapter / reconcile. Best run after several chapters and
+  reconcile rounds have accumulated signal.
 ---
 
 # Refine Harness
+
+## Mode
+Subagent. Reads many files (drafts/snapshots, current drafts, wiki/log.md, plan/HARNESS.md
+bias sections, all fanon-proposed entries), produces a small set of proposed changes. The
+user ratifies each change; the subagent never edits anything on its own.
+
+## Inputs required
+- All `<book>/drafts/snapshots/ch<NN>-v0.md` (Claude's untouched drafts) and the current
+  `<book>/drafts/ch<NN>-<slug>.md` (user-edited) — to diff
+- `<book>/drafts/snapshots/ch<NN>-published-<platform>-v<N>.md` — published-chapter snapshots
+  (cleanest edit signal)
+- `wiki/log.md` — append-only operation history; rejected proposals are signal
+- `wiki/fanon/proposed/` — accumulated proposals and the user's verdicts on them
+- `plan/HARNESS.md` — current harness rules (the target of proposed changes)
+- `CANON.md` (language settings, comic register, divergences)
+
+## Persistent state
+- `plan/HARNESS.md` — proposed-changes section appended with each suggestion
+- `wiki/log.md` — append the `refine-harness | …` line
+- Refinement itself stays in the conversation until the user ratifies; nothing is written
+  to `wiki/canon/`, `wiki/fanon/`, or any draft.
 
 Close the loop. Read the trajectory the project has already generated, find repeated patterns, and
 propose changes to how the pipeline works.

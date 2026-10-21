@@ -1,13 +1,33 @@
 ---
 name: reconcile
 description: >
-  After a chapter is drafted, extract what it established, check it against canon and existing fanon,
-  and route each new fact through user review before promoting it. Use when the user says "reconcile",
-  "update the wiki with the new chapter", "promote the fanon", or after write-chapter finishes. This is
-  the gate that keeps generated fiction from contaminating extracted canon.
+  Use when ONLY when the user says "reconcile", "reconcile chapter N", "re-audit chapter N",
+  "проверь главу по канону", or "сверь главу". The audit step between write-chapter and
+  illustrate in the chapter pipeline — write-chapter suggests running reconcile after a
+  chapter completes; can also be invoked directly to re-audit a past chapter or a rewritten
+  queued chapter. Never auto-accepts — every promotion is an explicit user decision. Do NOT
+  use for prose drafting — that's write-chapter. Do NOT use to update the wiki without
+  auditing — there is no audit-free shortcut.
 ---
 
 # Reconcile
+
+## Mode
+Subagent. Produces a review inbox the user decides row-by-row, plus the proposed entries in
+`wiki/fanon/proposed/` and the continuity ledger row.
+
+## Inputs required
+- The chapter text at the current `<book>/drafts/ch<NN>-<slug>.md`
+- `wiki/canon/` (full — overview, forbidden, characters, voices, world, threads)
+- `wiki/fanon/` (existing, to detect duplicates and conflicts)
+- `drafts/continuity.md` (current row count)
+- `<book>/outline.md` (to update the chapter's drafted mark)
+
+## Persistent state
+- `wiki/fanon/proposed/` — the proposed entries, each with `## Ratified` left blank until user accepts
+- `drafts/continuity.md` — new row appended
+- `<book>/outline.md` — chapter row updated to drafted
+- `wiki/log.md` — append the `reconcile | …` line
 
 Fold a finished chapter's assertions into the fanon tier — through review, never automatically.
 

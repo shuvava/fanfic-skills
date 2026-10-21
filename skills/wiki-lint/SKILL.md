@@ -1,13 +1,30 @@
 ---
 name: wiki-lint
 description: >
-  Health-check the wiki — tier violations, uncited claims, contradictions, thin voice cards, language
-  drift, orphan pages, stale threads. Use when the user says "lint the wiki", "check the story bible",
-  "audit the wiki", "is my wiki healthy", or after several ingests or chapters. Read-only by default;
-  reports and proposes fixes rather than applying them.
+  Use when ONLY when the user wants a read-only health check of the wiki: "lint the wiki",
+  "check the story bible", "audit the wiki", "is my wiki healthy", "проверь вики",
+  "аудит вики". Reports tier violations, uncited claims, contradictions, thin voice cards,
+  language drift, orphan pages, stale threads. Read-only by default — never writes back.
+  Do NOT use to add source material — that's ingest-source. Do NOT use to tune drafting rules
+  from past edits — that's refine-harness. Best run after several ingests or chapters have
+  accumulated.
 ---
 
 # Wiki Lint
+
+## Mode
+Subagent. Read-only audit. The output is a report; no edits, no proposals to apply
+without explicit user approval. The user reads the report and decides what to act on.
+
+## Inputs required
+- `wiki/` (full — all tiers, all pages)
+- `CANON.md` (language settings, comic register, divergences — for the language check)
+- `plan/HARNESS.md` if it exists (for context on what rules the project has self-imposed)
+- `wiki/log.md` (recent activity — to know which chapters were drafted since last lint)
+
+## Persistent state
+- `wiki/lint-reports/<date>.md` — the report file (timestamped so multiple reports don't clobber)
+- Nothing else. The skill never modifies wiki pages, fanon entries, or any artefact.
 
 Audit and report. **Read-only by default** — propose fixes, apply only on confirmation.
 

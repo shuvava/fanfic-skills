@@ -1,13 +1,51 @@
 ---
 name: write-chapter
 description: >
-  Decompose one chapter into scene beats, then draft it in the source language against the canon wiki,
-  then canon-check the draft. Use when the user says "write chapter 4", "draft the next chapter",
-  "write the scene where X", "write chapter 2 of book 3", or "continue the story" in a project that
-  has an outline. Requires an outline — run plan-chapters first if it is missing.
+  Use when ONLY when the user asks to draft a new chapter or scene: "write chapter N",
+  "draft the next chapter", "write the scene where X", "write chapter 2 of book 3",
+  "continue the story", "напиши главу", "напиши следующую главу", "напиши сцену где…".
+  Requires a chapter outline (run plan-chapters first if missing). Do NOT use when the user
+  wants to outline first — that's plan-chapters. Do NOT use when the user wants to audit an
+  existing chapter against canon — that's reconcile.
 ---
 
 # Write Chapter
+
+## Mode
+Inline. The user iterates on the draft — asks "why did X do Y?", requests rewrites of
+specific scenes, pushes back on voice or pacing. This follow-up loop needs the full canon
+context in the main session, which is why write-chapter is not a subagent.
+
+## Inputs required
+- `<book>/outline.md` (required) — this chapter's row, its part's card, and the next 2–3 chapters' rows
+- `CANON.md` (language settings, divergences, preferences)
+- `plan/HARNESS.md` if it exists — project-local drafting rules learned from past edits
+- `wiki/canon/` (full — overview, forbidden, characters, voices, world)
+- `wiki/fanon/` entries the chapter depends on
+- `drafts/continuity.md` (series-wide, not per book) and summaries of the previous two chapters
+
+## Skip-if-loaded
+The canon wiki is the largest single read in the pipeline. Before reading these files, check
+whether each was already loaded in this session and no `ingest-source` / `reconcile` /
+`naturalize` has happened since. Re-reading costs ~5–8 K tokens per chapter; skipping when
+safe is the biggest single-context win for this skill.
+
+Skip candidates:
+- `wiki/canon/overview.md`, `wiki/canon/forbidden.md`
+- `wiki/canon/characters/<each relevant>.md`, `wiki/canon/voices/<each with dialogue>.md`
+- `wiki/canon/world/<each relevant>.md`
+- `drafts/continuity.md`
+- `CANON.md`
+
+If any is missing from context, or any staleness trigger fires, read fresh.
+
+## Persistent state
+- `<book>/drafts/ch<NN>-<slug>.md` — the chapter draft (`tier: generated`)
+- `<book>/drafts/snapshots/ch<NN>-v0.md` — frozen untouched copy (the baseline `refine-harness` diffs against)
+- `<book>/beats/ch<NN>.md` — the scene beat sheet (input from plan-chapters, may be updated)
+- `<book>/naturalness/ch<NN>-<slug>.md` — naturalize's review inbox (when `naturalize` runs)
+- `<book>/logic/ch<NN>-draft/` — logic reader's flags (when logic reader runs)
+- `wiki/log.md` — append the `write | …` line with metrics
 
 Beat out one chapter, draft it, check it. One chapter at a time.
 

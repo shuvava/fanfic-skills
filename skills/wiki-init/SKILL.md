@@ -1,13 +1,33 @@
 ---
 name: wiki-init
 description: >
-  Scaffold a new fanfic project — the tiered canon/fanon wiki, the CANON.md schema, and source language
-  detection. Use when the user says "set up a story bible", "start a fanfic project", "init a canon wiki",
-  "I have a book in markdown and want to write fanfic", or points at source material and asks where to
-  begin. Creates raw/ + wiki/canon/ + wiki/fanon/ + wiki/drafts/ and detects the source language.
+  Use when ONLY when the user is starting a brand-new fanfic project and there is no wiki
+  yet: "set up a story bible", "start a fanfic project", "init a canon wiki", "I have a
+  book in markdown and want to write fanfic", "create the wiki", "создай вики",
+  "разверни проект". Runs once at project start. Detects source language, scaffolds the
+  tiered canon/fanon wiki, writes CANON.md. Do NOT use when the wiki already exists and the
+  user wants to add source material — that's ingest-source. Do NOT use to audit an existing
+  wiki — that's wiki-lint.
 ---
 
 # Wiki Init
+
+## Mode
+Subagent. One-shot scaffolding. The user's first run; everything else depends on what this
+skill creates.
+
+## Inputs required
+- The project directory path (where `raw/` lives or will live)
+- A sample of source material (the user pointing at `raw/` or a book file)
+- No prerequisites — the wiki does not exist yet
+
+## Persistent state
+- `CANON.md` — schema, language settings, naturalness mode, critics list
+- `raw/` — immutable sources (never edited by any skill)
+- `plan/` — STORY_INTENT.md, outline.md, conflicts.md, HARNESS.md placeholders
+- `drafts/` (and `snapshots/`) — chapter drafts and untouched first-draft snapshots
+- `wiki/` — `index.md`, `log.md`, `canon/`, `fanon/`, `lint-reports/` placeholders
+- `publish/` (optional) — per-platform notes placeholder if a publishing platform is named
 
 Scaffold the project. Read `../../CONVENTIONS.md` first — it defines language
 preservation, provenance tiers, and citation format used by every other skill.

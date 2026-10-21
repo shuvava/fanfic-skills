@@ -1,17 +1,42 @@
 ---
 name: plan-chapters
 description: >
-  Expand the story intent into a hierarchical outline — arc, chapters, scenes — and run the canon
-  conflict check over the plan before any prose exists. Use when the user says "outline the story",
-  "plan the chapters", "expand the plan", "break this into chapters", "outline book 2", or after
-  plan-story finishes. Handles both a standalone work and one book of a multi-book series, keeping
-  each book's plan separate and its start state matched to the previous book's end state.
-  Surfaces canon contradictions at planning time, when they cost one question instead of a rewrite.
-  Also writes the book's synopsis and reader annotation from the finished outline — use when the
-  user says "write the synopsis", "we need an annotation", "напиши синопсис", "нужна аннотация".
+  Use when ONLY when the user wants to expand a confirmed story intent into a chapter outline:
+  "outline the story", "plan the chapters", "expand the plan", "break this into chapters",
+  "outline book 2", "составь план глав", "разбей на главы", "напиши синопсис",
+  "нужна аннотация". Requires plan/STORY_INTENT.md from plan-story. Produces the outline
+  (Layer 1–4), the canon conflict check (CONFLICTS.md), and (from the finished outline) the
+  synopsis and reader annotation. Do NOT use when no STORY_INTENT.md exists yet — that's
+  plan-story first. Do NOT use when the user wants to draft prose — that's write-chapter.
 ---
 
 # Plan Chapters
+
+## Mode
+Inline. Heavy Q&A — one observed session had 9 clarifying questions in a row, each
+ratifying a layer of the outline. The user is in the loop throughout because misalignment
+at planning time costs one question; misalignment after drafting costs a rewrite.
+
+## Inputs required
+- `plan/STORY_INTENT.md` (required) — from `plan-story`. If missing, redirect to plan-story.
+- `CANON.md` (language settings, divergences)
+- `wiki/canon/` (full — overview, world/constraints, world/география, forbidden, characters, voices)
+- `plan/HARNESS.md` if it exists — project-local planning rules
+- `plan/SERIES_ARC.md` if it exists — to resolve which book this is in a series
+- `plan/IDEAS.md` if it exists — candidate material from `brainstorm`
+- For a series book ≥2: the previous book's `outline.md` (start state) and `drafts/continuity.md`
+
+## Skip-if-loaded
+Before reading the canon wiki, check whether each file was already read this session. If yes
+and no `ingest-source` / `write-chapter` / `reconcile` has happened since, reuse the
+in-context content. The wiki is the largest single read in the pipeline; re-reading it costs
+~3–5 K tokens of dead context per pass.
+
+## Persistent state
+- `<book>/outline.md` — the outline (Layer 1 part cards, Layer 2 part card paragraphs, Layer 3 chapter rows, Layer 4 scene lists)
+- `<book>/conflicts.md` — the canon conflict check (7 checks)
+- `<book>/SYNOPSIS.md` — `## Synopsis` (for the editor) and `## Annotation` (for readers)
+- `plan/HARNESS.md` if it gets updated with new project-specific rules learned
 
 Expand intent into a structured outline, ratifying each level with the user, then lint the plan
 against canon before anyone writes a word.

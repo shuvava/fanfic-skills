@@ -1,15 +1,31 @@
 ---
 name: cover
 description: >
-  Make a book cover for a fic volume: author name, book title and number in the series, set with a
-  real font over an aged-parchment or illustrated background, plus an optional emblem, checked
-  against the publishing platform's size limits. Use when the user says "cover", "book cover",
-  "обложка", "сделай обложку", "обложка для книги / тома", shows a cover to imitate, or gives
-  upload rules like "не менее 200 пикселей в ширину и 285 в высоту". Text is always composed
-  locally by `compose_cover.py`, never drawn by an image model.
+  Use when ONLY when the user asks for a single volume cover with title font and optional
+  emblem: "cover", "book cover", "make a cover", "обложка", "сделай обложку",
+  "обложка для книги", "обложка для тома", or shows a cover to imitate. Text is composed
+  locally by compose_cover.py, never drawn by an image model. Output is checked against the
+  publishing platform's size limits. Do NOT use when the user wants per-chapter illustrations
+  ("illustrate chapter N", "image for chapter X") — that's illustrate. Do NOT use when the
+  user wants to upload or publish text — that's publish.
 ---
 
 # Cover
+
+## Mode
+Subagent. One-shot generation. The output is a single image file the user judges by
+viewing; no follow-up loop on the cover itself.
+
+## Inputs required
+- The volume's metadata: author name, title, book number in the series
+- A reference cover to imitate (if the user provided one)
+- Platform upload rules (if specified — e.g. "не менее 200 пикселей в ширину и 285 в высоту")
+- For illustrated backgrounds: `../illustrate/SKILL.md` "Running generation" (and `OPENROUTER_API_KEY` per §12)
+- `CANON.md` for series / author name canonicalisation
+
+## Persistent state
+- The cover image file (path decided per project convention)
+- `publish/platforms/<platform>.md` — cover URL / file path recorded if the work is being published
 
 One image per book: who wrote it, what it is called, which book of the series it is.
 
