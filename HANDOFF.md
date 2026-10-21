@@ -709,6 +709,68 @@ instead of vanishing as "inexact".
   runs happily and produces plausible output. Nothing in the plugin detects this; the test harness had
   to. Worth surfacing in `wiki-lint`.
 
+## Skill metadata convention (v0.23.0)
+
+Every `skills/<name>/SKILL.md` follows a fixed shape so the always-loaded discovery surface stays
+small and the body stays focused.
+
+### Description (frontmatter, always loaded)
+
+- Opens with `Use when ONLY when …` and lists trigger phrases in English and Russian where the user
+  types them. Stays under ~600 chars (well under the 1 024 cap).
+- Ends with `Do NOT use when …` clauses that **name the adjacent skill** (e.g. *"Do NOT use for cross-language
+  translation — that's `translate`"*). Cross-deconfliction is the point: with 15 skills loaded at once,
+  the model needs the disambiguator visible in the description, not buried in the body.
+- Never summarises the skill's workflow. A description that says *"Three phases: style lock, character
+  lock, per-chapter prompt"* causes agents to follow the description and skip the body. The workflow
+  lives in the body and is loaded only when the skill triggers.
+
+### Body
+
+Opens with four short sections, in order:
+
+1. `## Mode` — `inline`, `subagent`, or `mixed`, with a one-sentence justification rooted in session-log
+   evidence. The matrix as of v0.23.0:
+   - **inline (5):** `brainstorm`, `plan-story`, `plan-chapters`, `write-chapter`, `develop-character`.
+     These run in the main session because the user iterates with the model on the work.
+   - **subagent (10):** `publish` (verified 71% fire-and-forget across 24 runs), `naturalize`,
+     `reconcile`, `ingest-source`, `wiki-init`, `wiki-lint`, `refine-harness`, `translate`, `cover`.
+     These produce bounded outputs the user evaluates as a whole.
+   - **mixed (1):** `illustrate`. Phase 1-2 inline (user approves style and character looks); Phase 3
+     subagent (per-chapter prompt generation, user judges by image).
+2. `## Inputs required` — every file the parent must hand to the skill before spawning / starting.
+3. `## Skip-if-loaded` — inline-mode skills only. Lists the canon files most likely to be re-read, with
+   explicit staleness triggers (an `ingest-source`, `reconcile`, `naturalize`, or `plan/HARNESS.md` edit
+   invalidates the in-context copy). Saves ~3-5 K tokens per chapter for inline skills, largest single
+   context-cost lever.
+4. `## Persistent state` — every file the skill writes. The skill's output IS its persistent state; no
+   separate "session note" file. For subagent skills this is the only state the parent needs to remember.
+
+### References (heavy material)
+
+`skills/<name>/references/<topic>.md`. Linked from the body with a one-line summary. SKILL.md →
+`references/<file>.md` is the **only** chain — no `references/<file>.md` → `references/<bar>.md`.
+Nested references cause Claude to read only the first ~100 lines of the target, missing content past
+that.
+
+### Why this shape
+
+Three evidence sources drive it:
+
+1. **Anthropic's skill best-practices:** "Each Skill has exactly one description field. The description
+   is critical for skill selection: Claude uses it to choose the right Skill from potentially 100+
+   available Skills."
+2. **The 78-session Russian-trigger study:** Russian triggers in descriptions are decorative in Claude
+   Desktop (Claude infers the skill from intent), but defensive in Claude Code CLI / API / Agent SDK
+   where description-matching is the primary mechanism. Russian triggers were added to the 9 skills
+   that lacked them as a safety net, not as the primary mechanism.
+3. **The 24-run publish analysis:** 71% of publish runs are pure fire-and-forget, 0% had mid-run
+   interruptions, 4% had a printed text question handled internally. This is why `publish` is subagent,
+   despite the per-chapter "ask the user" rule — the subagent prints the question and waits in its own
+   context, and the parent never has to keep the publish workflow in its context.
+
+See `reports/skill-description-audit.md` for the full evidence trail and design rationale.
+
 ---
 
 ## Working agreements from the session
