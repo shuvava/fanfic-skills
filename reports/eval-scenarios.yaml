@@ -1,0 +1,436 @@
+# Eval scenarios for the v0.23.0 description rewrite.
+#
+# Schema:
+#   id:            stable identifier, used in results
+#   skill:         the skill this scenario targets
+#   type:          trigger | cross-deconfliction | russian-trigger
+#   input:         the user message sent to a fresh-context subagent
+#   expected:      the skill that should load
+#   defers:        (cross-deconfliction only) skills that should be mentioned as
+#                  "deferred to" with a one-line reason
+#   severity:      blocker (must pass) | nice-to-have (≥80% pass rate)
+#   notes:         why this scenario matters, what it's measuring
+#
+# The eval runs by:
+#   1. Spawning a subagent with system_prompt = the 15 SKILL.md descriptions
+#      (in YAML block below, injected as a tool-readable message), no other context.
+#   2. Sending `input` as the user message.
+#   3. Recording the subagent's choice and rationale.
+#   4. Comparing against `expected` (and `defers` for cross-deconfliction cases).
+#
+# Run twice: once with the OLD descriptions (from git c837418) as baseline, once with
+# the NEW descriptions (current main / PR #29 head).
+
+scenarios:
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # brainstorm — the skill with the 0% Russian trigger rate (the gap we set out to close)
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: brainstorm-trigger-en
+    skill: brainstorm
+    type: trigger
+    input: "let's brainstorm some ideas for the next book in the series"
+    expected: brainstorm
+    severity: blocker
+    notes: baseline English trigger; should fire reliably
+
+  - id: brainstorm-trigger-ru
+    skill: brainstorm
+    type: russian-trigger
+    input: "давай придумаем, что будет в следующей книге"
+    expected: brainstorm
+    severity: blocker
+    notes: Russian trigger; the 0% gap from the 78-session study
+
+  - id: brainstorm-cross-plan-story
+    skill: brainstorm
+    type: cross-deconfliction
+    input: "I want to write a fic about the sequel — let's plan"
+    expected: brainstorm
+    defers:
+      - skill: plan-story
+        reason: "plan-story fires when the user has committed to one fic; here they're still choosing"
+    severity: nice-to-have
+    notes: ambiguous between brainstorm (many ideas) and plan-story (one fic); must articulate why brainstorm wins
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # cover — book cover vs illustration confusion
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: cover-trigger-en
+    skill: cover
+    type: trigger
+    input: "make a book cover for book 2"
+    expected: cover
+    severity: blocker
+
+  - id: cover-trigger-ru
+    skill: cover
+    type: russian-trigger
+    input: "сделай обложку для второго тома"
+    expected: cover
+    severity: blocker
+
+  - id: cover-cross-illustrate
+    skill: cover
+    type: cross-deconfliction
+    input: "I need art for the book — title and emblem"
+    expected: cover
+    defers:
+      - skill: illustrate
+        reason: "illustrate is per-chapter, not a single volume cover with title font"
+    severity: blocker
+    notes: illustration vs cover confusion is a documented cross-trigger
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # develop-character — character depth vs scene writing
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: develop-character-trigger-en
+    skill: develop-character
+    type: trigger
+    input: "develop Mark's character — give him a real want"
+    expected: develop-character
+    severity: blocker
+
+  - id: develop-character-trigger-ru
+    skill: develop-character
+    type: russian-trigger
+    input: "проработай персонажа Марка — у него должна быть своя история"
+    expected: develop-character
+    severity: blocker
+
+  - id: develop-character-cross-brainstorm
+    skill: develop-character
+    type: cross-deconfliction
+    input: "what if Mark betrayed the family in chapter 4?"
+    expected: develop-character
+    defers:
+      - skill: brainstorm
+        reason: "brainstorm is for plot-level 'what if' ideas; here a named character is being developed"
+    severity: nice-to-have
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # illustrate — per-chapter image prompts vs cover
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: illustrate-trigger-en
+    skill: illustrate
+    type: trigger
+    input: "illustrate chapter 7 — same face as last time"
+    expected: illustrate
+    severity: blocker
+
+  - id: illustrate-trigger-ru
+    skill: illustrate
+    type: russian-trigger
+    input: "иллюстрация к главе 7 — тот же персонаж, что и раньше"
+    expected: illustrate
+    severity: blocker
+
+  - id: illustrate-cross-cover
+    skill: illustrate
+    type: cross-deconfliction
+    input: "I need a picture for the book"
+    expected: illustrate
+    defers:
+      - skill: cover
+        reason: "cover is for one volume cover with title font and emblem, not per-chapter"
+    severity: nice-to-have
+    notes: same cross-trigger risk as cover-vs-illustrate, but from the other direction
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # ingest-source — adding source material vs auditing the wiki
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: ingest-source-trigger-en
+    skill: ingest-source
+    type: trigger
+    input: "ingest chapter 5 of the source"
+    expected: ingest-source
+    severity: blocker
+
+  - id: ingest-source-trigger-ru
+    skill: ingest-source
+    type: russian-trigger
+    input: "добавь пятую главу в канон"
+    expected: ingest-source
+    severity: blocker
+
+  - id: ingest-source-cross-wiki-lint
+    skill: ingest-source
+    type: cross-deconfliction
+    input: "process this chapter and check the wiki is consistent"
+    expected: ingest-source
+    defers:
+      - skill: wiki-lint
+        reason: "wiki-lint is read-only audit; ingest-source is write — wiki-lint runs separately"
+    severity: nice-to-have
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # naturalize — monolingual cleanup vs cross-language translate
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: naturalize-trigger-en
+    skill: naturalize
+    type: trigger
+    input: "this text sounds mechanical — fix it"
+    expected: naturalize
+    severity: blocker
+
+  - id: naturalize-trigger-ru
+    skill: naturalize
+    type: russian-trigger
+    input: "почисти текст — звучит как будто ИИ писал"
+    expected: naturalize
+    severity: blocker
+
+  - id: naturalize-cross-translate
+    skill: naturalize
+    type: cross-deconfliction
+    input: "translate this to English — and make it sound natural"
+    expected: naturalize
+    defers:
+      - skill: translate
+        reason: "translate is the cross-language skill; naturalness is monolingual and runs inside translate"
+    severity: blocker
+    notes: the most likely wrong-routing — model picks naturalize for the "natural" hint, misses the cross-language intent
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # plan-chapters — outline vs write prose
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: plan-chapters-trigger-en
+    skill: plan-chapters
+    type: trigger
+    input: "outline the next book"
+    expected: plan-chapters
+    severity: blocker
+
+  - id: plan-chapters-trigger-ru
+    skill: plan-chapters
+    type: russian-trigger
+    input: "составь план глав для второй книги"
+    expected: plan-chapters
+    severity: blocker
+
+  - id: plan-chapters-cross-plan-story
+    skill: plan-chapters
+    type: cross-deconfliction
+    input: "plan the story"
+    expected: plan-chapters
+    defers:
+      - skill: plan-story
+        reason: "plan-story is the convergent interview to pick the fic; plan-chapters needs STORY_INTENT.md as input"
+    severity: blocker
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # plan-story — interview before any intent exists
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: plan-story-trigger-en
+    skill: plan-story
+    type: trigger
+    input: "I want to write a fic about a mage detective"
+    expected: plan-story
+    severity: blocker
+
+  - id: plan-story-trigger-ru
+    skill: plan-story
+    type: russian-trigger
+    input: "хочу написать фанфик про детектива-мага"
+    expected: plan-story
+    severity: blocker
+
+  - id: plan-story-cross-brainstorm
+    skill: plan-story
+    type: cross-deconfliction
+    input: "let's figure out what to write about"
+    expected: plan-story
+    defers:
+      - skill: brainstorm
+        reason: "brainstorm is divergent — many ideas to choose from; plan-story is convergent — one question at a time"
+    severity: nice-to-have
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # publish — verified via 24-run analysis to be subagent
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: publish-trigger-en
+    skill: publish
+    type: trigger
+    input: "publish the next chapter"
+    expected: publish
+    severity: blocker
+
+  - id: publish-trigger-ru
+    skill: publish
+    type: russian-trigger
+    input: "опубликуй следующую главу"
+    expected: publish
+    severity: blocker
+
+  - id: publish-cross-reconcile
+    skill: publish
+    type: cross-deconfliction
+    input: "the chapter is ready — go through it and put it on the site"
+    expected: publish
+    defers:
+      - skill: reconcile
+        reason: "reconcile audits a chapter against canon; publish runs after reconcile, not instead"
+    severity: blocker
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # reconcile — audit gate between write-chapter and illustrate
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: reconcile-trigger-en
+    skill: reconcile
+    type: trigger
+    input: "reconcile chapter 4"
+    expected: reconcile
+    severity: blocker
+
+  - id: reconcile-trigger-ru
+    skill: reconcile
+    type: russian-trigger
+    input: "проверь главу по канону"
+    expected: reconcile
+    severity: blocker
+
+  - id: reconcile-cross-publish
+    skill: reconcile
+    type: cross-deconfliction
+    input: "re-audit chapter 3 before I publish it"
+    expected: reconcile
+    defers:
+      - skill: publish
+        reason: "publish runs after reconcile; running reconcile here is the audit gate that precedes publish"
+    severity: nice-to-have
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # refine-harness — learn from past edits, not audit the wiki
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: refine-harness-trigger-en
+    skill: refine-harness
+    type: trigger
+    input: "refine — I keep fixing the same things"
+    expected: refine-harness
+    severity: blocker
+
+  - id: refine-harness-trigger-ru
+    skill: refine-harness
+    type: russian-trigger
+    input: "обучись на моих правках — почему я каждый раз одно и то же правлю?"
+    expected: refine-harness
+    severity: blocker
+
+  - id: refine-harness-cross-wiki-lint
+    skill: refine-harness
+    type: cross-deconfliction
+    input: "review what's wrong with the project"
+    expected: refine-harness
+    defers:
+      - skill: wiki-lint
+        reason: "wiki-lint audits the wiki; refine-harness learns from edit diffs and proposes harness changes"
+    severity: nice-to-have
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # translate — cross-language, NOT monolingual cleanup
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: translate-trigger-en
+    skill: translate
+    type: trigger
+    input: "translate the fic to English"
+    expected: translate
+    severity: blocker
+
+  - id: translate-trigger-ru
+    skill: translate
+    type: russian-trigger
+    input: "переведи фанфик на английский"
+    expected: translate
+    severity: blocker
+
+  - id: translate-cross-naturalize
+    skill: translate
+    type: cross-deconfliction
+    input: "translate and fix the clumsy phrasing"
+    expected: translate
+    defers:
+      - skill: naturalize
+        reason: "naturalize is monolingual; translate runs naturalize internally as a sub-step"
+    severity: nice-to-have
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # wiki-init — one-time scaffolding, NOT for existing wiki
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: wiki-init-trigger-en
+    skill: wiki-init
+    type: trigger
+    input: "set up a story bible for my new fic"
+    expected: wiki-init
+    severity: blocker
+
+  - id: wiki-init-trigger-ru
+    skill: wiki-init
+    type: russian-trigger
+    input: "создай вики для нового фанфика"
+    expected: wiki-init
+    severity: blocker
+
+  - id: wiki-init-cross-ingest-source
+    skill: wiki-init
+    type: cross-deconfliction
+    input: "I have a book in markdown — start writing fanfic from it"
+    expected: wiki-init
+    defers:
+      - skill: ingest-source
+        reason: "ingest-source runs after the wiki exists; here the wiki doesn't exist yet"
+    severity: blocker
+    notes: documented cross-trigger; ingest-source is the explicit "I have a book in markdown" path in the description, but wiki-init must come first
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # wiki-lint — read-only audit, NOT adding source material
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: wiki-lint-trigger-en
+    skill: wiki-lint
+    type: trigger
+    input: "lint the wiki — is it healthy?"
+    expected: wiki-lint
+    severity: blocker
+
+  - id: wiki-lint-trigger-ru
+    skill: wiki-lint
+    type: russian-trigger
+    input: "проверь вики на здоровье"
+    expected: wiki-lint
+    severity: blocker
+
+  - id: wiki-lint-cross-refine-harness
+    skill: wiki-lint
+    type: cross-deconfliction
+    input: "audit the project — what's wrong?"
+    expected: wiki-lint
+    defers:
+      - skill: refine-harness
+        reason: "refine-harness proposes harness changes; wiki-lint reports wiki health"
+    severity: nice-to-have
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # write-chapter — draft prose, NOT outline or audit
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: write-chapter-trigger-en
+    skill: write-chapter
+    type: trigger
+    input: "write chapter 4"
+    expected: write-chapter
+    severity: blocker
+
+  - id: write-chapter-trigger-ru
+    skill: write-chapter
+    type: russian-trigger
+    input: "напиши четвёртую главу"
+    expected: write-chapter
+    severity: blocker
+
+  - id: write-chapter-cross-plan-chapters
+    skill: write-chapter
+    type: cross-deconfliction
+    input: "write chapter 1 of book 2"
+    expected: write-chapter
+    defers:
+      - skill: plan-chapters
+        reason: "plan-chapters is needed if no outline exists for book 2; assumed outline exists in this scenario"
+    severity: nice-to-have
