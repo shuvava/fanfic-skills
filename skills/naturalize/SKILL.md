@@ -1,15 +1,37 @@
 ---
 name: naturalize
 description: >
-  Find sentences a native speaker would not write — model-sounding prose and concept-speak in plans —
-  and propose the plainest natural fix, without touching the author's jokes or the meaning. Use when
-  the user says "the text sounds mechanical", "it reads like AI", "fix clumsy phrasing", "почисти
-  корявые фразы", "текст механический", "проверь естественность", or when write-chapter,
-  plan-story or plan-chapters reach their naturalness step. Works on chapters (prose mode) and on
-  plans — STORY_INTENT, outline, beat cards (plan mode). Mode per project: off / review / auto-safe.
+  Use when ONLY when the user flags prose as sounding mechanical, AI-like, or non-native and
+  asks for cleanup in the same language: "sounds mechanical", "reads like AI", "fix clumsy
+  phrasing", "почисти корявые фразы", "текст механический", "проверь естественность",
+  "почисти текст", "звучит как ИИ", "слишком машинно". Strictly no meaning changes: if a
+  passage needs meaning work, flags it without a rewrite and tells the user to use
+  write-chapter for that passage. Also runs internally from plan-story, plan-chapters, and
+  write-chapter §5 — invoke directly only when the user names this skill. Do NOT use for
+  cross-language translation — that's translate.
 ---
 
 # Naturalize
+
+## Mode
+Subagent. Produces a review inbox the user decides row-by-row. In `auto-safe` mode, small
+repairs (≤3 words, meaning-preserving, broken collocation or garbled proverb) are applied
+without asking; everything else goes to the review file.
+
+## Inputs required
+- The text to naturalize (chapter or plan file)
+- `CANON.md` — `naturalness:` mode and `critics:` list
+- `plan/HARNESS.md` if it exists — `## Naturalness examples` and `## Overused patterns`
+- `wiki/canon/overview.md` — `## Comic register` (to know what's NOT a defect)
+- For prose mode: `<book>/drafts/ch<NN>-<slug>.md` (current draft, including any v0 snapshot revisions)
+- For plan mode: `STORY_INTENT.md` / outline / beat cards
+
+## Persistent state
+- `<book>/naturalness/<target-stem>.md` — the review inbox with each flagged sentence, the proposed fix, the shadow prediction, and the user's decision
+- `<book>/naturalness/critics/<target-stem>/` — the outside readers' flags (per-critic JSON replies and `merged.md`)
+- `<book>/naturalness/critics/<target-stem>/prompt.md` — the prompt sent to outside readers (kept for auditability)
+- `plan/HARNESS.md` → `## Naturalness examples` — appended when the user accepts/rejects/owns (used by `refine-harness` to learn)
+- `wiki/log.md` — append the `naturalize | …` line with per-critic counts and shadow prediction accuracy
 
 Read the text the way a native reader does, and flag what they would stumble on.
 

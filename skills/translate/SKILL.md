@@ -1,16 +1,34 @@
 ---
 name: translate
 description: >
-  Translate the fic, chapter by chapter, from the language it is written in into English (or
-  another target language), keeping names and terms consistent across the whole series, every
-  paragraph aligned with the original, and the meaning, jokes and voices intact. Use when the user
-  says "translate chapter 5", "translate the book into English", "make an English version",
-  "update the translation", "the original changed — fix the translation", "переведи главу на
-  английский", "переведи книгу", "сделай английскую версию", "обнови перевод". Translates the
-  user's chapters (drafts/ or raw/), never the wiki.
+  Use when ONLY when the user asks to translate the fic from one language to another:
+  "translate chapter N", "translate the fic", "translate to English / Russian / <lang>",
+  "make an English version", "update the translation", "the original changed — fix the
+  translation", "переведи главу", "переведи на английский", "сделай английскую версию",
+  "обнови перевод". Cross-lingual, paragraph-aligned, names and terms consistent across the
+  whole series. Translates drafts/ or raw/, never the wiki. Do NOT use when the user wants
+  monolingual prose cleanup ("fix clumsy phrasing", "почисти") — that's naturalize.
 ---
 
 # Translate
+
+## Mode
+Subagent. Each chapter is independent — translations are parallelisable by chapter (the
+glossary is the shared state). The user evaluates the translation against the source;
+follow-up fixes are short and targeted.
+
+## Inputs required
+- The chapter to translate (`raw/<file>` or `<book>/drafts/<file>`)
+- `translations/glossary.md` if it exists — names, terms, established translations
+- `translations/style.md` if it exists — voice / register decisions
+- `CANON.md` (source and target language)
+- For series consistency: existing translations of earlier chapters (to detect name drift)
+
+## Persistent state
+- `translations/<target-lang>/<book>/ch<NN>-<slug>.md` — the translated chapter
+- `translations/glossary.md` — appended on name / term decisions (so later chapters match)
+- `translations/<target-lang>/index.md` if it exists — the translated work's catalog
+- `wiki/log.md` — append the `translate | …` line
 
 A translation is a second edition of the chapter, not a paraphrase of it. A reader of the English
 must get the same events, the same point, the same jokes, and the same people — and chapter 12 must

@@ -1,16 +1,37 @@
 ---
 name: publish
 description: >
-  Serialise the fic while it is still being written: gate the next chapter, export it in the
-  platform's format, publish it (the user confirms every publication), record what readers got,
-  and push typo-only errata. Use when the user says "publish the next chapter", "publish chapter
-  5", "what's published", "fix a typo in the published chapter", "опубликуй главу", "выложи
-  следующую главу", "что уже опубликовано", "исправь опечатку в опубликованной", "update the
-  annotation", "обнови аннотацию", or a scheduled publishing run starts. Platforms: author.today
-  now; one adapter per platform.
+  Use when ONLY when the user says "publish the next chapter", "publish chapter N",
+  "upload chapter N", "publish a typo-only errata", "what's published", "обнови аннотацию",
+  "опубликуй главу", "выложи главу", "что уже опубликовано", "исправь опечатку", or a
+  scheduled publish run starts. The user confirms every publication — the subagent prints
+  a question and waits for a clear yes before going live. Do NOT use for a book cover image —
+  that's cover. Do NOT use to audit a chapter against canon — that's reconcile.
 ---
 
 # Publish
+
+## Mode
+Subagent. Verified across 24 real publish runs in 23 sessions: 71% pure fire-and-forget,
+17% brief acknowledgement, 0% mid-run interruptions, 4% mid-run text question (handled
+internally). Each publication is gated by an explicit user yes before going live.
+
+## Inputs required
+- The chapter draft at `<book>/drafts/ch<NN>-<slug>.md` (with `published:` frontmatter)
+- `<book>/outline.md` (to update the published note)
+- `wiki/log.md` (to verify `write✓ reconcile✓ naturalize✓` stages for the gate)
+- `publish/platforms/<platform>.md` (the work's per-platform notes)
+- `references/platforms/<platform>.md` (the adapter — author.today for now)
+- For typo errata: the live chapter URL
+
+## Persistent state
+- `publish/LEDGER.md` — one row per publication, written by `publication.py record`
+- `publish/platforms/<platform>.md` — updated with posted annotation, run notes
+- `publish/exports/<platform>/b<NN>-ch<NN>.html` (+ `.json` sidecar) — what was uploaded
+- `publish/readback/<platform>/b<NN>-ch<NN>.txt` — verification result
+- `<book>/drafts/snapshots/ch<NN>-published-<platform>-v<N>.md` — frozen published snapshot
+- `<book>/drafts/ch<NN>-<slug>.md` `published:` frontmatter — entry added on record
+- `wiki/log.md` — append the `publish | …` line
 
 Readers remember what they read. A chapter that has gone out (**live**) outranks the draft and the
 outline, and its text changes only by errata — typos, never rewrites. A chapter on a timer that has
@@ -252,70 +273,9 @@ line.
    `Publish b<NN>/ch<NN> «<title>» on <platform>` plus the timer date if delayed. Never push unless
    the user asks.
 
-## Editing a queued chapter
+## Editing a queued chapter, errata, and lint
 
-A queued chapter has no readers yet, so it is not fixed (`CONVENTIONS.md` §13). **Only on the
-user's request** — a rewrite nobody asked for is a finding, not an edit.
-
-1. **Rewrite** the draft by the stage that owns the change (`write-chapter`, `naturalize`, a
-   hand edit). Then `reconcile` the chapter again: the gate reads the **latest** log entries.
-2. **Check:**
-   ```bash
-   python3 <scripts>/publication.py errata-check drafts/book-01/ch05-<slug>.md --platform author-today
-   ```
-   On a queued chapter it says `queued for <date>` and lists the changed paragraphs, exit 0. Show
-   them. Run the gate (Publish → 1) — it applies to a re-upload as to a first upload.
-3. **Export** and round-trip (Publish → 2).
-4. **Re-upload under the same timer** by the adapter's **Re-uploading a queued chapter**: open the
-   chapter's edit page, put the new text through the editor's API, sync it into the form field,
-   save with the scheduling button (never the draft button — it drops the timer), re-fetch the edit
-   page and confirm the saved timer equals the one before. A changed timer stops the run: say so
-   and restore it before anything else.
-5. **Read back** and `verify` (Publish → 3) — the hash or text of what the site saved equals the
-   export.
-6. **Record** — `record` writes `v<N+1>` with the timer's date and a new snapshot. Log
-   `publish | b<NN>/ch<NN> re-upload → author-today v<N+1> (queued <date>)` with
-   `changed_paragraphs=<n>`, and commit.
-
-The user's request to rewrite a queued chapter covers its re-upload under the existing timer — the
-timer was approved already. A new date is a separate yes.
-
-**Example.** Chapter 12 is on a timer for Tuesday 19:00, uploaded as `v1`. The user asks for its
-second scene shorter. Redraft, reconcile, `errata-check` (queued, 3 paragraphs changed), export,
-re-upload, the edit page still shows Tuesday 19:00, verify identical, `record` → `v2`, Tuesday.
-
-## Errata — typos only
-
-Errata are for **live** chapters. The user edits the chapter's draft, then:
-
-```bash
-python3 <scripts>/publication.py errata-check drafts/book-01/ch05-<slug>.md --platform author-today
-```
-
-It diffs the reader-visible text against the last published version and sorts every change into
-**typo** (one misspelt word, a punctuation mark, a split or merged word) or **REWRITE** (anything
-that changes wording, adds or removes a word, or touches paragraph count). Exit 1 on any rewrite.
-
-- **Rewrites do not go out.** Show them; the user reverts them or keeps them for a later edition —
-  this project publishes typo-only.
-- **Non-standard orthography is not a typo.** `canon/overview.md` `## Non-standard orthography`
-  records the author's deliberate forms (`какой то`, `кому нибудь`). The script passes
-  `кому нибудь → кому-нибудь` as typo-sized; you must not. Check every typo row against that list
-  and drop any "fix" of a recorded form — a reader's correction included.
-- Then export, put the new text on the platform (same flow, editing the existing chapter), verify,
-  get the user's yes, and `record` — which writes `v<N+1>`. Log it as `publish | b<NN>/ch<NN> errata
-  → author-today v<N+1>` with `typos=<n>`.
-- If `translations/` exists, the chapter's translations are now stale: `translation.py status`, then
-  `translate` updates only the changed blocks.
-
-## Lint
-
-```bash
-python3 <scripts>/publication.py lint
-```
-
-Cross-checks frontmatter, snapshots and ledger, and reports every published chapter whose draft
-changed since. `wiki-lint` runs it too.
+The three side flows — re-uploading a queued chapter under its existing timer, pushing typo-only errata to a live chapter, and the publication lint — live in [references/scenarios.md](references/scenarios.md). Read that file before running any of them.
 
 ## Rules
 

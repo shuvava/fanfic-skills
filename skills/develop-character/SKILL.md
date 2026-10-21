@@ -1,15 +1,41 @@
 ---
 name: develop-character
 description: >
-  Develop a character into a full profile — their own story, want, need, wound, stakes, relationships,
-  what they do off-page, and how they change — so no character reads as scenery for the protagonist.
-  Use when the user says "develop this character", "flesh out X", "who is X really", "проработай
-  персонажа", or when another stage finds a character above the depth threshold
-  (`CONVENTIONS.md` §11) without a profile. Works for canon characters (extends, never edits canon)
-  and for new characters (creates `fanon-proposed`). Asks decisions one at a time.
+  Use when ONLY when the user names a specific existing character and asks for depth:
+  "develop this character", "flesh out X", "who is X really", "what does X want",
+  "проработай персонажа", "расскажи про X подробнее". Produces a profile with their own
+  story, want, need, wound, stakes, off-page activity, and arc. Works for canon characters
+  (extends, never edits canon) and for new characters (creates fanon-proposed). One question
+  at a time. Do NOT use when the user is brainstorming plot-level "what if" ideas with no
+  character named — that's brainstorm. Do NOT use when the user wants to write a scene
+  featuring an existing character — that's write-chapter.
 ---
 
 # Develop Character
+
+## Mode
+Inline. The user often iterates on the profile after seeing it — "X's motivation is wrong,
+X wants Y not Z", "add a `## Would never do` section", "merge with the family page". The
+interview is the value; the conversation IS the output until the user ratifies.
+
+## Inputs required
+- The character name (the user names one)
+- `wiki/canon/characters/<name>.md` if it exists — what canon already says (read-only for canon characters)
+- `wiki/canon/voices/<name>.md` if it exists — verbatim dialogue the character already has
+- `wiki/fanon/` entries that mention this character
+- `CANON.md` (language settings, `## Comic register` if present)
+- `plan/HARNESS.md` if it exists — project-specific character rules
+
+## Skip-if-loaded
+Before reading canon pages, check whether they were already loaded this session and no
+`ingest-source` has happened since. Character sheets and voice cards persist across the
+session once read; re-reading is wasted context.
+
+## Persistent state
+- `wiki/canon/characters/<name>.md` — extended for canon characters (extends, never edits)
+- `wiki/fanon/proposed/characters/<name>.md` — created for new characters or major additions to existing
+- `wiki/index.md` — updated to list the new/changed page
+- `wiki/log.md` — append the `develop-character | …` line
 
 Give a character a life of their own, then check that the plan actually lets them live it.
 

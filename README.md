@@ -57,6 +57,33 @@ For a global install visible from every project, copy the same three into `~/.ag
 reference resolves to the plugin root from that exact depth — flattening the layout silently breaks
 the shared conventions.
 
+## How skills are organised
+
+Every `skills/<name>/SKILL.md` follows the same shape:
+
+- **Frontmatter `description:`** is the always-loaded discovery surface. It opens with `Use when ONLY when …`,
+  lists the trigger phrases in English and Russian where applicable, and ends with `Do NOT use when …` clauses that
+  name the adjacent skill. It never summarises the skill's workflow — that lives in the body and is loaded only
+  when the skill triggers. Descriptions stay under ~600 chars (well under the 1 024 cap) to keep the
+  always-loaded zone cheap.
+- **Body** opens with four short sections, in this order:
+  - `## Mode` — `inline` (the skill stays in the main session so the user can iterate), `subagent` (the skill
+    runs in a fresh-context subagent, returning its outputs), or `mixed` (some phases inline, some subagent —
+    `illustrate` is the only one). The mode is justified in one sentence; the choice comes from session-log
+    evidence, not from aesthetic preference.
+  - `## Inputs required` — every file the parent session must hand to the skill before spawning / starting.
+  - `## Skip-if-loaded` (inline-mode skills only) — explicit staleness triggers and a re-read / reuse rule,
+    so the canon wiki isn't reloaded from disk when it's already in context.
+  - `## Persistent state` — every file the skill writes. The skill's output IS its persistent state; no
+    separate session-note file.
+- **Heavy reference material** lives in `skills/<name>/references/<topic>.md`, linked from the body with a
+  one-line summary. SKILL.md → references/<file>.md is the only chain — no references/<file> → references/<bar>
+  (Anthropic's "Avoid deeply nested references" rule; nested links cause Claude to read only the first ~100 lines
+  of the target, missing content past that).
+
+To add or modify a skill, follow the same shape. The pattern is enforced by review, not by tooling, so check
+your diff against the existing skills before opening a PR.
+
 ## Use it
 
 Make a project directory and **put your source material in `raw/`**. That directory name is not a
