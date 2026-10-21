@@ -134,124 +134,16 @@ detail can be resolved here with the user and noted in the beats.
 ## 3. Beat out the chapter
 
 Write `<book>/beats/ch<NN>.md` in `wiki_language`: two short sections for the user who reviews it,
-then one card per scene for the drafter:
-
-```markdown
-## <"In short", in wiki_language>
-4–6 sentences: what happens, why, and what the reader should understand or feel when the chapter ends.
-One of them says what the chapter does for its part, in everyday words.
-
-## <"To decide", in wiki_language>
-1. <question> — <recommended answer, one line of why>
-(or one line: nothing to decide)
-
-## Scene <n> — <slug>
-- **POV:** <character>
-- **Setting:** <where, when>
-- **Goal:** what the POV character wants entering the scene
-- **Conflict:** what opposes it
-- **Outcome:** how it ends — usually worse than it started
-- **Reaction / dilemma / decision:** the emotional beat that follows. Its length follows the chapter's
-  place in the part: a phrase or a paragraph in the middle, to keep pace; before the climax, the
-  dilemma written out as the card's two options; after the climax, the longest reaction in the part —
-  and that one too ends in a decision
-- **Point:** what the reader must understand when the scene ends — the realisation, subtext or irony
-  the scene exists for, stated plainly and with its *because*. Not the outcome restated
-- **Canon deps:** [src: ...] entries this scene relies on. For every rule of how the world works, the
-  line from `raw/` itself, with the author's hedges, and who in the world knows it (see *Who knows what*)
-- **Fanon deps:** [fanon: ...]
-- **Voice notes:** which cards to re-read before each character's first line
-- **Constraints:** anything from forbidden.md or load-bearing canon that applies
-- **Precedent:** a canon scene of the same kind — an exam, a lecture, a sparring match — [src: ...], or `none`
-- **What is new:** what this scene has that the precedent does not — stakes, obstacle, outcome,
-  information. At least two; a different room does not count
-- **Event:** what happens on the page that changes the situation — not only what the POV thinks
-  about it — and, for every act in it, its *because* (see *Give every act its cause*)
-- **Cut:** last scene only, when the outline marks one — the exact line or action the chapter stops
-  on, and why the reader cares how it turns out. Omit the field for a closed ending
-- **Picture:** the scene that holds the outline row's `picture`, if it has one — the moment, who is
-  in it, and what must be visible on the page for it to be drawn. Omit it everywhere else
-```
-
-**The two top sections are for the reviewer, and they are written last.** A card is 1000+ words of
-apparatus the drafter needs — goals, dependencies, citations, conflict tables — and the person at the
-beat gate has to find the chapter and the questions inside it. On a real run a world detail the user
-later questioned in the finished prose had been written in the beats all along, too deep in a dense card to catch.
-
-- **In short** retells the chapter the way you would tell a friend about it, in your own words.
-  Close the cards and write it. The rules are the synopsis rules (`plan-chapters` → Synopsis and
-  annotation): events in order, motives named, plain sentences. No field names, no `[src:]`, no
-  scene numbers, no copied `Point`. The reader of this section knows the world, so world words need
-  no explaining. End on what the reader should take away, and name the chapter's `Point` in everyday
-  words.
-- **To decide** lists every question the user must answer before drafting, pulled up from wherever
-  it arose (the outline review, a missing voice card, a conflict the check found). Each has your
-  recommendation. Write the question the way you would ask it aloud, not in editor's terms. Nothing
-  to decide is one line, and a real result.
-- **Draft from the scenes, never from In short.** It compresses, and a draft written from it loses
-  what the compression dropped. When the user edits the cards, rewrite In short to match.
-- Check it for runs copied from the plan:
-  ```bash
-  python3 <scripts>/synopsis_check.py <book>/beats/ch<NN>.md --section "<In short heading>" \
-    --against <book>/outline.md
-  ```
-
-**Write the Point first, and write it with its *because*.** A card whose goal, conflict and outcome
-are all correct still loses a scene whose meaning lives in subtext. "The engagement is broken off" is an outcome. "Breaking it off is the kind move, because her father needs the dowry back more than he needs an ally — and whoever returns it first makes the other the debtor" is a point. Measured on a
-real run: scenes drafted from cards without it were plausible and on-brief, and the source's author
-read every one as a different scene — the meaning was gone before a word of prose existed, and no
-drafter can restore a point the card never carried. If you cannot state the point, the scene does not
-have one yet: ask, don't draft.
-
-**Give every act its cause.** Every action, decision, refusal, silence and agreement in a card
-says why this person does it here and now: a reason on the page, in an earlier chapter, or in their
-profile. When the reason is a goal, say why they want it. A choice made off the page — a consent, a
-change of mind — is a choice the reader never sees: put it in a scene or ask. On a real run most of
-what the user rewrote in two drafted chapters was already in their beats, written as bare sequence
-("one pushes him; she hits back") with the reason only in the drafter's head. Where the reason is
-written, the user can judge it in a line; where it is not, a reader cannot tell intent from a hole,
-and neither can the drafter three scenes later. A character who acts against their own logic on
-purpose — for the scene's emotion — still gets the card line *why*, and the user decides.
-
-**A cause can be offstage.** The outline marks it («за кадром: …» in a Russian plan): the author's
-logic that the POV character and the reader do not know, or only guess. Carry it onto the card with
-the same marker. Draft the act so it fits that cause; never let the narrator or anyone else state it
-unless they could know it (*Who knows what*); leave at most a trace the POV can notice — and the guess
-itself where the outline says the POV guesses. A cause that is offstage on the card is not a hole for
-the breaks reader; one that is in no field at all is.
-
-**Run the swap test on every card with a precedent.** Paste the canon scene in place of this one: if
-nothing downstream would notice, the scene is a re-staging, not a scene — rebeat it before drafting.
-The precedent is also where a card goes wrong quietly: "fill the format from the canon scene" is an instruction to re-stage it, and a real author read the result as the same scene, beat for beat.
-
-**Run `naturalize` in plan mode over the cards' `Point` and `Event`** (unless `CANON.md` sets
-`naturalness: off`), and show its review file with the beats. A point written as concept-speak is
-drafted as concept-speak: on a real run a piece of the plan's abstract shorthand reappeared in later files word for word.
+then one card per scene for the drafter. The full template, conventions for In short / To decide,
+the Point and Precedent checks, the Three Ways a Joke Fails examples, and the Who Knows What
+mechanics check all live in [references/beat-card-template.md](references/beat-card-template.md).
+Read that file before writing the first card.
 
 **Show the beats to the user before drafting.** This is the cheapest gate in the pipeline — fixing a
 beat costs a line, fixing drafted prose costs a scene. Lead with In short and To decide, pasted into
 the conversation, and point to the file for the cards. The user decides from the top sections and
 opens the cards when something needs a closer look. An answer to To decide goes into the cards, and
 In short is rewritten if the answer changed the chapter.
-
-**Who knows what — check every mechanic against `raw/` before the beat gate.** A card that leans on
-how the world works (how healing reaches a wound, what a material does, what a guild teaches) is where
-invented canon enters unseen, and the user then has to catch it line by line. For each such rule:
-
-- **Quote `raw/`, not the wiki.** A wiki page is a summary and drops the author's hedges: «примерно
-  девять из десяти, если не врать» becomes «90%» on the page, and the draft then states as a measured
-  fact what the narrator only guessed — about something else. Carry the hedge with the quote.
-- **Check what the world already has** in that field — artefacts, guild practice, known techniques —
-  before inventing one. A new mechanic drafted without them contradicts the canon it skipped.
-- **Name who knows it.** The world knows what canon shows people knowing. The protagonist knows what
-  happened on the page, and only the way he met it: he *watched* the far end of the pole, so he did not
-  *feel* it. A side character says only what they could have learned. **The protagonist's own
-  discoveries are unknown to the world** unless canon says otherwise; a mechanic in which «village
-  healers have always done» what the hero found out alone in chapter 9 is `blocking`. The reverse holds
-  too: the hero does not outknow an institution that simply has not taught him yet.
-- **Use the locals' words.** The narrator's vocabulary — modern slang, his name for a phenomenon — does
-  not go into the mouths or the records of people who never had it. If the narrator calls it «the
-  green glow» and the locals say «the gift», a healer's journal says «the gift».
 
 **Logic and canon reader — before the beat gate.** You check the beats against what you believe;
 a reader with fresh context and `raw/` at hand does not share your beliefs. Unless `CANON.md` sets
@@ -420,88 +312,11 @@ prose log entries and had to be collected by hand.
 
 ## 5. Canon-check the draft
 
-Run explicitly and report:
-
-| Check | Verify |
-|---|---|
-| Language | Is the prose in `output_language`? Are quoted canon lines untouched? |
-| Style fingerprint | Run the script below. Report its table and fix anything outside tolerance. |
-| Orthography | Is every rule in `## Non-standard orthography` reproduced, not corrected? |
-| Voice | Does each character's dialogue survive comparison to their verbatim lines? |
-| Register | Are address forms and honorifics consistent with the relationship table? |
-| Forbidden | Does anything violate `forbidden.md`? |
-| Would-never-do | Does any character act outside their recorded code? |
-| World limits | Are costs honored? |
-| Who knows | Every rule of the world on the page traces to a `raw/` line; nobody knows what they could not have learned; the hero's discoveries stay his; locals use their own words |
-| Timeline | Any conflict with `timeline.md`? |
-| Picture | The outline's picture moment is on the page as an action with visible detail — who, where, what they hold — not only summarised or thought about |
-| Ending | A cut stops on its moment with nothing after it; a closed ending carries no bolted-on omen; a previous chapter's cut is settled in the opening |
-| Beats | Does each scene deliver its card's goal, conflict, and outcome? |
-| Point | Can a reader reach each card's point from the page alone, its *because* included? Quote the lines that carry it. A point no line carries is missing from the scene, however well the outcome lands |
-| Precedent | Does any scene repeat a canon scene's shape — same staging, same moves, same observations? List every narrator observation re-performed from canon; each is cut or turned into an acknowledged callback |
-| Event | Does the chapter contain the external event its card named, on the page? |
-| Part | A climax chapter: the protagonist's deciding act and its cost are on the page. An aftermath chapter: a consequence happens on the page and the decision is spoken or done. Any chapter: what the next rows need planted is planted |
-| New assertions | What does this chapter establish that no tier records? |
-| Logic reader | The same reader over the draft: `logic_reader.py prompt <draft> --stage draft --beats <book>/beats/ch<NN>.md --dir <book>/logic/ch<NN>-draft`, same subagent hand-off and sorting as at the beat gate. Fix what evidence settles before hand-off (your edit: update the v0 snapshot); questions for the user go at the top of the hand-off, before the naturalness review. Report flagged / fixed / asked |
-| Naturalness | Run `naturalize` in prose mode once the rows above pass (skip if `naturalness: off`), outside readers included (`critics:` in `CANON.md`). Report its counts — flagged, auto-repaired, left for review, and per critic — and the review file's path |
-
-Measure the style row rather than judging it:
-
-```bash
-python3 <scripts>/style_fingerprint.py check <drafts>/ch<NN>-<slug>.md --against <ingested chapters>
-```
-
-`<ingested chapters>` is the same span `canon/overview.md` records under `## Style fingerprint`
-(e.g. `raw/ch01.md raw/ch02.md ...`), **not** `raw/*.md`. Checking a draft against uningested
-chapters grades it on a target no page in the wiki describes.
-
-It prints every feature that drifted, with the source value, the draft value and the delta, and exits
-non-zero when anything is outside tolerance. **Revise the draft and re-run until it passes, or state
-plainly which deltas you are leaving and why.** A first draft typically comes back with the source's
-strongest punctuation habits at a fraction of their density — that is the normal failure and it is
-worth one revision pass, because it is the difference between prose that reads like the author and
-prose that reads like a competent imitation.
-
-**Naturalness runs last** because every other row can rewrite sentences, and a fix reviewed before a
-canon revision would be reviewed twice. In `auto-safe` mode its repairs are Claude's own edits: apply
-them and update `snapshots/ch<NN>-v0.md` before hand-off (§4), so the snapshot stays "what Claude
-produced" and `refine-harness` does not count the repairs as user edits. Fixes the user accepts from
-the review file are theirs — they land after hand-off and never touch the snapshot.
-
-**Outside readers are part of this row, not an extra pass.** Your own reading misses what another
-reader catches: on a blind read of three published chapters, the user found a real defect in 22 of 29
-sentences they had let through, and no single critic caught more than half of them. Two outside
-models plus a fresh-context Claude caught 20. Their flags reach the user only through `naturalize`'s review file, after you have
-sorted them against the user's verdicts — never as a raw list.
-
-**Report violations rather than silently fixing them.** A deliberate divergence is legitimate; the
-user decides which it is. This applies to canon, not to the fingerprint: a style delta is a defect to
-fix, not a choice to surface.
-
-### When a check fails, find the cause before fixing the prose
-
-A failed check is a symptom. Patching the sentence that tripped it leaves the cause in place and the
-same defect returns next chapter — this is the single most common way a project accumulates the same
-edit forever, and it is what `refine-harness` later has to clean up in bulk.
-
-Locate the cause before revising:
-
-| Cause | How it looks | Where the fix belongs |
-|---|---|---|
-| **Prose** | The beat was right; the sentence executed it wrong | The draft. Revise and move on |
-| **Beat** | The scene card asked for something the wiki forbids | `<book>/beats/ch<NN>.md`, then redraft that scene |
-| **Outline** | The scene should not exist in this shape at all | `plan-chapters` — it is one row, not one chapter |
-| **Wiki** | The page you drafted against is thin, silent, or misread the source | `ingest-source` for the missing span, or fix the canon page against `raw/` |
-| **Harness** | You did the same wrong thing you did last chapter | `refine-harness` — the default needs changing, not this draft |
-
-State the cause you settled on before revising. "Voice drifted because `canon/voices/<x>.md` records
-four verbatim lines and none of them in an argument" is actionable; "fixed the dialogue" is not, and
-it will be fixed again next chapter.
-
-**Three strikes.** If three revision passes have not cleared the same check, stop revising. Three
-failures on one check is not a prose problem — it is a thin page, a wrong beat, or a harness default
-working against you. Say so, name the suspected cause, and hand it to the user instead of attempting
-a fourth pass.
+Run every row of the canon-check table explicitly and report. The full 19-row table, the cause-
+finding protocol (prose / beat / outline / wiki / harness), the three-strikes rule, the style
+fingerprint invocation, the logic reader invocation, and the naturalness-last ordering live in
+[references/canon-check-table.md](references/canon-check-table.md). Read that file before running
+the check.
 
 ## 6. Hand off
 

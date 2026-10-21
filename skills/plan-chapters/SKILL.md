@@ -333,23 +333,11 @@ usually shorthand for nothing. Audit your own layer before presenting it:
 - **Fold test.** If the next chapter could open with one line summarising this one and lose nothing,
   merge them.
 - **Every part passes the part checks.** Each is a `warning` that names the part and the chapter and
-  asks — never a quota, and never a block. On a published part they report only.
-  1. *The climax answers the question.* A part that asks «will she find allies» and climaxes in a won
-     duel has the wrong question or the wrong climax.
-  2. *The protagonist decides it, on the page.* The climax is a scene where the protagonist chooses
-     between the card's two options and acts — not a result reported afterwards, not a rescue by
-     someone else.
-  3. *The cost is not «nothing»* — unless the part is declared a return to where it began, as a
-     comic or slice-of-life part may be. Record that as a choice on the card.
-  4. *The trouble grows and comes from different sides.* Each complication is harder than the one
-     before and has a different source, and the opposition presses again in the middle of the part.
-     Three obstacles from one source in a row is one obstacle repeated.
-  5. *The part is not the last one, bigger.* If both climaxes are «wins a fight, a harder one», the
-     second is a repeat; the reader has already had that payoff.
-  6. *No thread drops silently.* Every thread the part's chapters touch is on the card, `closed here`
-     or `carried on`.
-  7. *The reflection is short and ends in a decision.* At most one pause chapter — reaction with no
-     new event on the page — after the climax (*Parts* → Where the reflection goes).
+  asks — never a quota, and never a block. On a published part they report only. The seven checks
+  (climax answers the question, protagonist decides on the page, cost is not "nothing", trouble
+  grows from different sides, part is not the last one bigger, no thread drops silently,
+  reflection ends in a decision) and a worked example live in
+  [references/part-checks.md](references/part-checks.md).
 - **Every character above the depth threshold has a profile** (`../../CONVENTIONS.md` §11). A
   character who has a line, appears in two scenes, or acts on a scene's goal without a profile in
   `wiki/fanon/proposed/characters/` is a `warning` — offer `develop-character`. Then look at the scene
@@ -401,34 +389,11 @@ remaining flags and drop the ones the fix settled. Delete `$D` once the answers 
 
 ### Synopsis check — Layers 1–2
 
-Before showing Layer 2, fill in the fields a publisher's synopsis form asks for, one line each,
-from Layers 1–2 alone. Treat the form as a test: a field you cannot fill from the layers is a hole
-in the story, not in the form, and here it costs one question.
+Fill the publisher's synopsis form from Layers 1–2 alone — treat the form as a test. A field you
+cannot fill from the layers is a hole in the story, not in the form. The full field table,
+annotation rules, synopsis writing rules, and the mechanical check live in
+[references/synopsis-checklist.md](references/synopsis-checklist.md).
 
-| Field | Filled when | Typical hole |
-|---|---|---|
-| Setting | place, time and the circumstances the conflict depends on | rarely fails — canon supplies it |
-| Protagonist | who, what they want, what in them stands in the way | no want: the hero only reacts, all book |
-| Antagonist | a person, or opposing circumstances named concretely ("the rule that…", not "obstacles") | complications that share no source, so nothing pushes back twice |
-| Inciting event | the event that makes the central question urgent | the "book starts early" check above |
-| Climax | a scene on the page where the central conflict is decided by what the protagonist does | a result reported instead of a scene where it is decided |
-| Twist | a reversal the reader did not expect that follows from something planted earlier — name where | none, or one with nothing planted: a coincidence |
-| Resolution | what differs from the start state, for the protagonist and for the central conflict | the ending restates the start |
-| Main intrigue | the one question the reader carries across the book; answered here or handed to the next rung | a list of subplots and no single question |
-
-Invented example, «Хроники Севера»: "Anna wins the trial" is a result, not a climax. The climax is
-the scene where she testifies against Mark in open court, knowing it costs her the family name.
-
-**Before calling a field a hole, read the protagonist's profile** in `wiki/fanon/proposed/characters/`.
-Its ratified shift section says where the change happens and what kind of change it is. Layer 2 may
-give that scene one clause. On a real run, a check made from the layers alone recommended a new scene
-for a change the profile had already placed, and the user had to be asked again. Where the profile
-and the intent describe the change differently, that mismatch is the finding. Fix the intent's
-wording; do not add a scene.
-
-"Circumstances" as antagonist and "no twist" are legitimate answers when they are chosen. Record
-them as choices. In a series, a main intrigue handed forward must exist in the next rung of
-`SERIES_ARC.md` or as a seed there; otherwise the book ends on a question nobody plans to answer.
 Show the filled table with Layer 2. A field left empty is a question for the user, like a
 placeholder.
 
@@ -461,40 +426,14 @@ Also check:
 
 ### Cross-book checks
 
-Series only. These are the failures a per-book lint cannot see, and they are the expensive ones —
-each is discovered three books later otherwise.
-
-| Check | What goes wrong | Severity |
-|---|---|---|
-| **Start-state drift** | A scene assumes a state the previous book's drafted ending contradicts. | `blocking` |
-| **Prior-fanon contradiction** | A scene contradicts a `fanon-established` fact an earlier book set. | `warning` — the user may be retconning on purpose, but it is never a silent change |
-| **Continuity-ledger contradiction** | A scene contradicts `drafts/continuity.md` — something the earlier prose actually said. | `blocking`. The published text is not revisable by a plan |
-| **Published contradiction** | A scene contradicts a chapter with `published:` in its frontmatter, or re-plans one (`../../CONVENTIONS.md` §13). Applies within a book too. | Live chapter: `blocking` — readers have it; only typo-only errata can change it. Queued (timer not fired): `warning` — the fix may be the queued chapter, re-uploaded under its timer; the user decides |
-| **Undelivered rung** | The Layer 2 ending does not reach this rung's end state. | `blocking` — the next book's start state is already written against it |
-| **Unplanted seed** | A `SERIES_ARC.md` seed with `Plant in` = this book that no scene plants. | `blocking` — the payoff book has nothing to pay off |
-| **Unpaid seed** | A seed with `Payoff target` = this book that no scene pays. | `warning`; either schedule it here or move the target and say so |
-| **Premature payoff** | A scene resolves a thread or seed reserved for a later rung. | `warning` — spending it now leaves the later book with a hole |
-| **Ladder overreach** | The outline delivers a state two or more rungs ahead. | `notice`; the ladder is wrong, not the book. Update `SERIES_ARC.md` |
+Series only. The full check table (start-state drift, prior-fanon contradiction, continuity-ledger
+contradiction, published contradiction, undelivered rung, unplanted/unpaid seed, premature payoff,
+ladder overreach) and the resolution protocol live in
+[references/cross-book-checks.md](references/cross-book-checks.md).
 
 A seed check is cheap to run and impossible to run late: by the time book 4 needs the object planted
 in book 2, book 2 is drafted and the fix costs a rewrite of a published chapter or a coincidence the
 reader will notice.
-
-### Resolving a blocking conflict
-
-Present it plainly, with both sides and their citations, then ask a single question:
-
-> Scene 7 has her using the family name openly. Canon establishes she abandoned it after the trial
-> [src: ch12.md#...] and `forbidden.md` records that as a hard line.
-> Is this an intentional divergence, or should the scene change?
-
-Three outcomes:
-- **Intentional** → record in `CANON.md` `divergences`, tag the fact `fanon-divergence`, continue.
-- **Error** → revise the scene.
-- **Canon was wrong** → the wiki misread the source. Re-check `raw/` and fix the canon page. This is
-  the only circumstance in which a canon page changes, and it requires re-reading the source.
-
-Never resolve a blocking conflict unilaterally. Never proceed past one unresolved.
 
 ## Synopsis and annotation
 
@@ -535,69 +474,12 @@ language: <output_language>
 ## Main intrigue          (and what carries into the next book)
 ```
 
-**The annotation** sells the premise:
-- It goes up to the inciting event and no further. The climax, the twist and the ending never
-  appear in it.
-- Check it against the reveal section of every character profile it mentions. It is read before
-  chapter 1, so anything scheduled for a later reveal is out.
-- Give a situation and a question, not a list of themes. "A story about friendship and betrayal" is
-  concept-speak, and every other book's annotation says the same thing.
-- Match the book's voice. A first-person book often gets a first-person annotation. The voice may
-  be the narrator's; the words must still be ones a stranger understands.
-- Keep it short, a few hundred to a thousand characters. The platform's limit is in its `publish`
-  adapter.
+The full annotation and synopsis writing rules, the mechanical check, and the worked example
+live in [references/synopsis-checklist.md](references/synopsis-checklist.md). Read that file
+before writing either.
 
-**The synopsis** retells the whole book, ending included, to someone who has never opened the
-series. Write it the way a person retells a book to a friend, not the way the outline is written.
-On a real run a synopsis assembled from outline rows was rejected whole ("not human language",
-"much worse than the example"), though every fact in it was right. `synopsis_check.py` found that
-half its sentences contained a five-word run copied from the outline. What the good example the
-user supplied did, and the rejected one did not:
-
-- **Tell it fresh, from the events.** Take from the outline *what happens and why*, then close it
-  and write your own sentences. The outline's phrasing is shorthand for people who already know the
-  story: paradox closers («получил допуск — и не владеет ничем, включая собственное имя»), a
-  scene's meaning in place of the scene, a verdict at the end of every paragraph. In a synopsis
-  these read as riddles.
-- **One thread, told in steps.** Each paragraph is one step of the protagonist's story: situation →
-  problem → what they try → what it costs → what changes. Subplots appear only where they hit that
-  thread. Never "Meanwhile, in parallel…" — that is the outline's line structure showing through.
-- **Few names.** Name the protagonist, the antagonist and the two or three people who change the
-  plot, five or six in total. Everyone else is "a classmate", "two outcasts nobody else would
-  take", "his brothers". A fight is told by its outcome and the protagonist's part in it, not a
-  roll call of who struck what.
-- **Explain every world word at first use, or drop it.** Before writing, list the words a stranger
-  would not know: world terms, ranks, game jargon, creature and place names. Each one is explained in
-  half a sentence where it first appears («ядро — источник силы внутри человека»), or replaced by a
-  plain description («хищные цветы у воды»), or cut.
-- **Name motives and feelings plainly.** «Она хочет, чтобы глава клуба её заметил», «он злится и
-  решает отомстить». A reader follows people, not mechanisms.
-- **Plain sentences.** Subject, verb, what happened, joined by «но», «поэтому», «тогда». Aim at
-  15–20 words; none over 30. No semicolon chains, no colon lists, no dash that ends a paragraph on
-  an aphorism.
-- Present tense, third person. No project apparatus: thread codes, block and chapter numbers, tiers,
-  `[src:]`. One to two pages.
-
-Invented example, «Хроники Севера». Assembled from the outline, rejected:
-> Анна получает место в совете, которого добивалась, — и не владеет в нём ничем, включая
-> собственный голос; параллельно Марк ведёт проект, о котором не говорит вслух.
-
-Retold:
-> Анну принимают в совет. Но голосовать за неё там будет Марк: её место оплатил его род. Анна
-> злится и решает найти в совете союзников, о которых Марк не узнает.
-
-**Check before showing.** Run the mechanical check, fix everything it reports, then reread the text
-as the stranger would:
-
-```bash
-python3 <scripts>/synopsis_check.py <book>/SYNOPSIS.md --section <synopsis heading> \
-  --against <book>/outline.md <book>/STORY_INTENT.md
-```
-
-`COPIED` means a sentence carries a five-word run from the plan: rewrite it, do not reword around
-the run. Then read it once more with two questions only: is there a word this reader does not know,
-and is there a sentence you would not say aloud when retelling the book? The script cannot answer
-either.
+**Check before showing.** Run the mechanical check listed in the reference, fix everything it
+reports, then reread the text as the stranger would.
 
 **Keep it current.** `derived_from` records the outline version it was built from. When Layer 1 or 2
 changes, regenerate the synopsis in the same run, and ask the user before changing an annotation
