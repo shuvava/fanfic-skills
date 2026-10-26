@@ -19,7 +19,7 @@ internally). Each publication is gated by an explicit user yes before going live
 ## Inputs required
 - The chapter draft at `<book>/drafts/ch<NN>-<slug>.md` (with `published:` frontmatter)
 - `<book>/outline.md` (to update the published note)
-- `wiki/log.md` (to verify `write✓ reconcile✓ naturalize✓` stages for the gate)
+- `wiki/log.md` (to verify `write✓ voices✓ reconcile✓ naturalize✓` stages for the gate)
 - `publish/platforms/<platform>.md` (the work's per-platform notes)
 - `references/platforms/<platform>.md` (the adapter — author.today for now)
 - For typo errata: the live chapter URL
@@ -142,6 +142,7 @@ Every row is evidence from this session (§10), not memory:
 | Canon check passed | the chapter's **latest** `write` log entry: `blocking=0` in its metrics, or its checks written out in the entry's lines (fingerprint in band, facts checked). Older entries do not count — a rewrite resets the check. No evidence either way → ask | `blocking` — run `write-chapter` §5 |
 | Reconciled | `reconcile✓` in status. Every fact a reader sees must be ratified fanon: a public invention that later gets "fixed" is a continuity error readers notice | `blocking` — run `reconcile` for this chapter |
 | Naturalness reviewed | `naturalize✓`, unless `naturalness: off` | `warning` — the user may publish anyway |
+| Voices checked | `voices✓`: the voice pass ran after the user's revisions (`write-chapter` §7) | `warning` — offer to run it first; it takes one subagent and a short list of fixes |
 | No drift in earlier chapters | status shows no DRIFTED | `blocking` — errata or restore first |
 | Spoilers | the chapter against the reveal section of every profile it mentions — `## Reveal schedule`, or its `wiki_language` name (`## Раскрытие читателю`) — in `wiki/fanon/proposed/characters/`; its picture per `illustrate` step 3. A hint earlier than scheduled is noted in that profile, so later chapters do not re-reveal it | `warning` — the user decides |
 | Book page | first chapter only: the project's platform notes record an annotation on the site | `warning` — offer Book page above. The first chapter makes the work visible, and a work page without an annotation is one readers skip |
@@ -272,6 +273,9 @@ line.
    and never stage `.env` or anything `.gitignore` excludes. One commit per chapter, message
    `Publish b<NN>/ch<NN> «<title>» on <platform>` plus the timer date if delayed. Never push unless
    the user asks.
+4. **Close with the next session.** End the report by saying the next chapter goes in a fresh
+   session (`CONVENTIONS.md` §14) — offer to start one where the host can. Everything it needs is
+   committed.
 
 ## Editing a queued chapter, errata, and lint
 

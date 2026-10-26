@@ -168,7 +168,7 @@ def gate_marks(cid: tuple[int, int], draft: Path) -> str:
         return "no wiki/log.md"
     lab = label(cid)
     heads = [ln for ln in LOG.read_text(encoding="utf-8").splitlines() if ln.startswith("## [")]
-    stages = ("write", "reconcile", "naturalize")
+    stages = ("write", "voices", "reconcile", "naturalize")
     # Stages name a chapter as b01/ch05 or by its draft path; accept either.
     hits = {s: any(f"] {s} |" in h and (lab in h or draft.name in h) for h in heads) for s in stages}
     return " ".join(f"{s}{'✓' if ok else '✗'}" for s, ok in hits.items())

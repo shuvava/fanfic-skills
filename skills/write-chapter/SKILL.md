@@ -45,15 +45,23 @@ If any is missing from context, or any staleness trigger fires, read fresh.
 - `<book>/beats/ch<NN>.md` — the scene beat sheet (input from plan-chapters, may be updated)
 - `<book>/naturalness/ch<NN>-<slug>.md` — naturalize's review inbox (when `naturalize` runs)
 - `<book>/logic/ch<NN>-draft/` — logic reader's flags (when logic reader runs)
+- `<book>/voices/ch<NN>-<slug>/` — the voice pass's prompt, reply and report (§7; deleted once applied)
 - `wiki/log.md` — append the `write | …` line with metrics
 
-Beat out one chapter, draft it, check it. One chapter at a time.
+Beat out one chapter, draft it, check it. One chapter at a time — and one chapter per session
+(`../../CONVENTIONS.md` §14).
 
 Follow `../../CONVENTIONS.md`. **Prose is written in `output_language` from
 `CANON.md` — by default, the source's language.** If `output_language` differs from `source_language`,
 say so before drafting and confirm.
 
 ## 1. Load context
+
+**Fresh session first.** If this session has already drafted, revised or published another
+chapter, stop before loading anything: say so and ask the user to start this chapter in a fresh
+session (offer to start one where the host can). Every call re-reads the conversation, and a
+session carrying an earlier chapter costs about twice as much per chapter
+(`../../CONVENTIONS.md` §14). Go on here only if the user says so.
 
 **Resolve the book first** per `../../CONVENTIONS.md` §8. `<book>/` and `<drafts>/` below are
 `plan/` and `drafts/` in a flat project, and `plan/book-<NN>-<slug>/` and `drafts/book-<NN>/` in a
@@ -323,13 +331,18 @@ the check.
 Drafts are `tier: generated`. **Never write chapter content into `wiki/canon/` — not ever.** New
 assertions from the chapter are handed to `reconcile`, which routes them through user review.
 
+**After hand-off the chapter runs:** the user's revisions → the voice pass (§7) → `reconcile` →
+`illustrate` where the chapter needs a picture → `publish`. After `publish`, the next chapter goes
+in a fresh session (`../../CONVENTIONS.md` §14).
+
 Append to `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] write | b<NN>/ch<NN> <title>
    metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n> natural=<flagged>/<auto> critics=<name>:<kept>/<flagged>,… logic=<flagged>/<fixed>/<asked> breaks=<flagged>/<fixed>/<asked>
 ```
 Drop `b<NN>/` and `book=` in a flat project.
-Then suggest running `reconcile`.
+Then wait for the user's revisions. When they are done — the user says so, asks for `reconcile`
+or `publish`, or the read-through has reached the end — run the voice pass (§7) before `reconcile`.
 
 **If `illustration_required` is true for this chapter's book (`CANON.md`, per-book setting —
 `../../CONVENTIONS.md` §8), or it is `planned` and the outline row has a `picture`, the chapter is
@@ -338,6 +351,41 @@ finished after `reconcile` — do not offer `illustrate`.
 After `reconcile`, go straight on to `illustrate` Phase 3 and offer its candidate moments in the same
 reply as the reconcile report. Do not wait to be asked: on a real run the user had to point out that a
 chapter handed off as done had no picture, when every chapter before it had one.
+
+## 7. Voice pass — after the user's revisions
+
+Revisions rewrite lines one at a time, each judged by what it says; how it sounds in the speaker's
+mouth drifts. A user who reads with the cards open asks for this check by hand every chapter — so
+it runs every time, after the last revision and before `reconcile`, and again if a later revision
+rewrites dialogue. It needs the cards, not the conversation, so a fresh-context subagent does the
+reading and the session sees only the fixes.
+
+```bash
+D=<book>/voices/ch<NN>-<slug>
+python3 <scripts>/voice_check.py prompt <drafts>/ch<NN>-<slug>.md --dir $D
+```
+
+Give the subagent only this, on a cheaper model where the host lets you pick one (on a test chapter
+it returned exactly the fix a manual pass had made): «Working directory: <project root>. Read
+`$D/prompt.md` — it is your whole task. Write the JSON object to `$D/reply.json`.» Then
+`python3 <scripts>/voice_check.py add <drafts>/ch<NN>-<slug>.md --dir $D --reply $D/reply.json` and
+read `$D/report.md`. Before applying, skip a fix that:
+
+- changes what the line says or does in the scene — the pass fixes voice, never meaning;
+- rewrites a line the user dictated or approved word for word in this chapter's revisions — show
+  it to the user as a question instead;
+- breaks a rule from `plan/HARNESS.md` or the chapter's punctuation counts.
+
+`python3 <scripts>/voice_check.py apply <drafts>/ch<NN>-<slug>.md --dir $D --skip <numbers>` makes
+the rest. Report to the user in a short list: how many lines were checked, each fix as before →
+after with the card's rule, each skipped fix and why. Where the reader found a profile line that
+contradicts a voice card, name it: the card wins in the prose, and fixing the profile is the
+user's call.
+
+The snapshot `v0` stays frozen — the pass runs after hand-off. Commit the draft, delete `$D`, and log:
+```
+## [YYYY-MM-DD] voices | b<NN>/ch<NN> — <checked> checked, <applied> fixed, <skipped> skipped
+```
 
 ## Rules
 

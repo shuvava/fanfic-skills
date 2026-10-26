@@ -166,7 +166,7 @@ brainstorm     → plan/IDEAS.md + plan/SERIES_ARC.md      [no gate — candidat
 plan-story     → plan/STORY_INTENT.md                    [grilling gate]
 plan-chapters  → outline + conflict report + synopsis    [conflict gate]
 develop-character → character profiles + cardboard check [depth threshold, CONVENTIONS §11]
-write-chapter  → beats (in short + to decide) → prose → canon check [beat gate]
+write-chapter  → beats (in short + to decide) → prose → canon check [beat gate] → your revisions → voice pass
 naturalize     → flag machine-sounding sentences, plus outside critics; propose fixes [review gate; off | review | auto-safe]
 reconcile      → review inbox → fanon promotion          [review gate]
 refine-harness → learn from your edits
@@ -177,7 +177,8 @@ publish        → gate → export → platform → record; typo-only errata [yo
 translate      → chapter → target language, block for block [glossary gate; notes review]
 ```
 
-Four human gates. Each catches errors one stage before they become expensive. `brainstorm` is
+One chapter per session: everything a chapter needs is on disk, and a session that carries the
+previous chapter re-reads it on every call (CONVENTIONS §14). Four human gates. Each catches errors one stage before they become expensive. `brainstorm` is
 deliberately not one of them — nothing it produces is committed, so there is nothing to gate.
 
 ## Three invariants
@@ -411,6 +412,11 @@ person just said or feared, or decided off the page; `write-chapter` runs it twi
 with your past questions from `## Logic examples` in `plan/HARNESS.md`, and merges the two runs. With `--stage outline`
 `plan-chapters` runs it over each part of the outline before showing it, and `plan-story` over the
 intent summary. Flags come back in story order, and the skills ask them one scene at a time.
+
+`scripts/voice_check.py` prepares the voice pass: every line of dialogue, numbered, for a
+fresh-context reader who opens the speakers' voice cards and proposes the smallest fix for each line
+that does not sound like its speaker. `add` keeps fixes whose quote occurs once in the draft;
+`apply` makes them. `write-chapter` runs it after your revisions and before `reconcile`.
 
 Once you approve a chapter's image, `scripts/place_illustration.py` puts it into the draft right
 after the paragraph holding the moment's anchor quote — one `![…](…)` line, relative to the draft,

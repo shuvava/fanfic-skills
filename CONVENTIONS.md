@@ -524,3 +524,37 @@ Tuesday.
 
 **Making a chapter public is the user's action.** A skill may prepare, upload as an unpublished
 draft and verify; it asks in chat before each publication, and a scheduled run stops before it.
+
+---
+
+## 14. One chapter per session; lookups outside it
+
+Every call re-reads the whole conversation, so a session's cost grows with the length of the
+conversation, not with how much new work there is. Measured on a real run: three chapters in one
+session that was never cleared — the context grew from 72k to 880k tokens over 474 calls, and the
+third chapter cost the most though it took the fewest calls. Re-reading context was 72% of the
+spend. Replaying the same calls with a fresh session per chapter halves it (−53%).
+
+**One chapter, one session.** Everything a chapter needs is on disk: the outline row, the beat file,
+the draft, `drafts/continuity.md`, `wiki/log.md`, `plan/HARNESS.md`. A new session loses nothing a
+chapter uses.
+
+- **When a chapter starts** (`write-chapter`, `plan-chapters` beating one chapter): if this session
+  has already drafted, revised or published another chapter, say so before loading anything and
+  ask the user to continue the new chapter in a fresh session — where the host can start one,
+  offer to; otherwise tell the user to open one and type the same request there. Go on in this
+  session only if the user says so.
+- **When a chapter ends** (its `publish`, or the last stage the project runs for it): close the
+  report by saying the next chapter goes in a fresh session.
+- **A long phase.** Where one phase ran long (a beat discussion over a day), a fresh session before
+  drafting is worth it too: the beat file holds the decisions.
+
+**Lookups go to a subagent.** A search whose output is long — a grep over `raw/`, a sweep of
+`wiki/` or `drafts/continuity.md`, reading earlier chapters for one fact — goes to a fresh-context
+subagent (on a cheaper model where the host lets you pick one) with the question and the places to
+look. It answers in a few lines with exact quotes and `[src: …]` citations; the dump stays in its
+context, not in the session's, where every later call would re-read it. Read a file directly when
+you are about to edit it or need most of it.
+
+**Batch edits.** Several replacements in one file go in one call (one script with a list of
+old → new pairs, each asserted to occur once), not one call each: every call re-reads the context.
