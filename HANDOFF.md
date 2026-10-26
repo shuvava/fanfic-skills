@@ -679,6 +679,28 @@ ignored in quotes, a table cell is a sentence (lines are joined before matching,
 row swallowed six chapters' flags into one), and same-run flags in one sentence stay one entry
 instead of vanishing as "inexact".
 
+## One chapter per session; voice pass (v0.25.0)
+
+Three chapters ran in one session that was never cleared: context grew from 72k to 880k tokens over
+474 calls, and re-reading it was 72% of the spend (subagents 17%). The third chapter made the fewest
+calls and cost the most. Replaying the real calls with a fresh session per chapter cut the main
+session's input by 53%; per phase, by 75%. Phases stayed in one session: beats, revisions and
+naturalize are conversations with the user, and a subagent cannot ask mid-run. So CONVENTIONS §14:
+`write-chapter` asks for a fresh session when this one already holds another chapter, `publish`
+closes by sending the next chapter to one, long lookups (grep over `raw/`, wiki sweeps) go to a
+subagent that answers in a few lines, and several edits to one file go in one call. Inline replace
+scripts were already the cheap pattern: one call for many edits.
+
+The user ran "every line through the voice cards" by hand in each of the three chapters; the pass
+fixed 1–5 lines each time (a tic taken from a profile the canon card contradicts, a title the card
+gives in full, one character in another's clipped manner). `write-chapter` §7 now runs it after
+the user's revisions, as a subagent over `voice_check.py`'s prompt: dialogue lines with the
+paragraph before, the list of cards. On one chapter's untouched draft a Sonnet reader found the
+slip the manual pass had found, plus two false flags: titles the card allows at the gate, flagged
+as if said in the field. The prompt now gives the chapter's path and asks where a place-dependent
+rule applies before flagging; rerun, it returned exactly the manual pass's one fix. One chapter,
+two runs — a cheaper model looks enough, not yet shown on a chapter with many speakers. `publish` gates on `voices✓` as a warning.
+
 ## Known gaps / possible next work
 
 - **Breaks on the planner's proposals in chat** (8 full + 6 partial of 19) has no precision marking;

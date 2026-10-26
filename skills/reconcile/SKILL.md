@@ -46,6 +46,10 @@ The fix is cheap: generated facts are proposals, and promotion is a human action
 Read `plan/HARNESS.md` if it exists — its `## Reconcile bias` section records categories the user has
 repeatedly rejected, and you should propose less aggressively there.
 
+**Voice pass first.** On a freshly written chapter, `wiki/log.md` should have a `voices` line for
+it after the last revision (`write-chapter` §7). If not, run the voice pass before extracting:
+its fixes change dialogue, and reconcile should record the lines that go out.
+
 ## 1. Extract assertions
 
 Read the chapter and list every fact it establishes that is not already in the wiki. For each:
