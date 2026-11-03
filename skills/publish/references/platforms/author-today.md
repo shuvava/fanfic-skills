@@ -16,7 +16,9 @@ Every fact is marked **known** (observed on a live run) or **to map**.
 | **A work in черновик is invisible to everyone**; it can be published only once at least one chapter is. Publishing the first chapter publishes the work with it | known |
 | Reader URL of a chapter: `https://author.today/reader/<workId>/<chapterId>` — the same `chapterId` as the edit page; the work page lists published chapters | known |
 | Chapter page: «Заголовок» field (pre-filled «Глава N»), rich-text editor, «Опубликовать автоматически» checkbox, buttons «Опубликовать» (submit) and «Сохранить как черновик» (on an existing chapter: «Сохранить черновик») and «Отмена» | known |
-| Editor: **Froala (jQuery plugin) on `textarea#Text`**; form posts to `/work/savechapter` with `Title`, `Text`, `Id` = work id, `ChapterId` (empty for a new chapter) | known |
+| **The site has two designs.** The current one is a Vue app; a «Старая версия дизайна» control switches an account back (an account setting: do not press it for a run). Check which one you are on before step 2: `window.jQuery` undefined and a `.fr-box` with no `#Text` means the current design | known |
+| Editor, current design: **Froala without jQuery**, the instance at `document.querySelector('.fr-box')['data-froala.editor']` (`html.set`, `html.get`, `events.trigger('contentChanged')`). It appears some seconds after the page: poll for it. No `textarea`, no `ko`, no hidden fields | known |
+| Editor, old design: Froala (jQuery plugin) on `textarea#Text`; form posts to `/work/savechapter` with `Title`, `Text`, `Id` = work id, `ChapterId` (empty for a new chapter) | known |
 | Allowed HTML: `p, br, b, strong, i, em, u, del, strike, blockquote, img, div, span, hr, ol/ul/li, table, pre, sub, sup, small, cite` — the export uses only `p`, `img` | known — editor options |
 | Images: toolbar «Вставить изображение» → upload or by URL; jpeg/png/gif/webp/svg, **≤ 5 MB**; uploaded to `cm.author.today/content_temp/…`, moved to `…/content/…` when the chapter is saved; dimensions kept | known |
 | «Оттипографить» — a **manual** typography button. Never press it: it would rewrite the author's dashes and quotes | known |
@@ -26,12 +28,16 @@ Every fact is marked **known** (observed on a live run) or **to map**.
 | Saved chapter: listed on the Текст tab as «<title> — не опубликовано / опубликовано (N знаков)»; edit page `/work/edit/chapter/<chapterId>`; row icons on hover: edit, read, preview, delete. The site's character counter equals `verify`'s character count | known |
 | Toasts: «Часть "…" была успешно сохранена в черновике» / «…была успешно опубликована» | known |
 | Work's Текст tab shows «до следующего обновления: N зн.» — an update threshold of **15 000 characters** since the last update. What crossing it does for readers (feed, notifications) | known threshold; effect **to map** — may favour publishing in ~15k-character batches |
-| «Опубликовать автоматически» — a checkbox that opens a date-and-time picker (knockout `autoPublish` / `autoPublishTime`, a moment in the **browser's time zone**; hidden field `AutoPublishTime` in UTC). With it checked, «Опубликовать» becomes **«Запланировать публикацию»**; toast «…будет опубликована автоматически по таймеру»; the chapter list shows the date instead of «не опубликовано». **«Сохранить черновик» does not save the schedule** | known |
+| «Опубликовать автоматически» — a checkbox that opens a date-and-time field, in the **browser's time zone**. With it checked, «Опубликовать» becomes **«Запланировать публикацию»**; the chapter list shows the date instead of «не опубликовано», in the browser's zone. **«Сохранить черновик» does not save the schedule** | known |
+| Timer, current design: a date picker. **The field takes no typing and its minutes go in steps of 15.** A minute off that grid goes through the page's own model: walk the Vue tree from the element holding `__vue_app__` (`_vnode`, `component.subTree`, `children`) to the component `ChapterAutoPublish`, call `vnode.props['onUpdate:date'](new Date(<UTC moment>))`. Its `props.date` and `props.enabled` also read the saved timer back after a reload | known |
+| Timer, old design: knockout `autoPublish` / `autoPublishTime`; hidden field `AutoPublishTime` in UTC | known |
 | Work's annotation: a field on the work's edit page, separate from the chapters; its length limit, whether it takes formatting, whether saving it notifies readers | to map |
-| **Several forms on the chapter's edit page** (the first is the site search): the chapter form is the one that contains `#Text`, never `document.forms[0]` | known |
-| `html.set` fills the editor, not the form: the form can post the old text. Before saving, `#Text.value = froalaEditor('html.get')`; `new FormData(<chapter form>).get('Text')` then holds the new text | known |
+| **Several forms on the chapter's edit page** (the first is the site search): the chapter form is the one that contains the editor (`.fr-box`; old design `#Text`), never `document.forms[0]` | known |
+| `html.set` fills the editor, not the form. Current design: fire `events.trigger('contentChanged')` after it. Old design: before saving, `#Text.value = froalaEditor('html.get')`; `new FormData(<chapter form>).get('Text')` then holds the new text | known |
+| Title field, current design: set the value with the native `HTMLInputElement` setter, then fire `input` and `change`; a plain assignment is not seen by Vue | known |
+| Links in the chapter list can come back blocked by the browser tool's output filter (long URLs look like encoded data). Read the chapter id out of the `href` in page JS and print the digits separated | known |
 | Form buttons: a click by the browser tool's reference or coordinates sometimes sends nothing; `button.click()` from page JS on the button found by its label saves on the first press | known |
-| Edit page of a chapter on a timer: buttons «Запланировать публикацию» and «Сохранить черновик». Saving with «Запланировать публикацию» keeps the timer and replaces the text — re-fetching the page shows the new text and the same `autoPublishTime` | known |
+| Edit page of a chapter on a timer: buttons «Запланировать публикацию» and «Сохранить черновик». Saving with «Запланировать публикацию» keeps the timer and replaces the text — re-fetching the page shows the new text and the same `autoPublishTime` | known on the old design; **to map** on the current one: the page reopens with the timer on, re-saving not yet tried |
 | Editing a published chapter: notifies readers? | to map |
 | Where comments live (per chapter / per work), pagination | to map (feedback) |
 
@@ -45,8 +51,9 @@ Every fact is marked **known** (observed on a live run) or **to map**.
 3. Images first: open «Вставить изображение», upload each file from the sidecar through the upload
    input Froala creates (the browser tool's file upload), and take the `content_temp` URL the
    editor inserts. Put it in the export's `<img src>` at its place. Local paths never reach the site.
-4. Text through the editor's own API, not by typing or pasting:
-   `jQuery('#Text').froalaEditor('html.set', <export html>)`; set the title field and fire
+4. Text through the editor's own API, not by typing or pasting. Current design: `ed.html.set(<export
+   html>)`, `ed.events.trigger('contentChanged')`, where `ed` is the instance above. Old design:
+   `jQuery('#Text').froalaEditor('html.set', <export html>)`. Set the title field and fire
    `input`/`change` on it.
 5. «Сохранить как черновик» — hidden save. **STOP: user** approves the upload in chat (a request to
    publish covers it). Back on the Текст tab the chapter shows «не опубликовано».
@@ -55,12 +62,16 @@ Every fact is marked **known** (observed on a live run) or **to map**.
    reader URL with `publication.py record`.
    **Delayed publication:** the user's yes names a date **and a time zone for readers** — the picker
    runs in the browser's zone, which may not be the readers'. Tick «Опубликовать автоматически», set
-   the time on the page's own model, press «Запланировать публикацию», then confirm the saved UTC time
-   by re-fetching the edit page (`autoPublishTime`). Record with `record --date <publication date>`.
+   the time on the page's own model, and **check the button now reads «Запланировать публикацию»
+   before pressing it: «Опубликовать» goes live at once.** Press it, then confirm the saved UTC time by
+   re-opening the edit page (`ChapterAutoPublish`'s `props.date`; old design `autoPublishTime`). Record
+   with `record --date <publication date>`.
    Until the timer fires the chapter is queued: it changes only at the user's request, by
    **Re-uploading a queued chapter** below.
 
-**Re-uploading a queued chapter** (`SKILL.md` → Editing a queued chapter):
+**Re-uploading a queued chapter** (`SKILL.md` → Editing a queued chapter). The steps below were
+observed on the old design; on the current one use the instance and `props.date` from the table, and
+treat the first run as **to map**: stop if the timer changes.
 
 1. Open the chapter's edit page `/work/edit/chapter/<chapterId>` (chapter id from the project's
    notes or the ledger URL). Note the timer: re-fetch the page and read `autoPublishTime` — this is
@@ -98,7 +109,8 @@ change — a stale reference can land on another element (once the site logo, wh
 
 ## Read-back
 
-Open the saved chapter's edit page, take `jQuery('#Text').froalaEditor('html.get')`, and compare it
+Open the saved chapter's edit page, take `html.get` from the editor (current design `ed.html.get()`,
+old design `jQuery('#Text').froalaEditor('html.get')`), and compare it
 **in the page** against the `plain` export loaded through a temporary file input, with
 `export_chapter.py`'s normalisation: drop `<img>`, `</p>`/`<br>` → newline, strip tags, unescape,
 NBSP → space, collapse whitespace, drop empty lines. Report paragraphs, characters, image URLs and
