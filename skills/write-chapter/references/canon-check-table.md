@@ -92,7 +92,7 @@ D=<book>/logic/ch<NN>-draft
 python3 <scripts>/logic_reader.py prompt <draft> --stage draft --beats <book>/beats/ch<NN>.md --dir $D
 ```
 
-Same subagent hand-off and sorting as at the beat gate (see `references/canon-check-table.md`).
+Same subagent hand-off, cheaper-model trial and sorting as at the beat gate (`SKILL.md` §3).
 Fix what evidence settles before hand-off (your edit: update the v0 snapshot); questions for the
 user go at the top of the hand-off, before the naturalness review. Report flagged / fixed /
 asked.

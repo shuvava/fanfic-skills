@@ -701,6 +701,25 @@ as if said in the field. The prompt now gives the chapter's path and asks where 
 rule applies before flagging; rerun, it returned exactly the manual pass's one fix. One chapter,
 two runs — a cheaper model looks enough, not yet shown on a chapter with many speakers. `publish` gates on `voices✓` as a warning.
 
+## Revision session; publish and readers off the session model (v0.26.0)
+
+Ten chapter sessions after v0.25.0 (one chapter each) still cost about $25 a chapter at API prices;
+the session itself was 69% of it, the readers 26%. Within the session the costliest phase was the
+read-through after hand-off: each line the user quoted cost about two calls of a 200–470k context,
+$5–9 a chapter. Publishing inline cost $1–4.4 for browser driving that a subagent did once for about
+$1. Moving the session to a cheaper model was ruled out: 60% of its spend is cache reads, priced the
+same on the cheaper model, so it would save about a fifth and risk the prose.
+
+So: `write-chapter` §8 is a revision session — the hand-off commits everything and sends the
+read-through to a fresh session that loads the draft, the voice cards, the house rules and the open
+review items, not the context that produced them (a third of the re-read or less). `publish` →
+Mode now says never inline at the end of a chapter session: the session hands a brief to a
+subagent on a cheaper model and relays its one question if the request did not settle the yes.
+CONVENTIONS §14 names which work takes the session model and which a cheaper one. Trials, not
+results: the facts reader moves to the cheaper model, and the second breaks run does too; the log's
+new `breaks_runs=` and `models=` fields let the next three chapters show whether the cheaper runs
+keep as many flags, with a written way back.
+
 ## Known gaps / possible next work
 
 - **Breaks on the planner's proposals in chat** (8 full + 6 partial of 19) has no precision marking;
