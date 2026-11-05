@@ -3,7 +3,8 @@ name: write-chapter
 description: >
   Use when ONLY when the user asks to draft a new chapter or scene: "write chapter N",
   "draft the next chapter", "write the scene where X", "write chapter 2 of book 3",
-  "continue the story", "напиши главу", "напиши следующую главу", "напиши сцену где…".
+  "continue the story", "напиши главу", "напиши следующую главу", "напиши сцену где…",
+  and to revise a drafted chapter in a fresh session: "revise chapter N", "правки главы N".
   Requires a chapter outline (run plan-chapters first if missing). Do NOT use when the user
   wants to outline first — that's plan-chapters. Do NOT use when the user wants to audit an
   existing chapter against canon — that's reconcile.
@@ -13,8 +14,10 @@ description: >
 
 ## Mode
 Inline. The user iterates on the draft — asks "why did X do Y?", requests rewrites of
-specific scenes, pushes back on voice or pacing. This follow-up loop needs the full canon
-context in the main session, which is why write-chapter is not a subagent.
+specific scenes, pushes back on voice or pacing. That loop is a conversation, so write-chapter is
+not a subagent — but it runs in a second, lighter session (§8): the revisions need the draft, the
+cards and the house rules, not the context that produced them. Readers, the critic, the voice pass
+and lookups are fresh-context subagents.
 
 ## Inputs required
 - `<book>/outline.md` (required) — this chapter's row, its part's card, and the next 2–3 chapters' rows
@@ -162,8 +165,13 @@ D=<book>/logic/ch<NN>-beats
 python3 <scripts>/logic_reader.py prompt <book>/beats/ch<NN>.md --stage beats --dir $D
 ```
 
-Give the subagent only this, nothing of the conversation: «Working directory: <project root>. Read
-`$D/prompt.md` — it is your whole task. Write the JSON array to `$D/reply.json`.» Then
+Give the subagent only this, nothing of the conversation, on a cheaper model where the host lets
+you pick one (`../../CONVENTIONS.md` §14): «Working directory: <project root>. Read
+`$D/prompt.md` — it is your whole task. Write the JSON array to `$D/reply.json`.» This reader
+searches `raw/` and checks citations — most of its calls are greps, at 15–47 calls a run. The
+cheaper model is a trial: if its `logic=` counts in `wiki/log.md` fall well below the chapters
+before the switch, or the user raises a canon slip it should have caught, run it on the session's
+model again and note that under `## Beat gate additions` in `plan/HARNESS.md`. Then
 `python3 <scripts>/logic_reader.py add <book>/beats/ch<NN>.md --dir $D --reply $D/reply.json`
 and sort `$D/report.md`:
 
@@ -193,7 +201,13 @@ that section filled: after each chapter, add a question the user asked about log
 raised (what was written, what the user asked, the kind of break in one line). Give `$D/prompt.md`
 to **two** fresh-context subagents in parallel, each told to write `$D/reply1.json` or
 `$D/reply2.json`: the runs share only about half their flags, and the flags one run found are as
-often right as the ones both found. Then
+often right as the ones both found. **Run 1 on the session's model, run 2 on a cheaper one** where
+the host lets you pick: the two runs are a fifth of a chapter's spend, and a second model may
+overlap less with the first than a second run of the same one. This is a trial — the report tags
+each flag with its runs, so log what each run contributed (`breaks_runs=` below). If over three
+chapters run 2's kept flags fall well below run 1's (under about two thirds), run both on the
+session's model and note it under `## Beat gate additions` in `plan/HARNESS.md`; that note
+outranks this default. Then
 `python3 <scripts>/logic_reader.py add <book>/beats/ch<NN>.md --dir $D --reply $D/reply1.json --reply $D/reply2.json`
 merges them by sentence. Sort `$D/report.md`:
 
@@ -338,11 +352,27 @@ in a fresh session (`../../CONVENTIONS.md` §14).
 Append to `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] write | b<NN>/ch<NN> <title>
-   metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n> natural=<flagged>/<auto> critics=<name>:<kept>/<flagged>,… logic=<flagged>/<fixed>/<asked> breaks=<flagged>/<fixed>/<asked>
+   metrics: book=<NN> words=<n> beats=<n> blocking=<n> warnings=<n> natural=<flagged>/<auto> critics=<name>:<kept>/<flagged>,… logic=<flagged>/<fixed>/<asked> breaks=<flagged>/<fixed>/<asked> breaks_runs=<model>:<kept>/<flagged>,<model>:<kept>/<flagged> models=logic:<model>
 ```
-Drop `b<NN>/` and `book=` in a flat project.
-Then wait for the user's revisions. When they are done — the user says so, asks for `reconcile`
-or `publish`, or the read-through has reached the end — run the voice pass (§7) before `reconcile`.
+Drop `b<NN>/` and `book=` in a flat project. In `breaks_runs`, a flag counts for every run its
+report entry names; kept is fixed or asked, not dropped. `models=` records which model ran the
+facts reader, so the trial can be read back from the log.
+
+**Revisions go in a fresh session (§8).** By hand-off this session holds the load, the beat
+discussion, the readers' reports and the canon check — 200–470k tokens on a real book — and every
+revision request re-reads all of it. Measured over ten chapters, the read-through loop was the most
+expensive phase: about two calls of the full context per line the user quoted, 30–40 lines a
+chapter, a third of the chapter's spend. The same loop on a session that loads only what revisions
+use (§8) re-reads a third as much or less. Everything it needs is on disk once the hand-off is committed.
+
+So: commit the draft, the snapshot, the beats, the review file and any open reader report, then end
+the hand-off with the next step — continue in a fresh session with «правки главы <N>» ("revise
+chapter <N>"), offering to start one where the host can. Add one line: several comments in one
+message cost about as much as one, since each message re-reads the session. Go on in this session
+only if the user says so.
+
+When the revisions are done — the user says so, asks for `reconcile` or `publish`, or the
+read-through has reached the end — run the voice pass (§7) before `reconcile`.
 
 **If `illustration_required` is true for this chapter's book (`CANON.md`, per-book setting —
 `../../CONVENTIONS.md` §8), or it is `planned` and the outline row has a `picture`, the chapter is
@@ -386,6 +416,34 @@ The snapshot `v0` stays frozen — the pass runs after hand-off. Commit the draf
 ```
 ## [YYYY-MM-DD] voices | b<NN>/ch<NN> — <checked> checked, <applied> fixed, <skipped> skipped
 ```
+
+## 8. Revision session — the read-through after hand-off
+
+A fresh session the user opens with «правки главы N» / "revise chapter N", or with a quoted line of
+a drafted chapter and a comment. It is the same chapter, so §1's fresh-session check does not stop
+it; it does if this session already holds another chapter.
+
+**Load only what revisions use**, in one call where you can (one `cat`/`sed` over the list, not a
+call per file):
+
+- `CANON.md`
+- from `plan/HARNESS.md`: `## Drafting rules`, `## Naturalness examples`, `## Overused patterns` —
+  not `## Logic examples` or `## Revision log`, which the readers and `refine-harness` use
+- from `canon/overview.md`: `## Style fingerprint`, `## Non-standard orthography`, `## Comic register`
+- the draft, and the beat file's In short and To decide (a card when a question needs it)
+- the voice cards of everyone with dialogue in the chapter — verbatim lines and `## Would never say`
+- what is still open from the hand-off: the naturalness review file and a reader report left in
+  `<book>/logic/`
+
+Not `drafts/continuity.md`, earlier chapters, `raw/` or the world pages: a question that needs them
+("did we say before that…") is a lookup subagent (`../../CONVENTIONS.md` §14), answering in a few
+lines with quotes.
+
+Then the loop is as before: answer, rewrite, batch several edits to the draft in one call. A
+revision the user asks for is a user edit — `snapshots/ch<NN>-v0.md` stays frozen (§4). A change
+that alters the plot goes back into the beat file as well. When the user is done: the voice pass
+(§7), `reconcile`, `illustrate` where the chapter needs a picture, then `publish` — which runs in a
+subagent (`publish` → Mode).
 
 ## Rules
 

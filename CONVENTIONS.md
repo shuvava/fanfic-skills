@@ -546,8 +546,14 @@ chapter uses.
   session only if the user says so.
 - **When a chapter ends** (its `publish`, or the last stage the project runs for it): close the
   report by saying the next chapter goes in a fresh session.
+- **After hand-off.** The read-through runs in a fresh session that loads only what revisions use
+  (`write-chapter` §8). Measured over ten chapters, revisions in the drafting session were the most
+  expensive phase — every quoted line re-read a 200–470k context.
 - **A long phase.** Where one phase ran long (a beat discussion over a day), a fresh session before
   drafting is worth it too: the beat file holds the decisions.
+- **Mechanical runs go to a subagent.** `publish` drives a browser for 25–35 calls; run inline at
+  the end of a chapter session, each of them re-read the whole chapter. It runs as a subagent on a
+  cheaper model and returns its report; the session asks the user what it must (`publish` → Mode).
 
 **Lookups go to a subagent.** A search whose output is long — a grep over `raw/`, a sweep of
 `wiki/` or `drafts/continuity.md`, reading earlier chapters for one fact — goes to a fresh-context
@@ -555,6 +561,13 @@ subagent (on a cheaper model where the host lets you pick one) with the question
 look. It answers in a few lines with exact quotes and `[src: …]` citations; the dump stays in its
 context, not in the session's, where every later call would re-read it. Read a file directly when
 you are about to edit it or need most of it.
+
+**Which model.** The session model writes and judges prose: the draft, the beats, revisions, the
+critic. A cheaper model (in Claude Code, the Agent tool's `model: sonnet`) takes work whose output
+is checked against a rule or a file: lookups, the voice pass, `publish`, and — on trial — the facts
+reader and one of the two breaks runs (`write-chapter` §3). Moving the session itself to a cheaper
+model saves little: most of a session's spend is re-reading cached context, and cache reads cost
+about the same on both at current prices.
 
 **Batch edits.** Several replacements in one file go in one call (one script with a list of
 old → new pairs, each asserted to occur once), not one call each: every call re-reads the context.

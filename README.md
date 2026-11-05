@@ -178,7 +178,7 @@ translate      → chapter → target language, block for block [glossary gate; 
 ```
 
 One chapter per session: everything a chapter needs is on disk, and a session that carries the
-previous chapter re-reads it on every call (CONVENTIONS §14). Four human gates. Each catches errors one stage before they become expensive. `brainstorm` is
+previous chapter re-reads it on every call (CONVENTIONS §14). Revisions after hand-off get their own lighter session (`write-chapter` §8), and `publish` runs as a subagent. Four human gates. Each catches errors one stage before they become expensive. `brainstorm` is
 deliberately not one of them — nothing it produces is committed, so there is nothing to gate.
 
 ## Three invariants

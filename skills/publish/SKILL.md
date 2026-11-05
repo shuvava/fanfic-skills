@@ -16,6 +16,25 @@ Subagent. Verified across 24 real publish runs in 23 sessions: 71% pure fire-and
 17% brief acknowledgement, 0% mid-run interruptions, 4% mid-run text question (handled
 internally). Each publication is gated by an explicit user yes before going live.
 
+**Never inline at the end of a chapter session.** A run is 25–35 calls of browser driving; inline,
+each re-read the whole chapter session (200–470k tokens), and over ten chapters that cost $1–4 per
+run against about $1 for the same run in a subagent. The session that is asked to publish starts a
+fresh-context subagent, on a cheaper model where the host lets you pick one (`../../CONVENTIONS.md`
+§14), and gives it only:
+
+> Working directory: <project root>. Run the `publish` skill for b<NN>/ch<NN>
+> (`<drafts>/ch<NN>-<slug>.md`) on <platform>. The user's words: «<their request, verbatim>».
+> <What that request settles: the standing schedule's next slot / the date they named / nothing —
+> then upload as a draft and stop before publishing.> Return the report and, if you stopped, the
+> one question you need answered.
+
+The yes rules of step 4 do not change: the user's request with a standing schedule is the yes for
+its slot; anything else, the subagent uploads a draft, stops and returns the question. The session
+asks the user, then resumes the same subagent with their answer, quoted (where the host can
+resume one; otherwise a new subagent with the answer in its brief). The session relays the report
+and closes with step 6.4. A run the user starts in a fresh session for publishing alone may run
+inline: there is no long context to re-read.
+
 ## Inputs required
 - The chapter draft at `<book>/drafts/ch<NN>-<slug>.md` (with `published:` frontmatter)
 - `<book>/outline.md` (to update the published note)
