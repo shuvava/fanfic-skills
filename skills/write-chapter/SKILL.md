@@ -254,6 +254,23 @@ A `blocking` conflict stops drafting.
   the hyphen, every such form in your draft is written without the hyphen.
 - **Write dialogue against the voice cards, not from memory.** Before each character's first line,
   re-read their verbatim canon lines. Check each drafted line against the `would never say` table.
+- **Every line says what the speaker wants.** The listener and the reader understand, from the line
+  itself or from what was already said, what the speaker is talking about and what they are after.
+  Short lines are fine — a card that says «speaks briefly» is about length, not about leaving the
+  link out: «Про меня хватит одного слова» makes the reader guess the missing half. The narrator's
+  thought after a line adds a conclusion, never a retelling of the line. Replace vague subjects
+  («каждый», «все») with names. Check the chain *line → narrator's conclusion → next line*: each link
+  names its purpose. On a real run a user rewrote one chapter's dialogue line by line for this
+  («обрубленно, как будто половина объяснения пропущена») and kept catching it in the next one.
+- **Romance as a scene, rivals in subtext.** A moment of attraction the outline asks for is staged —
+  closeness, a look, a recorded physical trait of the character, a touch, what catches in the
+  viewpoint character's breath — not a single line of «something stirred». The viewpoint character
+  may still misread it; the reader should see more than they do. Rivals in front of the person they
+  compete for jab in subtext: concern or a compliment with a hook, talk about something external
+  (food, a carriage, a training dummy), and **the person is not mentioned at all**, not even as «he».
+  The subtext is never explained; a naive witness who misses it is the joke (Austen's «fine eyes»).
+  On a real run each of these took the user three rounds to get. With characters who are minors, the
+  scene stays first-love: no erotic undertone (Rules).
 - **Honor the language-specific markers** the voice cards record — address forms, diminutives,
   honorifics, register shifts, aspect habits. These carry more characterization weight than adjectives
   and are the first thing to go wrong when a model drifts toward generic prose.
