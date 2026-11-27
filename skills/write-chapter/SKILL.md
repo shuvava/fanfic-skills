@@ -441,7 +441,18 @@ lines with quotes.
 
 Then the loop is as before: answer, rewrite, batch several edits to the draft in one call. A
 revision the user asks for is a user edit — `snapshots/ch<NN>-v0.md` stays frozen (§4). A change
-that alters the plot goes back into the beat file as well. When the user is done: the voice pass
+that alters the plot goes back into the beat file as well.
+
+**A revision that adds a fact is checked before it is committed.** When an edit brings in something
+the draft did not say — a place, an object, who knows what, what happened in an earlier chapter, how
+one character addresses another — check it the way §5 checks a draft, before the commit and not at
+`reconcile`: a lookup subagent searches `wiki/` (canon and fanon) and the earlier chapters and answers
+with quotes. Rewritten resolutions and the narrator retelling the past («as then», «all year», «I
+pretended not to hear») need it most: they restate earlier scenes from memory. Revisions are where
+the session has the least context loaded (above), so this is where a contradiction slips in — in one
+project it happened three chapters running, each new fact caught only at `reconcile` or by the user.
+
+When the user is done: the voice pass
 (§7), `reconcile`, `illustrate` where the chapter needs a picture, then `publish` — which runs in a
 subagent (`publish` → Mode).
 
